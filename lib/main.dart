@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'Login/all.dart';
+import 'package:foodies/Models/appuser.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
+import 'Services/auth.dart';
+import 'wrapper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,13 +17,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Foodies',
-      theme: ThemeData(
-        // This is the theme of your application.
-        primarySwatch: Colors.cyan,
+    return StreamProvider<AppUser?>.value(
+      value: AuthService().user,
+      initialData: null,
+      child: MaterialApp(
+        title: 'Foodies',
+        theme: ThemeData(
+          // This is the theme of your application.
+          primarySwatch: Colors.cyan,
+        ),
+        home: const Wrapper(),
       ),
-      home: const LoginPage(title: 'Login Page'),
     );
   }
 }
