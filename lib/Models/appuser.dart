@@ -1,6 +1,6 @@
 class AppUser {
   final String uid;
-  final String type;
+  final bool isAnonymous;
 
-  AppUser({required this.uid, required this.type});
+  AppUser({required this.uid, required this.isAnonymous});
 }
