@@ -52,7 +52,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       height: 75.0,
                     ),
                     Center(
-                      child: Text(
+                      child: Text(                          //sign up
                         'Sign Up',
                         style: TextStyle(
                           color: Colors.cyan[300],
@@ -63,7 +63,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     const SizedBox(
                       height: 25.0,
                     ),
-                    Padding(
+                    Padding(                                        //enter name
                       padding: const EdgeInsets.symmetric(horizontal: 15.0),
                       child: TextFormField(
                         decoration: const InputDecoration(
@@ -86,7 +86,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     const SizedBox(
                       height: 15.0,
                     ),
-                    Padding(
+                    Padding(                                              //enter contact number
                       padding: const EdgeInsets.symmetric(horizontal: 15.0),
                       child: TextFormField(
                         decoration: const InputDecoration(
@@ -117,7 +117,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     const SizedBox(
                       height: 15.0,
                     ),
-                    Padding(
+                    Padding(                                           //enter email
                       padding: const EdgeInsets.symmetric(horizontal: 15.0),
                       child: TextFormField(
                         decoration: const InputDecoration(
@@ -140,7 +140,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     const SizedBox(
                       height: 15.0,
                     ),
-                    Padding(
+                    Padding(                                         //enter password
                       padding: const EdgeInsets.symmetric(horizontal: 15.0),
                       child: TextFormField(
                         decoration: const InputDecoration(
@@ -166,7 +166,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     const SizedBox(
                       height: 15.0,
                     ),
-                    Padding(
+                    Padding(                                                  //choose user type
                       padding: const EdgeInsets.symmetric(horizontal: 15.0),
                       child: DropdownButtonFormField(
                         decoration: const InputDecoration(
@@ -195,7 +195,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     const SizedBox(
                       height: 25.0,
                     ),
-                    Container(
+                    Container(                                               //create account
                       height: 50.0,
                       width: 250.0,
                       decoration: BoxDecoration(

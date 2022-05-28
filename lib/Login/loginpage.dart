@@ -35,17 +35,17 @@ class _LoginPageState extends State<LoginPage> {
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(top: 60.0),
+                    Padding(                                       //logo
+                      padding: const EdgeInsets.only(top: 80.0),
                       child: Center(
                         child: SizedBox(
-                          width: 300,
-                          height: 250,
-                          child: Image.asset('assets/images/placeholder.png'),
+                          width: 400,
+                          height: 300,
+                          child: Image.asset('assets/images/logo.png'),
                         ),
                       ),
                     ),
-                    Padding(
+                    Padding(                                      //email
                       padding: const EdgeInsets.symmetric(horizontal: 15.0),
                       child: TextFormField(
                         decoration: const InputDecoration(
@@ -65,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                         },
                       ),
                     ),
-                    Padding(
+                    Padding(                                            //password
                       padding: const EdgeInsets.only(
                           left: 15.0, right: 15.0, top: 15.0, bottom: 0.0),
                       child: TextFormField(
@@ -92,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                       error,
                       style: const TextStyle(color: Colors.red, fontSize: 15.0),
                     ),
-                    TextButton(
+                    TextButton(                                       //forgot password
                       onPressed: () {
                         //Function for forgot password button
                       },
@@ -101,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                         style: TextStyle(fontSize: 15.0),
                       ),
                     ),
-                    Container(
+                    Container(                                         //login
                       height: 50.0,
                       width: 250.0,
                       decoration: BoxDecoration(
@@ -132,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(
                       height: 15.0,
                     ),
-                    Container(
+                    Container(                                      //sign in as guest
                       height: 50.0,
                       width: 250.0,
                       decoration: BoxDecoration(
@@ -153,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(
                       height: 120.0,
                     ),
-                    GestureDetector(
+                    GestureDetector(                                     //new user? create account
                       onTap: () {
                         Navigator.push(
                             context,
