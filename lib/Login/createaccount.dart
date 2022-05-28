@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:foodies/Services/all.dart';
-
 import '../loading.dart';
 
 class CreateAccountPage extends StatefulWidget {
@@ -102,7 +101,13 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                           } else if (val.length < 8) {
                             return 'Enter a valid phone number';
                           }
-                          return null;
+
+                          try {
+                            int.parse(val);
+                            return null;
+                          } catch (e) {
+                            return 'Enter only numbers';
+                          }
                         },
                         onChanged: (val) {
                           setState(() => phone = val);
@@ -201,8 +206,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             setState(() => loading = true);
-                            dynamic result =
-                                await _auth.register(email, password);
+                            dynamic result = await _auth.register(
+                                name, phone, email, type, password);
 
                             if (result == null) {
                               setState(() => error = 'Invalid email');
