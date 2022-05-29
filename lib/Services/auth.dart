@@ -12,6 +12,11 @@ class AuthService {
         : null;
   }
 
+  //Returning appUser
+  AppUser? get currentUser {
+    return _userFromFirebase(_auth.currentUser);
+  }
+
   //auth change appuser stream
   Stream<AppUser?> get user {
     return _auth
