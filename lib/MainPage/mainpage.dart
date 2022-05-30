@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodies/Services/all.dart';
+import '../Features/all.dart';
 import 'functions.dart';
 
 class MainPage extends StatefulWidget {
@@ -11,6 +12,12 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   final AuthService _auth = AuthService();
+  final screens = [
+    const SearchPage(),
+    const DealsPage(),
+    const LocationPage(),
+    const FilterPage()
+  ];
   int currentIndex = 0;
   Color color = Colors.blue;
 
@@ -29,28 +36,16 @@ class _MainPageState extends State<MainPage> {
             onPressed: () async {
               await _auth.signOut();
             },
+
+            /*onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const ProfilePage()));
+            },*/
           )
         ],
       ),
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            const SizedBox(
-              height: 150.0,
-            ),
-            Center(
-              child: Text(
-                'Main Page',
-                style: TextStyle(
-                  color: color,
-                  fontSize: 30.0,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+      body: screens[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.shifting,
         currentIndex: currentIndex,
