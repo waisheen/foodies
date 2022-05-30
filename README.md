@@ -1,16 +1,13 @@
 # foodies
 
-A new Flutter project.
+A user-friendly, intuitive application to obtain information on all food choices within NUS. Search, filter, review and more! 
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+If you would like to try out the app, do follow the intructions below:
 
-A few resources to get you started if this is your first Flutter project:
+- [Download and install flutter](https://www.geeksforgeeks.org/how-to-install-flutter-on-visual-studio-code/)
+- [Set up an emulator](https://www.geeksforgeeks.org/how-to-set-up-an-emulator-for-vscode/?ref=lbp)
+- Open the folder containing the source code, then run it. The app should appear on the emulator. 
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+For detailed documentation, do refer to the link [here](https://docs.google.com/document/d/1s0gJMcxUtR9Nez6d2XyC_h4tIFBrB-31Xc6zF2vcSlM/edit#heading=h.1vjixcg8y918)
