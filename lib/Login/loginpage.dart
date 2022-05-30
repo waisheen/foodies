@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
     return loading
         ? const Loading()
         : Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.transparent,
             body: Stack(
               children: [
                 Container(
@@ -49,10 +49,11 @@ class _LoginPageState extends State<LoginPage> {
                           //logo
                           padding: const EdgeInsets.only(top: 80.0),
                           child: Center(
-                            child: SizedBox(
+                            child: Container(
+                              color: Colors.transparent,
                               width: 400,
                               height: 300,
-                              child: Image.asset('assets/images/logo.png'),
+                              child: Image.asset('assets/images/logo3.png'),
                             ),
                           ),
                         ),
