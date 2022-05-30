@@ -71,18 +71,18 @@ Besides searching for specific outlets, there will be a recommendations tab upon
 Several extensions can be integrated into the application if time allows. One of the possible extensions is announcements at the main page of the application to show any important information or special arrangements, such as different operating hours during school holidays. There can also be the integration of real-time location into the application. There can be approximate crowd levels shown at different hours of the days in specific food outlets.
 
 # Class Diagram
-![class diagram](https://drive.google.com/file/d/145BLKEekDr5QWx1YXPH13-u6IH6OyS4l/view?usp=sharing)
+![class diagram](diagrams/ClassDiagram.png)
 
 # Database Structure
-![location diagram](https://drive.google.com/file/d/16jnzth_vGMcekwgSEGfxsaP0LqAk8lJS/view?usp=sharing)
-![food places diagram](https://drive.google.com/file/d/10SAx3VoqMbhkOLbaCV9hht7DS2GQESmE/view?usp=sharing)
-![shops diagram](https://drive.google.com/file/d/1SWKgbUukC1L-w_lidSyc6KkvlGE1WLH9/view?usp=sharing)
-![reviews diagram](https://drive.google.com/file/d/141oQlcJu9-ckb4cPL54T44ykE06vnIJt/view?usp=sharing)
-![promotion diagram](https://drive.google.com/file/d/13zCPjXRe4-Myh-Oj-IIst2RKtcdt5TvQ/view?usp=sharing)
-![user info diagram](https://drive.google.com/file/d/1AEukf5xrVpgduHbDHCfUA8F541E2DisR/view?usp=sharing)
+![location diagram](diagrams/Location.png)
+![food places diagram](diagrams/FoodPlace.png)
+![shops diagram](diagrams/Shop.png)
+![reviews diagram](diagrams/Review.png)
+![promotion diagram](diagrams/Promotion.png)
+![user info diagram](diagrams/UserInformation.png)
 
 # Programme Flow
-![programme flow](https://drive.google.com/file/d/1UD5PheLmOMlVtt-k0G0ZLaKM75ACBAi2/view?usp=sharing)
+![programme flow](diagrams/ProgrammeFlow.png)
 
 
 # Build Process
