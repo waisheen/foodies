@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:foodies/Login/forgotpassword.dart';
 import '../loading.dart';
+import '../reusablewidgets.dart';
 import 'all.dart';
 import '../Services/all.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -33,8 +29,8 @@ class _LoginPageState extends State<LoginPage> {
             backgroundColor: Colors.transparent,
             body: Stack(
               children: [
+                //background
                 Container(
-                  //background
                   constraints: const BoxConstraints.expand(),
                   decoration: const BoxDecoration(
                       image: DecorationImage(
@@ -47,8 +43,9 @@ class _LoginPageState extends State<LoginPage> {
                     key: _formKey,
                     child: Column(
                       children: <Widget>[
+                        
+                        //logo
                         Padding(
-                          //logo
                           padding: const EdgeInsets.only(top: 80.0),
                           child: Center(
                             child: Container(
@@ -59,58 +56,40 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
-                        Padding(
-                          //email
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Email',
-                              prefixIcon: Icon(Icons.email_outlined),
-                              hintText: 'Enter your email',
-                            ),
-                            validator: (val) {
-                              if (val == null || val.isEmpty) {
-                                return 'Cannot be empty';
-                              }
-                              return null;
-                            },
-                            onChanged: (val) {
-                              setState(() => email = val);
-                            },
-                          ),
-                        ),
-                        Padding(
-                          //password
-                          padding: const EdgeInsets.only(
-                              left: 15.0, right: 15.0, top: 15.0, bottom: 0.0),
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Password',
-                              prefixIcon: Icon(Icons.lock_outlined),
-                              hintText: 'Enter your password',
-                            ),
-                            obscureText: true,
-                            validator: (val) {
-                              if (val == null || val.isEmpty) {
-                                return 'Cannot be empty';
-                              }
-                              return null;
-                            },
-                            onChanged: (val) {
-                              setState(() => password = val);
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 5.0),
+                        
+                        //enter email
+                        inputText("Email", "Enter a valid email", const Icon(Icons.email_outlined), 
+                        (val) {
+                          if (val == null || val.isEmpty) {
+                            return 'Cannot be empty';
+                          }
+                          return null;
+                        }, 
+                        (val) => setState(() => email = val)),
+                        
+                        emptyBox(15.0),
+
+                        //enter password
+                        inputText("Password", "Choose your password", const Icon(Icons.lock_outlined), 
+                        (val) {
+                          if (val == null || val.isEmpty) {
+                            return 'Cannot be empty';
+                          } 
+                          return null;
+                        }, 
+                        (val) => setState(() => password = val)),
+
+                        emptyBox(5.0),
+
+                        //error message (if any)
                         Text(
                           error,
                           style: const TextStyle(
                               color: Colors.red, fontSize: 15.0),
                         ),
+
+                        //forgot password button
                         TextButton(
-                          //forgot password
                           onPressed: () => Navigator.push(context,
                                 MaterialPageRoute(
                                     builder: (context) => const ForgotPassword())),
@@ -120,66 +99,38 @@ class _LoginPageState extends State<LoginPage> {
                                 TextStyle(color: Colors.blue, fontSize: 15.0),
                           ),
                         ),
-                        Container(
-                          //login
-                          height: 50.0,
-                          width: 250.0,
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: Colors.blue),
-                          ),
-                          child: TextButton(
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                setState(() => loading = true);
-                                dynamic result =
-                                    await _auth.signIn(email, password);
 
-                                if (result == null) {
-                                  setState(() {
-                                    loading = false;
-                                    error = 'Invalid email or password';
-                                  });
-                                }
-                              }
-                            },
-                            child: const Text(
-                              'Login',
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 18),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 15.0,
-                        ),
-                        Container(
-                          //sign in as guest
-                          height: 50.0,
-                          width: 250.0,
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: Colors.blue),
-                          ),
-                          child: TextButton(
-                            onPressed: () async {
+                        //login button
+                        bigButton("Login", 
+                          () async {
+                            if (_formKey.currentState!.validate()) {
                               setState(() => loading = true);
-                              await _auth.signInAnonymous();
-                            },
-                            child: const Text(
-                              'Sign in as Guest',
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 18),
-                            ),
-                          ),
+                              dynamic result = await _auth.signIn(email, password);
+
+                              if (result == null) {
+                                setState(() {
+                                  loading = false;
+                                  error = 'Invalid email or password';
+                                });
+                              }
+                            }
+                          }
                         ),
-                        const SizedBox(
-                          height: 50.0,
+
+                        emptyBox(10.0),
+
+                        //sign in as guest button
+                        bigButton("Sign in as Guest", 
+                          () async {
+                            setState(() => loading = true);
+                            await _auth.signInAnonymous();
+                          }
                         ),
+                        
+                        emptyBox(50.0),
+
+                        //create account button
                         GestureDetector(
-                          //new user? create account
                           onTap: () => Navigator.push(context,
                                 MaterialPageRoute(
                                     builder: (context) => const CreateAccountPage())),

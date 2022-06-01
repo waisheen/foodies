@@ -78,7 +78,6 @@ class AuthService {
       await _auth.sendPasswordResetEmail(email: email);
       return "Success";
     } on FirebaseAuthException catch (e) {
-      print(e.code);
       return e.code;
     }
   }

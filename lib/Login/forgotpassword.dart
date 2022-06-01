@@ -1,7 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:foodies/Services/auth.dart';
 import 'package:foodies/loading.dart';
+
+import '../reusablewidgets.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({Key? key}) : super(key: key);
@@ -25,17 +26,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         ? const Loading()
         : Scaffold(
             extendBodyBehindAppBar: true,
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              leading: TextButton.icon(
-                icon: const Icon(Icons.arrow_back_rounded, color: Colors.black),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                label: Container(),
-              ),
-            ),
+            appBar: backButton(context),
             backgroundColor: Colors.transparent,
             body: Stack(
               children: [
@@ -52,9 +43,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     key: _formKey,
                     child: Column(
                       children: <Widget>[
-                        const SizedBox(
-                          height: 15,
-                        ),
+                        emptyBox(100.0),
+
+                        //reset password text
                         const Center(
                           child: Text(
                             "Reset Password",
@@ -62,70 +53,43 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                 TextStyle(color: Colors.black, fontSize: 25.0),
                           ),
                         ),
-                        const SizedBox(
-                          height: 100,
-                        ),
-                        Padding(
-                          //email
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Email',
-                              prefixIcon: Icon(Icons.email_outlined),
-                              hintText: 'Enter your email',
-                            ),
-                            validator: (val) {
-                              if (val == null || val.isEmpty) {
-                                return 'Cannot be empty';
-                              }
-                              return null;
-                            },
-                            onChanged: (val) {
-                              setState(() => email = val);
-                            },
-                          ),
-                        ),
+
+                        emptyBox(100.0),
+
+                        //enter email
+                        inputText("Email", "Enter a valid email",
+                            const Icon(Icons.email_outlined), (val) {
+                          if (val == null || val.isEmpty) {
+                            return 'Cannot be empty';
+                          }
+                          return null;
+                        }, (val) => setState(() => email = val)),
+
+                        //error message (if any)
                         Text(
                           error,
                           style: const TextStyle(
                               color: Colors.red, fontSize: 15.0),
                         ),
-                        const SizedBox(height: 30.0),
-                        Container(
-                          //reset password button
-                          height: 50.0,
-                          width: 250.0,
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: Colors.blue),
-                          ),
-                          child: TextButton(
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                setState(() => loading = true);
-                                dynamic result = await _auth.resetPassword(email);
 
-                                if (result == "invalid-email") {
-                                  setState(() => error = 'Invalid email');
-                                } else if (result == "user-not-found") {
-                                  setState(() =>
-                                      error = 'No existing account found');
-                                } else {
-                                  setState(() => error =
-                                      'Check your inbox/spam inbox to reset password');
-                                }
-                                setState(() => loading = false);
-                              }
-                            },
-                            child: const Text(
-                              'Reset Password',
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 18),
-                            ),
-                          ),
-                        ),
+                        emptyBox(30.0),
+
+                        //reset password button
+                        bigButton("Reset Password", () async {
+                          if (_formKey.currentState!.validate()) {
+                            setState(() => loading = true);
+                            dynamic result = await _auth.resetPassword(email);
+
+                            if (result == "invalid-email") {
+                              setState(() => error = 'Invalid email');
+                            } else if (result == "user-not-found") {
+                              setState(() => error = "No existing account found");
+                            } else {
+                              setState(() => error = "Check your inbox/spam inbox to reset password");
+                            }
+                            setState(() => loading = false);
+                          }
+                        })
                       ],
                     ),
                   ),

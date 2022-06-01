@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodies/Services/all.dart';
+import 'package:foodies/reusablewidgets.dart';
 import '../loading.dart';
 import 'package:bordered_text/bordered_text.dart';
 
@@ -30,21 +31,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         ? const Loading()
         : Scaffold(
             extendBodyBehindAppBar: true,
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              leading: TextButton.icon(
-                icon: const Icon(Icons.arrow_back_rounded, color: Colors.black),
-                /*label: const Text(
-              'Back',
-              style: TextStyle(color: Colors.black),
-            ),*/
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                label: Container(),
-              ),
-            ),
+            appBar: backButton(context),
             backgroundColor: Colors.white,
             body: Stack(
               children: [
@@ -61,15 +48,14 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     key: _formKey,
                     child: Column(
                       children: <Widget>[
-                        const SizedBox(
-                          height: 125.0,
-                        ),
+                        emptyBox(125.0),
+
+                        //sign up text
                         Center(
                           child: BorderedText(
                             strokeColor: Colors.blue,
                             strokeWidth: 2.0,
                             child: const Text(
-                              //sign up
                               'Sign Up',
                               style: TextStyle(
                                 color: Colors.transparent,
@@ -78,118 +64,68 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          height: 25.0,
-                        ),
-                        Padding(
-                          //enter name
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Name',
-                              hintText: 'Enter your name',
-                              prefixIcon: Icon(Icons.account_circle_rounded),
-                            ),
-                            validator: (val) {
-                              if (val == null || val.isEmpty) {
-                                return 'Cannot be empty';
-                              }
-                              return null;
-                            },
-                            onChanged: (val) {
-                              setState(() => name = val);
-                            },
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 15.0,
-                        ),
-                        Padding(
-                          //enter contact number
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Contact Number',
-                              hintText: 'Enter a valid phone number',
-                              prefixIcon: Icon(Icons.local_phone),
-                            ),
-                            validator: (val) {
-                              if (val == null || val.isEmpty) {
+                        
+                        emptyBox(25.0),
+
+                        //enter name
+                        inputText("Name", "Enter your name", const Icon(Icons.account_circle_rounded), 
+                        (val) {
+                          if (val == null || val.isEmpty) {
+                            return 'Cannot be empty';
+                          }
+                          return null;
+                        }, 
+                        (val) => setState(() => name = val)),
+                                               
+                        emptyBox(15.0),
+                        
+                        //enter phone number
+                        inputText("Contact Number", "Enter a valid phone number", const Icon(Icons.local_phone), 
+                        (val) {
+                          if (val == null || val.isEmpty) {
                                 return 'Cannot be empty';
                               } else if (val.length < 8) {
                                 return 'Enter a valid phone number';
                               }
-
                               try {
                                 int.parse(val);
                                 return null;
                               } catch (e) {
                                 return 'Enter only numbers';
                               }
-                            },
-                            onChanged: (val) {
-                              setState(() => phone = val);
-                            },
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 15.0,
-                        ),
-                        Padding(
-                          //enter email
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Email',
-                              hintText: 'Enter a valid email',
-                              prefixIcon: Icon(Icons.email_outlined),
-                            ),
-                            validator: (val) {
-                              if (val == null || val.isEmpty) {
-                                return 'Cannot be empty';
-                              }
-                              return null;
-                            },
-                            onChanged: (val) {
-                              setState(() => email = val);
-                            },
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 15.0,
-                        ),
-                        Padding(
-                          //enter password
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Password',
-                              hintText: 'Choose your password',
-                              prefixIcon: Icon(Icons.lock_outlined),
-                            ),
-                            obscureText: true,
-                            validator: (val) {
-                              if (val == null || val.isEmpty) {
-                                return 'Cannot be empty';
-                              } else if (val.length < 6) {
+                          }, 
+                        (val) => setState(() => phone = val)),
+                        
+                        emptyBox(15.0),
+
+                        //enter email
+                        inputText("Email", "Enter a valid email", const Icon(Icons.email_outlined), 
+                        (val) {
+                          if (val == null || val.isEmpty) {
+                            return 'Cannot be empty';
+                          }
+                          return null;
+                        }, 
+                        (val) => setState(() => email = val)),
+
+                        emptyBox(15.0),
+
+                        //enter password
+                        inputText("Password", "Choose your password", const Icon(Icons.lock_outlined), 
+                        (val) {
+                          if (val == null || val.isEmpty) {
+                            return 'Cannot be empty';
+                          } else if (val.length < 6) {
                                 return 'Password needs to be at least 6 characters long';
                               }
-                              return null;
-                            },
-                            onChanged: (val) {
-                              setState(() => password = val);
-                            },
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 15.0,
-                        ),
+                          return null;
+                        }, 
+                        (val) => setState(() => password = val)),
+                        
+                        emptyBox(15.0),
+
+                        //choose user type
                         Padding(
-                          //choose user type
                           padding: const EdgeInsets.symmetric(horizontal: 15.0),
                           child: DropdownButtonFormField(
                             decoration: const InputDecoration(
@@ -215,44 +151,28 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                             },
                           ),
                         ),
-                        const SizedBox(
-                          height: 40.0,
-                        ),
-                        Container(
-                          //create account
-                          height: 60.0,
-                          width: 250.0,
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(30),
-                            border: Border.all(color: Colors.blue),
-                          ),
-                          child: TextButton(
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                setState(() => loading = true);
-                                dynamic result = await _auth.register(
-                                    name, phone, email, type, password);
+                        
+                        emptyBox(25.0),
 
-                                if (result == null) {
-                                  setState(() => error = 'Invalid email');
-                                } else {
-                                  setState(() => error = 'Success!');
-                                  _auth.signOut();
-                                }
-                                setState(() => loading = false);
+                        //create account  button
+                        bigButton("Create Account", 
+                          () async {
+                            if (_formKey.currentState!.validate()) {
+                              setState(() => loading = true);
+                              dynamic result = await _auth.register(name, phone, email, type, password);
+
+                              if (result == null) {
+                                setState(() => error = 'Invalid email');
                               } else {
-                                setState(() => error = '');
+                                setState(() => error = 'Success!');
+                                _auth.signOut();
                               }
-                            },
-                            child: const Text(
-                              'Create Account',
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 18),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 10.0),
+                              setState(() => loading = false);
+                            } 
+                          }),
+                        
+                        emptyBox(10.0),
+
                         Text(
                           error,
                           style: TextStyle(
