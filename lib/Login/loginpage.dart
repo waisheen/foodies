@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodies/Login/forgotpassword.dart';
 import '../loading.dart';
 import 'all.dart';
 import '../Services/all.dart';
@@ -33,6 +34,7 @@ class _LoginPageState extends State<LoginPage> {
             body: Stack(
               children: [
                 Container(
+                  //background
                   constraints: const BoxConstraints.expand(),
                   decoration: const BoxDecoration(
                       image: DecorationImage(
@@ -67,6 +69,12 @@ class _LoginPageState extends State<LoginPage> {
                               prefixIcon: Icon(Icons.email_outlined),
                               hintText: 'Enter your email',
                             ),
+                            validator: (val) {
+                              if (val == null || val.isEmpty) {
+                                return 'Cannot be empty';
+                              }
+                              return null;
+                            },
                             onChanged: (val) {
                               setState(() => email = val);
                             },
@@ -84,6 +92,12 @@ class _LoginPageState extends State<LoginPage> {
                               hintText: 'Enter your password',
                             ),
                             obscureText: true,
+                            validator: (val) {
+                              if (val == null || val.isEmpty) {
+                                return 'Cannot be empty';
+                              }
+                              return null;
+                            },
                             onChanged: (val) {
                               setState(() => password = val);
                             },
@@ -97,9 +111,9 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         TextButton(
                           //forgot password
-                          onPressed: () {
-                            //Function for forgot password button
-                          },
+                          onPressed: () => Navigator.push(context,
+                                MaterialPageRoute(
+                                    builder: (context) => const ForgotPassword())),
                           child: const Text(
                             "Forgot Password",
                             style:
@@ -166,13 +180,9 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         GestureDetector(
                           //new user? create account
-                          onTap: () {
-                            Navigator.push(
-                                context,
+                          onTap: () => Navigator.push(context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        const CreateAccountPage()));
-                          },
+                                    builder: (context) => const CreateAccountPage())),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: const <Widget>[

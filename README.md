@@ -34,13 +34,13 @@ As a Muslim NUS student, I want to know which places offer halal food
 - As a stall owner, I would like to add a new item to my menu
 
 # Features
-1. Signups and Login
+**1. Signups and Login**
 
 Our application will feature a login system at the start page. Users who have an account can choose to login with their email and password. New users can also create an account via the click of a button at the start page. The signup and login feature is for users to leave reviews and ratings about the food outlets on the application. For users who just want to use the app without the functionality of leaving reviews and ratings do not need to go through the hassle of creating a new account, and they can choose to login as a guest instead. There will be a password reset system for users who forgot their password.
 
 In addition to normal users, sellers who own the food outlets can choose to sign up on the app as a seller too. As a seller, signing up and logging in on the app will allow them to perform several tasks such as submitting a request to update their store information (e.g. menu, operating hours) and also create new promotions to attract people to their stores, which will be shown in one of the features. As a seller, they will not be able to leave a review like the normal users and they have to be manually approved, with additional information required such as the outlets they own.
 
-2. Filtering
+**2. Filtering**
 
 Under the filter function on the main page of the application, the user can choose to filter food outlets based on several metrics they have chosen to fit their tastes and preferences. Information of the food outlets will be stored and filtered accordingly.
 
@@ -49,17 +49,17 @@ Firstly, the user will be able to choose the price range of the food they want t
 After selecting all the options that fit their criteria, they can press the filter button and the remaining suitable choices that fit all these metrics will be displayed to the user.
 
 
-3. Deals and Promotions
+**3. Deals and Promotions**
 
 The next function on the main page of the application is the deals and promotions tab, where the users can find out the ongoing deals that are offered to food outlets on campus. The user can press on it to find out about the details of the promotion, such as the start and end dates, the outlets offering the promotions or other relevant information.
 
 The deals and promotions can be manually updated, or it can also be updated by approved and verified sellers. These sellers can create an account on the app, then create new promotions or deals featuring their shops and providing the relevant details.
 
-4. Locations
+**4. Locations**
 
 There will be a location function on the main page of the application, where the user can press to find out about the different locations in the school (e.g. School of Computing, UTown, Faculty of Science). The user will then be able to press on the different locations and find out about the food places and shops that are available in the general location. There will also be an additional feature where the approximate current location of the user is shown on the map to ease exploring different food choices nearby.
 
-5. Search
+**5. Search**
 
 The next function on the main page of the application is the search function. Via the search function, the users can search for specific outlets. They will be able to find out more about the specific outlets such as their opening hours, menu or user ratings and reviews for the outlet itself. 
 

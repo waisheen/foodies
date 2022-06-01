@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:foodies/Services/database.dart';
 import '../Models/appuser.dart';
 
@@ -67,6 +68,15 @@ class AuthService {
       User? user = result.user;
       return _userFromFirebase(user);
     } catch (e) {
+      return null;
+    }
+  }
+
+  //Reset password
+  Future resetPassword(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: 'chongwaisheen02@gmail.com');
+    } catch(e) {
       return null;
     }
   }
