@@ -1,6 +1,5 @@
-import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:foodies/Login/all.dart';
 import 'package:foodies/Services/auth.dart';
 import 'package:foodies/loading.dart';
 
@@ -103,15 +102,19 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             border: Border.all(color: Colors.blue),
                           ),
                           child: TextButton(
-                            onPressed: () {
+                            onPressed: () async {
                               if (_formKey.currentState!.validate()) {
                                 setState(() => loading = true);
-                                dynamic result = _auth.resetPassword(email);
-                                
-                                if (result == null) {
+                                dynamic result = await _auth.resetPassword(email);
+
+                                if (result == "invalid-email") {
                                   setState(() => error = 'Invalid email');
+                                } else if (result == "user-not-found") {
+                                  setState(() =>
+                                      error = 'No existing account found');
                                 } else {
-                                  setState(() => error = 'Check your email to reset password');
+                                  setState(() => error =
+                                      'Check your inbox/spam inbox to reset password');
                                 }
                                 setState(() => loading = false);
                               }
