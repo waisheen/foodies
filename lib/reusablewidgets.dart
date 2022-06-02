@@ -38,6 +38,7 @@ PreferredSizeWidget backButton(BuildContext context) {
   );
 }
 
+//big buttons 
 Widget bigButton(String text, void Function()? onPressed) {
   return Container(
     height: 50.0,
@@ -45,7 +46,7 @@ Widget bigButton(String text, void Function()? onPressed) {
     decoration: BoxDecoration(
       color: Colors.transparent,
       borderRadius: BorderRadius.circular(30),
-      border: Border.all(color: Colors.blue),
+      border: Border.all(color: Colors.teal),
     ),
     child: TextButton(
       onPressed: onPressed,
@@ -53,7 +54,7 @@ Widget bigButton(String text, void Function()? onPressed) {
         text,
         style: const TextStyle(
           color: Colors.black, 
-          fontSize: 18),
+          fontSize: 16),
       ),
     ),
   );

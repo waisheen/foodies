@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:foodies/ProfilePage/sellerprofilepage.dart';
+import 'package:foodies/ProfilePage/userprofilepage.dart';
 import 'package:foodies/Services/all.dart';
 import '../Features/all.dart';
 import 'functions.dart';
@@ -16,16 +18,24 @@ class _MainPageState extends State<MainPage> {
     const SearchPage(),
     const DealsPage(),
     const LocationPage(),
-    const FilterPage()
+    const FilterPage(),
+    const UserProfilePage()
   ];
+  PageController pageController = PageController();
   int currentIndex = 0;
-  Color color = Colors.blue;
+  final Color colour = Colors.teal.shade600;
+
+  void onTapped(int index) {
+    setState(() => currentIndex = index);
+    pageController.animateToPage(index, duration: const Duration(seconds: 1), 
+      curve: Curves.fastOutSlowIn);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: color,
+        backgroundColor: colour,
         actions: <Widget>[
           TextButton.icon(
             icon: const Icon(Icons.account_circle_rounded, color: Colors.black),
@@ -36,42 +46,52 @@ class _MainPageState extends State<MainPage> {
             onPressed: () async {
               await _auth.signOut();
             },
-
-            /*onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const ProfilePage()));
-            },*/
-          )
+          ),
         ],
       ),
+      
       backgroundColor: Colors.white,
-      body: screens[currentIndex],
+      body: PageView(
+        controller: pageController,
+        children: const [
+          SearchPage(),
+          DealsPage(),
+          LocationPage(),
+          FilterPage(),
+          //(func to check if user signed in) => go to log in page, or else
+          //(func to get user role) == "User" ? UserProfilePage() : SellerProfilePage()
+          UserProfilePage()
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.shifting,
         currentIndex: currentIndex,
-        onTap: (index) {
-          setState(() => currentIndex = index);
-          setState(() => color = setColor(index));
-        },
-        selectedFontSize: 15.0,
-        selectedItemColor: Colors.black,
+        selectedItemColor: colour,
+        unselectedItemColor: Colors.grey.shade700,
+        onTap: onTapped,
+        selectedFontSize: 10.0,
+        backgroundColor: colour,
         items: const [
           BottomNavigationBarItem(
-              icon: Icon(Icons.search_outlined, color: Colors.black),
-              label: 'Search',
-              backgroundColor: Colors.blue),
+              icon: Icon(Icons.search_outlined),
+              label: 'Search'
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.discount_outlined, color: Colors.black),
-              label: 'Deals',
-              backgroundColor: Colors.red),
+              icon: Icon(Icons.discount_outlined),
+              label: 'Deals'
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.place_outlined, color: Colors.black),
+              icon: Icon(Icons.place_outlined),
               label: 'Location',
-              backgroundColor: Colors.green),
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.filter_alt_outlined, color: Colors.black),
+              icon: Icon(Icons.filter_alt_outlined),
               label: 'Filter',
-              backgroundColor: Colors.amber),
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle_rounded),
+              label: 'Profile',
+          ),
         ],
       ),
     );

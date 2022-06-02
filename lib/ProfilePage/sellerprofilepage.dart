@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:foodies/Services/all.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+class SellerProfilePage extends StatefulWidget {
+  const SellerProfilePage({Key? key}) : super(key: key);
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<SellerProfilePage> createState() => _SellerProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _SellerProfilePageState extends State<SellerProfilePage> {
   final AuthService _auth = AuthService();
   int currentIndex = 0;
   Color color = Colors.blue;
@@ -16,17 +16,6 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: TextButton.icon(
-          icon: const Icon(Icons.arrow_back_rounded, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          label: Container(),
-        ),
-      ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
@@ -36,7 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             Center(
               child: Text(
-                _auth.currentUser!.uid,
+                "seller: ${_auth.currentUser!.uid}",
                 style: TextStyle(
                   color: color,
                   fontSize: 30.0,

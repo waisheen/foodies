@@ -7,6 +7,9 @@ Color setColor(int index) {
     return Colors.red;
   } else if (index == 2) {
     return Colors.green;
+  } else if (index == 2) {
+    return Colors.amber;
+  } else {
+    return Colors.purple;
   }
-  return Colors.amber;
 }

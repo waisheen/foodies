@@ -43,7 +43,6 @@ class _LoginPageState extends State<LoginPage> {
                     key: _formKey,
                     child: Column(
                       children: <Widget>[
-                        
                         //logo
                         Padding(
                           padding: const EdgeInsets.only(top: 80.0),
@@ -56,28 +55,40 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
-                        
+
                         //enter email
-                        inputText("Email", "Enter a valid email", const Icon(Icons.email_outlined), 
-                        (val) {
+                        inputText("Email", "Enter a valid email",
+                            const Icon(Icons.email_outlined), (val) {
                           if (val == null || val.isEmpty) {
                             return 'Cannot be empty';
                           }
                           return null;
-                        }, 
-                        (val) => setState(() => email = val)),
-                        
+                        }, (val) => setState(() => email = val)),
+
                         emptyBox(15.0),
 
                         //enter password
-                        inputText("Password", "Choose your password", const Icon(Icons.lock_outlined), 
-                        (val) {
-                          if (val == null || val.isEmpty) {
-                            return 'Cannot be empty';
-                          } 
-                          return null;
-                        }, 
-                        (val) => setState(() => password = val)),
+                        Padding(
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 15.0),
+                          child: TextFormField(
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: "Password",
+                                hintText: "Choose your password",
+                                prefixIcon: Icon(Icons.lock_outlined),
+                              ),
+                              validator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  return 'Cannot be empty';
+                                } else {
+                                  return null;
+                                }
+                              },
+                              onChanged: (val) => setState(() => password = val),
+                              obscureText: true
+                          )
+                        ),
 
                         emptyBox(5.0),
 
@@ -90,9 +101,11 @@ class _LoginPageState extends State<LoginPage> {
 
                         //forgot password button
                         TextButton(
-                          onPressed: () => Navigator.push(context,
-                                MaterialPageRoute(
-                                    builder: (context) => const ForgotPassword())),
+                          onPressed: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ForgotPassword())),
                           child: const Text(
                             "Forgot Password",
                             style:
@@ -101,39 +114,38 @@ class _LoginPageState extends State<LoginPage> {
                         ),
 
                         //login button
-                        bigButton("Login", 
-                          () async {
-                            if (_formKey.currentState!.validate()) {
-                              setState(() => loading = true);
-                              dynamic result = await _auth.signIn(email, password);
+                        bigButton("Login", () async {
+                          if (_formKey.currentState!.validate()) {
+                            setState(() => loading = true);
+                            dynamic result =
+                                await _auth.signIn(email, password);
 
-                              if (result == null) {
-                                setState(() {
-                                  loading = false;
-                                  error = 'Invalid email or password';
-                                });
-                              }
+                            if (result == null) {
+                              setState(() {
+                                loading = false;
+                                error = 'Invalid email or password';
+                              });
                             }
                           }
-                        ),
+                        }),
 
                         emptyBox(10.0),
 
                         //sign in as guest button
-                        bigButton("Sign in as Guest", 
-                          () async {
-                            setState(() => loading = true);
-                            await _auth.signInAnonymous();
-                          }
-                        ),
-                        
+                        bigButton("Sign in as Guest", () async {
+                          setState(() => loading = true);
+                          await _auth.signInAnonymous();
+                        }),
+
                         emptyBox(50.0),
 
                         //create account button
                         GestureDetector(
-                          onTap: () => Navigator.push(context,
-                                MaterialPageRoute(
-                                    builder: (context) => const CreateAccountPage())),
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const CreateAccountPage())),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: const <Widget>[
