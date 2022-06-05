@@ -2,6 +2,23 @@
 
 A user-friendly, intuitive application to obtain information on all food choices within NUS. Users can search, filter, review, view promotions and more! Sellers can also update opening hours, post promotions and updates on latest happenings. 
 
+
+# Build Process
+
+If you would like to try out the app, do follow the intructions below:
+
+## Using an Emulator
+1. Download the apk file which can be found in the [Releases](https://github.com/waisheen/foodies/releases) tab of this repository
+2. Open your emulator via Android Studio
+3. Drag and drop the file into the emulator and wait for the app to be installed
+4. Once installed, click on the app icon to run it!
+
+
+## Using Physical Android Device
+1. Download the apk file which can be found in the [Releases](https://github.com/waisheen/foodies/releases) tab of this repository
+2. Install the app onto your device by following the instructions that are appear. Do allow the permissions that are requested during installation. 
+3. Once installed, click on the app icon to run it!
+
 # Motivation
 We believe that at times when we are with our friends in NUS, we ask this question, “Where are we going to eat?”, and usually the replies range from “I don’t know” to “There’s nothing suitable here”. There is a plethora of food choices in NUS and many different kinds of food at diverse price ranges to cater to everyone. Sometimes, people prefer to save money and pick cheaper options. Other times, people need to find halal options or just grab a quick lunch nearby. However, NUS students or staff may not know what all their available options are. 
 
@@ -83,25 +100,6 @@ Several extensions can be integrated into the application if time allows. One of
 
 # Programme Flow
 ![programme flow](diagrams/ProgrammeFlow.png)
-
-
-# Build Process
-
-If you would like to try out the app, do follow the intructions below:
-
-## Using an Emulator
-1. Download and install [Flutter](https://www.geeksforgeeks.org/how-to-install-flutter-on-visual-studio-code/)
-2. Clone or download this repository
-3. Using `flutter pub get` in the terminal, obtain the relevant dependencies for `pubspec.yaml`
-4. Set up an [emulator](https://www.geeksforgeeks.org/how-to-set-up-an-emulator-for-vscode/?ref=lbp)
-5. Open the folder as well as the emulator containing the source code, then run it. The app should appear on the emulator. 
-
-## Using Physical Android Device
-1. Enable Developer options and USB debugging on your device. Detailed instructions are available in the [Android documentation](https://developer.android.com/studio/debug/dev-options)
-2. Using a USB cable, plug your phone into your computer and authorise access to your computer
-3. Using `flutter pub get` in the terminal, obtain the relevant dependencies for `pubspec.yaml`
-4. Select your Android device.
-5. Run the command `flutter run` in the terminal and the application should be installed onto your device.
 
 # Detailed Documentation
 For detailed documentation, do refer to the link [here](https://docs.google.com/document/d/1s0gJMcxUtR9Nez6d2XyC_h4tIFBrB-31Xc6zF2vcSlM/edit#heading=h.1vjixcg8y918)
