@@ -27,7 +27,7 @@ class _MainPageState extends State<MainPage> {
 
   void onTapped(int index) {
     setState(() => currentIndex = index);
-    pageController.animateToPage(index, duration: const Duration(seconds: 1), 
+    pageController.animateToPage(index, duration: const Duration(milliseconds: 700), 
       curve: Curves.fastOutSlowIn);
   }
 
