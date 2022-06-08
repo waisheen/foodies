@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:foodies/ProfilePage/sellerprofilepage.dart';
-import 'package:foodies/ProfilePage/userprofilepage.dart';
 import 'package:foodies/Services/all.dart';
 import '../Features/all.dart';
-import 'functions.dart';
+import '../ProfilePage/profilepage.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -14,21 +12,15 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   final AuthService _auth = AuthService();
-  final screens = [
-    const SearchPage(),
-    const DealsPage(),
-    const LocationPage(),
-    const FilterPage(),
-    const UserProfilePage()
-  ];
   PageController pageController = PageController();
   int currentIndex = 0;
   final Color colour = Colors.teal.shade600;
 
   void onTapped(int index) {
     setState(() => currentIndex = index);
-    pageController.animateToPage(index, duration: const Duration(milliseconds: 700), 
-      curve: Curves.fastOutSlowIn);
+    pageController.animateToPage(index,
+        duration: const Duration(milliseconds: 700),
+        curve: Curves.fastOutSlowIn);
   }
 
   @override
@@ -49,7 +41,6 @@ class _MainPageState extends State<MainPage> {
           ),
         ],
       ),
-      
       backgroundColor: Colors.white,
       body: PageView(
         controller: pageController,
@@ -58,9 +49,7 @@ class _MainPageState extends State<MainPage> {
           DealsPage(),
           LocationPage(),
           FilterPage(),
-          //(func to check if user signed in) => go to log in page, or else
-          //(func to get user role) == "User" ? UserProfilePage() : SellerProfilePage()
-          UserProfilePage()
+          ProfilePage()
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -73,24 +62,20 @@ class _MainPageState extends State<MainPage> {
         backgroundColor: colour,
         items: const [
           BottomNavigationBarItem(
-              icon: Icon(Icons.search_outlined),
-              label: 'Search'
+              icon: Icon(Icons.search_outlined), label: 'Search'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.discount_outlined), label: 'Deals'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.place_outlined),
+            label: 'Location',
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.discount_outlined),
-              label: 'Deals'
+            icon: Icon(Icons.filter_alt_outlined),
+            label: 'Filter',
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.place_outlined),
-              label: 'Location',
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.filter_alt_outlined),
-              label: 'Filter',
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle_rounded),
-              label: 'Profile',
+            icon: Icon(Icons.account_circle_rounded),
+            label: 'Profile',
           ),
         ],
       ),

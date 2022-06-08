@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 Widget emptyBox(double height) {
@@ -5,23 +6,23 @@ Widget emptyBox(double height) {
 }
 
 //user to input text field
-Widget inputText(String label, String hint, Widget icon, String? Function(String?)? validator, void Function(String)? onChanged) {
+Widget inputText(String label, String hint, Widget icon,
+    String? Function(String?)? validator, void Function(String)? onChanged) {
   return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+    padding: const EdgeInsets.symmetric(horizontal: 30.0),
     child: TextFormField(
-      decoration: InputDecoration(
-        border: const OutlineInputBorder(),
-        labelText: label,
-        hintText: hint,
-        prefixIcon: icon,
-      ),
-      validator: validator,
-      onChanged: onChanged
-    ),
+        decoration: InputDecoration(
+          border: const OutlineInputBorder(),
+          labelText: label,
+          hintText: hint,
+          prefixIcon: icon,
+        ),
+        validator: validator,
+        onChanged: onChanged),
   );
 }
 
-//back button 
+//back button
 PreferredSizeWidget backButton(BuildContext context) {
   return AppBar(
     backgroundColor: Colors.transparent,
@@ -38,7 +39,7 @@ PreferredSizeWidget backButton(BuildContext context) {
   );
 }
 
-//big buttons 
+//big buttons
 Widget bigButton(String text, void Function()? onPressed) {
   return Container(
     height: 50.0,
@@ -52,10 +53,27 @@ Widget bigButton(String text, void Function()? onPressed) {
       onPressed: onPressed,
       child: Text(
         text,
-        style: const TextStyle(
-          color: Colors.black, 
-          fontSize: 16),
+        style: const TextStyle(color: Colors.black, fontSize: 16),
       ),
     ),
   );
+}
+
+//futurebuilders to listen to changes
+Widget futureText(BuildContext context, CollectionReference users, String uid,
+    String getter) {
+  return FutureBuilder(
+      future: users.doc(uid).get(),
+      builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return Text(
+            snapshot.data!.get(getter).toString(),
+            style: const TextStyle(fontSize: 16),
+          );
+        }
+        return const Text(
+          'Loading...',
+          style: TextStyle(fontSize: 16),
+        );
+      });
 }

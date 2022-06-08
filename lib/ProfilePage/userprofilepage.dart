@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foodies/Services/all.dart';
 import 'package:foodies/reusablewidgets.dart';
@@ -11,6 +12,10 @@ class UserProfilePage extends StatefulWidget {
 
 class _UserProfilePageState extends State<UserProfilePage> {
   final AuthService _auth = AuthService();
+  final CollectionReference userInformation =
+      FirebaseFirestore.instance.collection('UserInfo');
+
+  //When details are retrieved, update the profile page
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +25,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
         child: Column(
           children: <Widget>[
             Stack(
-              clipBehavior: Clip.none, 
+              clipBehavior: Clip.none,
               alignment: Alignment.center,
               children: [
                 //backdrop image
@@ -51,46 +56,53 @@ class _UserProfilePageState extends State<UserProfilePage> {
             emptyBox(70),
 
             //display name
-            const ListTile(
-              contentPadding: EdgeInsets.only(left: 25),
-              title: Padding(
-                padding: EdgeInsets.only(bottom: 3),
-                child: Text("Name"),
-              ),
-              subtitle: Text("get user name",
-                  style: TextStyle(fontSize: 16)), //get user name from database
-            ),
+            ListTile(
+                contentPadding: const EdgeInsets.only(left: 25),
+                title: const Padding(
+                  padding: EdgeInsets.only(bottom: 3),
+                  child: Text("Name"),
+                ),
+                subtitle: futureText(
+                    context,
+                    userInformation,
+                    _auth.currentUser!.uid,
+                    'name') //get user name from database
+                ),
 
             //display phone number
-            const ListTile(
-              contentPadding: EdgeInsets.only(left: 25),
-              title: Padding(
-                padding: EdgeInsets.only(bottom: 3),
-                child: Text("Phone Number"),
-              ),
-              subtitle: Text("get user phone number",
-                  style: TextStyle(fontSize: 16)), //get number from database
-            ),
+            ListTile(
+                contentPadding: const EdgeInsets.only(left: 25),
+                title: const Padding(
+                  padding: EdgeInsets.only(bottom: 3),
+                  child: Text("Phone Number"),
+                ),
+                subtitle: futureText(
+                    context,
+                    userInformation,
+                    _auth.currentUser!.uid,
+                    'contact') //get number from database
+                ),
 
             //display email
-            const ListTile(
-              contentPadding: EdgeInsets.only(left: 25),
-              title: Padding(
+            ListTile(
+              contentPadding: const EdgeInsets.only(left: 25),
+              title: const Padding(
                 padding: EdgeInsets.only(bottom: 3),
                 child: Text("Email Address"),
               ),
-              subtitle: Text("get user email",
-                  style: TextStyle(fontSize: 16)), //get email from database
+              subtitle: futureText(context, userInformation,
+                  _auth.currentUser!.uid, 'email'), //get email from database
             ),
 
             //display role
-            const ListTile(
-              contentPadding: EdgeInsets.only(left: 25),
-              title: Padding(
+            ListTile(
+              contentPadding: const EdgeInsets.only(left: 25),
+              title: const Padding(
                 padding: EdgeInsets.only(bottom: 3),
                 child: Text("Role"),
               ),
-              subtitle: Text("User", style: TextStyle(fontSize: 16)),
+              subtitle: futureText(
+                  context, userInformation, _auth.currentUser!.uid, 'role'),
             ),
 
             emptyBox(20),

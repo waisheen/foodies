@@ -69,26 +69,25 @@ class _LoginPageState extends State<LoginPage> {
 
                         //enter password
                         Padding(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 15.0),
-                          child: TextFormField(
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: "Password",
-                                hintText: "Choose your password",
-                                prefixIcon: Icon(Icons.lock_outlined),
-                              ),
-                              validator: (val) {
-                                if (val == null || val.isEmpty) {
-                                  return 'Cannot be empty';
-                                } else {
-                                  return null;
-                                }
-                              },
-                              onChanged: (val) => setState(() => password = val),
-                              obscureText: true
-                          )
-                        ),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 30.0),
+                            child: TextFormField(
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: "Password",
+                                  hintText: "Choose your password",
+                                  prefixIcon: Icon(Icons.lock_outlined),
+                                ),
+                                validator: (val) {
+                                  if (val == null || val.isEmpty) {
+                                    return 'Cannot be empty';
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                onChanged: (val) =>
+                                    setState(() => password = val),
+                                obscureText: true)),
 
                         emptyBox(5.0),
 
