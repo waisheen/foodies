@@ -28,7 +28,7 @@ class _SellerProfilePageState extends State<SellerProfilePage> {
                 "seller: ${_auth.currentUser!.uid}",
                 style: TextStyle(
                   color: color,
-                  fontSize: 30.0,
+                  fontSize: 15.0,
                 ),
               ),
             ),
