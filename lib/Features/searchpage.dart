@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodies/Features/recommendation.dart';
 import 'package:foodies/Services/all.dart';
 
 class SearchPage extends StatefulWidget {
@@ -50,35 +51,7 @@ class _SearchPageState extends State<SearchPage> {
             Container(
               height: 20,
             ),
-            Container(
-              height: 200,
-              width: 350,
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                image: AssetImage('assets/images/caawow.png'),
-                fit: BoxFit.cover,
-              )),
-            ),
-            Container(height: 20),
-            Container(
-              height: 200,
-              width: 350,
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                image: AssetImage('assets/images/wangs.png'),
-                fit: BoxFit.cover,
-              )),
-            ),
-            Container(height: 20),
-            Container(
-              height: 200,
-              width: 350,
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                image: AssetImage('assets/images/pastafast.png'),
-                fit: BoxFit.cover,
-              )),
-            ),
+            const Expanded(child: RecommendationPage()),
             Container(height: 20),
           ],
         ),
