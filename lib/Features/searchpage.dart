@@ -21,6 +21,7 @@ class _SearchPageState extends State<SearchPage> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             const SizedBox(
               height: 25.0,
@@ -49,10 +50,9 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
             Container(
-              height: 20,
+              height: 30.0,
             ),
-            const Expanded(child: RecommendationPage()),
-            Container(height: 20),
+            const SizedBox(height: 600, child: RecommendationPage()),
           ],
         ),
       ),

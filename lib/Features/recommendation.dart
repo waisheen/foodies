@@ -11,6 +11,7 @@ class RecommendationPage extends StatefulWidget {
 }
 
 class _RecommendationPageState extends State<RecommendationPage> {
+  //This collect all shops available, can be further filtered
   Stream<QuerySnapshot> getShopSnapshots(BuildContext context) async* {
     yield* FirebaseFirestore.instance.collection('Shop').snapshots();
   }
@@ -18,9 +19,8 @@ class _RecommendationPageState extends State<RecommendationPage> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: <Widget>[
-        Container(height: 20),
-        buildStream(context, getShopSnapshots(context))
+      children: [
+        buildStream(context, getShopSnapshots(context)),
       ],
     );
   }

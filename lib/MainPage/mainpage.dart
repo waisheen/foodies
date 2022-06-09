@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodies/Services/all.dart';
 import '../Features/all.dart';
-import '../Features/recommendation.dart';
 import '../ProfilePage/profilepage.dart';
 
 class MainPage extends StatefulWidget {
@@ -50,7 +49,7 @@ class _MainPageState extends State<MainPage> {
           DealsPage(),
           LocationPage(),
           FilterPage(),
-          RecommendationPage()
+          ProfilePage()
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

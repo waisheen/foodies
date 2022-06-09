@@ -121,8 +121,10 @@ Widget buildCard(BuildContext context, String title, String imageURL) {
   );
 }
 
+//This collects info from database and builds whatever is there
 Widget buildStream(BuildContext context, Stream<QuerySnapshot> stream) {
   return Flexible(
+      fit: FlexFit.loose,
       child: StreamBuilder(
           stream: stream,
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -130,6 +132,7 @@ Widget buildStream(BuildContext context, Stream<QuerySnapshot> stream) {
               return const Loading();
             }
             return ListView.builder(
+                shrinkWrap: true,
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (BuildContext context, int index) {
                   DocumentSnapshot entity = snapshot.data!.docs[index];
