@@ -99,26 +99,25 @@ Widget futureText(BuildContext context, CollectionReference users, String uid,
       });
 }
 
-Widget buildCard(BuildContext context, String title, String imageURL) {
-  return Center(
-    child: Card(
-        child: InkWell(
-            child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Text(
-          title,
-          style: const TextStyle(fontSize: 20.0),
-        ),
-        Container(
-          color: Colors.transparent,
-          width: 700,
-          height: 500,
-          child: Image.network(imageURL),
-        ),
-      ],
-    ))),
-  );
+Widget buildCard(BuildContext context, String title, String imageURL,
+    void Function() onTapped) {
+  return Card(
+      child: InkWell(
+          onTap: onTapped,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              SizedBox(
+                width: 500,
+                child: Text(
+                  title,
+                  style: const TextStyle(fontSize: 30.0),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+              Image.network(imageURL),
+            ],
+          )));
 }
 
 //This collects info from database and builds whatever is there
@@ -136,8 +135,8 @@ Widget buildStream(BuildContext context, Stream<QuerySnapshot> stream) {
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (BuildContext context, int index) {
                   DocumentSnapshot entity = snapshot.data!.docs[index];
-                  return buildCard(
-                      context, entity.get('name'), entity.get('imageURL'));
+                  return buildCard(context, entity.get('name'),
+                      entity.get('imageURL'), () {});
                 });
           }));
 }
