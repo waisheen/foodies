@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Shop {
@@ -21,6 +20,9 @@ class Shop {
         maxPrice = snapshot['maxPrice'],
         closing = snapshot['closing'],
         opening = snapshot['opening'],
-        openDays = snapshot['openDays'],
+        openDays = List<String>.from(snapshot['openDays']),
         imageURL = snapshot['imageURL'];
+
+  //Check whether shop is open
+
 }

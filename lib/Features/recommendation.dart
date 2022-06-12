@@ -20,7 +20,7 @@ class _RecommendationPageState extends State<RecommendationPage> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        buildStream(context, getShopSnapshots(context)),
+        buildShopStream(context, getShopSnapshots(context)),
       ],
     );
   }

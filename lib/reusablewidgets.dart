@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import 'Models/shop.dart';
 import 'loading.dart';
 
 Widget emptyBox(double height) {
@@ -99,6 +100,7 @@ Widget futureText(BuildContext context, CollectionReference users, String uid,
       });
 }
 
+//Builds a card with a title, image and a onTap fuction
 Widget buildCard(BuildContext context, String title, String imageURL,
     void Function() onTapped) {
   return Card(
@@ -120,8 +122,8 @@ Widget buildCard(BuildContext context, String title, String imageURL,
           )));
 }
 
-//This collects info from database and builds whatever is there
-Widget buildStream(BuildContext context, Stream<QuerySnapshot> stream) {
+//This collects info from shop database and builds a card
+Widget buildShopStream(BuildContext context, Stream<QuerySnapshot> stream) {
   return Flexible(
       fit: FlexFit.loose,
       child: StreamBuilder(
@@ -134,9 +136,9 @@ Widget buildStream(BuildContext context, Stream<QuerySnapshot> stream) {
                 shrinkWrap: true,
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (BuildContext context, int index) {
-                  DocumentSnapshot entity = snapshot.data!.docs[index];
-                  return buildCard(context, entity.get('name'),
-                      entity.get('imageURL'), () {});
+                  //DocumentSnapshot entity = snapshot.data!.docs[index];
+                  Shop shop = Shop.fromSnapshot(snapshot.data!.docs[index]);
+                  return buildCard(context, shop.name, shop.imageURL, () {});
                 });
           }));
 }
