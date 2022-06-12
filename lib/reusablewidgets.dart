@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import 'Models/shop.dart';
+import 'loading.dart';
+
 Widget emptyBox(double height) {
   return SizedBox(height: height);
 }
@@ -19,6 +22,25 @@ Widget inputText(String label, String hint, Widget icon,
         ),
         validator: validator,
         onChanged: onChanged),
+  );
+}
+
+//user to input text field (obscured)
+Widget inputObscuredText(String label, String hint, Widget icon,
+    String? Function(String?)? validator, void Function(String)? onChanged) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+    child: TextFormField(
+      decoration: InputDecoration(
+        border: const OutlineInputBorder(),
+        labelText: label,
+        hintText: hint,
+        prefixIcon: icon,
+      ),
+      validator: validator,
+      onChanged: onChanged,
+      obscureText: true,
+    ),
   );
 }
 
@@ -76,4 +98,47 @@ Widget futureText(BuildContext context, CollectionReference users, String uid,
           style: TextStyle(fontSize: 16),
         );
       });
+}
+
+//Builds a card with a title, image and a onTap fuction
+Widget buildCard(BuildContext context, String title, String imageURL,
+    void Function() onTapped) {
+  return Card(
+      child: InkWell(
+          onTap: onTapped,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              SizedBox(
+                width: 500,
+                child: Text(
+                  title,
+                  style: const TextStyle(fontSize: 30.0),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+              Image.network(imageURL),
+            ],
+          )));
+}
+
+//This collects info from shop database and builds a card
+Widget buildShopStream(BuildContext context, Stream<QuerySnapshot> stream) {
+  return Flexible(
+      fit: FlexFit.loose,
+      child: StreamBuilder(
+          stream: stream,
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (!snapshot.hasData) {
+              return const Loading();
+            }
+            return ListView.builder(
+                shrinkWrap: true,
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (BuildContext context, int index) {
+                  //DocumentSnapshot entity = snapshot.data!.docs[index];
+                  Shop shop = Shop.fromSnapshot(snapshot.data!.docs[index]);
+                  return buildCard(context, shop.name, shop.imageURL, () {});
+                });
+          }));
 }

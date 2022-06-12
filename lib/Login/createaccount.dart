@@ -64,69 +64,67 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                             ),
                           ),
                         ),
-                        
+
                         emptyBox(25.0),
 
                         //enter name
-                        inputText("Name", "Enter your name", const Icon(Icons.account_circle_rounded), 
-                        (val) {
+                        inputText("Name", "Enter your name",
+                            const Icon(Icons.account_circle_rounded), (val) {
                           if (val == null || val.isEmpty) {
                             return 'Cannot be empty';
                           }
                           return null;
-                        }, 
-                        (val) => setState(() => name = val)),
-                                               
+                        }, (val) => setState(() => name = val)),
+
                         emptyBox(15.0),
-                        
+
                         //enter phone number
-                        inputText("Contact Number", "Enter a valid phone number", const Icon(Icons.local_phone), 
-                        (val) {
+                        inputText(
+                            "Contact Number",
+                            "Enter a valid phone number",
+                            const Icon(Icons.local_phone), (val) {
                           if (val == null || val.isEmpty) {
-                                return 'Cannot be empty';
-                              } else if (val.length < 8) {
-                                return 'Enter a valid phone number';
-                              }
-                              try {
-                                int.parse(val);
-                                return null;
-                              } catch (e) {
-                                return 'Enter only numbers';
-                              }
-                          }, 
-                        (val) => setState(() => phone = val)),
-                        
+                            return 'Cannot be empty';
+                          } else if (val.length < 8) {
+                            return 'Enter a valid phone number';
+                          }
+                          try {
+                            int.parse(val);
+                            return null;
+                          } catch (e) {
+                            return 'Enter only numbers';
+                          }
+                        }, (val) => setState(() => phone = val)),
+
                         emptyBox(15.0),
 
                         //enter email
-                        inputText("Email", "Enter a valid email", const Icon(Icons.email_outlined), 
-                        (val) {
+                        inputText("Email", "Enter a valid email",
+                            const Icon(Icons.email_outlined), (val) {
                           if (val == null || val.isEmpty) {
                             return 'Cannot be empty';
                           }
                           return null;
-                        }, 
-                        (val) => setState(() => email = val)),
+                        }, (val) => setState(() => email = val)),
 
                         emptyBox(15.0),
 
                         //enter password
-                        inputText("Password", "Choose your password", const Icon(Icons.lock_outlined), 
-                        (val) {
+                        inputObscuredText("Password", "Choose your password",
+                            const Icon(Icons.lock_outlined), (val) {
                           if (val == null || val.isEmpty) {
                             return 'Cannot be empty';
                           } else if (val.length < 6) {
-                                return 'Password needs to be at least 6 characters long';
-                              }
+                            return 'Password needs to be at least 6 characters long';
+                          }
                           return null;
-                        }, 
-                        (val) => setState(() => password = val)),
-                        
+                        }, (val) => setState(() => password = val)),
+
                         emptyBox(15.0),
 
                         //choose user type
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 30.0),
                           child: DropdownButtonFormField(
                             decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
@@ -151,26 +149,26 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                             },
                           ),
                         ),
-                        
+
                         emptyBox(25.0),
 
                         //create account  button
-                        bigButton("Create Account", 
-                          () async {
-                            if (_formKey.currentState!.validate()) {
-                              setState(() => loading = true);
-                              dynamic result = await _auth.register(name, phone, email, type, password);
+                        bigButton("Create Account", () async {
+                          if (_formKey.currentState!.validate()) {
+                            setState(() => loading = true);
+                            dynamic result = await _auth.register(
+                                name, phone, email, type, password);
 
-                              if (result == null) {
-                                setState(() => error = 'Invalid email');
-                              } else {
-                                setState(() => error = 'Success!');
-                                _auth.signOut();
-                              }
-                              setState(() => loading = false);
-                            } 
-                          }),
-                        
+                            if (result == null) {
+                              setState(() => error = 'Invalid email');
+                            } else {
+                              setState(() => error = 'Success!');
+                              _auth.signOut();
+                            }
+                            setState(() => loading = false);
+                          }
+                        }),
+
                         emptyBox(10.0),
 
                         Text(

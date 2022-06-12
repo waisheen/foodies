@@ -15,3 +15,10 @@ class DatabaseService {
     });
   }
 }
+
+class Database {
+  final String collection;
+  Database({required this.collection});
+  late final CollectionReference databaseInformation =
+      FirebaseFirestore.instance.collection(collection);
+}
