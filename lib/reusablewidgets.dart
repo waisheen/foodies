@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:foodies/Features/shopdetails.dart';
 
 import 'Models/shop.dart';
 import 'loading.dart';
@@ -138,7 +139,15 @@ Widget buildShopStream(BuildContext context, Stream<QuerySnapshot> stream) {
                 itemBuilder: (BuildContext context, int index) {
                   //DocumentSnapshot entity = snapshot.data!.docs[index];
                   Shop shop = Shop.fromSnapshot(snapshot.data!.docs[index]);
-                  return buildCard(context, shop.name, shop.imageURL, () {});
+                  return buildCard(
+                    context,
+                    shop.name,
+                    shop.imageURL,
+                    () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ShopDetailsPage(shop: shop))),
+                  );
                 });
           }));
 }

@@ -1,22 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:foodies/Services/all.dart';
 
+import '../Models/shop.dart';
 import '../reusablewidgets.dart';
 
 class ShopDetailsPage extends StatefulWidget {
-  const ShopDetailsPage({Key? key}) : super(key: key);
+  const ShopDetailsPage({Key? key, required this.shop}) : super(key: key);
+  final Shop shop;
 
   @override
   State<ShopDetailsPage> createState() => _ShopDetailsPageState();
 }
 
 class _ShopDetailsPageState extends State<ShopDetailsPage> {
-  final AuthService _auth = AuthService();
-  final CollectionReference userInformation =
+  final CollectionReference shopInformation =
       FirebaseFirestore.instance.collection('Shop');
-  int currentIndex = 0;
-  Color color = Colors.blue;
 
   @override
   Widget build(BuildContext context) {
@@ -56,57 +54,50 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
 
             emptyBox(70),
 
-            //display name
+            //Shop name
             ListTile(
                 contentPadding: const EdgeInsets.only(left: 25),
                 title: const Padding(
                   padding: EdgeInsets.only(bottom: 3),
-                  child: Text("Name"),
+                  child: Text("Shop Name"),
                 ),
-                subtitle: futureText(
-                    context,
-                    userInformation,
-                    _auth.currentUser!.uid,
-                    'name') //get user name from database
+                subtitle: Text(widget.shop.name) //get shopv name from database
                 ),
 
-            //display phone number
-            ListTile(
-                contentPadding: const EdgeInsets.only(left: 25),
-                title: const Padding(
-                  padding: EdgeInsets.only(bottom: 3),
-                  child: Text("Phone Number"),
-                ),
-                subtitle: futureText(
-                    context,
-                    userInformation,
-                    _auth.currentUser!.uid,
-                    'contact') //get number from database
-                ),
-
-            //display email
+            //display Opening Days
             ListTile(
               contentPadding: const EdgeInsets.only(left: 25),
               title: const Padding(
                 padding: EdgeInsets.only(bottom: 3),
-                child: Text("Email Address"),
+                child: Text("Opening Days"),
               ),
-              subtitle: futureText(context, userInformation,
-                  _auth.currentUser!.uid, 'email'), //get email from database
+              subtitle: widget.shop.getDaysText(), //get number from database
             ),
 
-            //display role
+            //display minmax prices
             ListTile(
               contentPadding: const EdgeInsets.only(left: 25),
               title: const Padding(
                 padding: EdgeInsets.only(bottom: 3),
-                child: Text("Role"),
+                child: Text("Prices"),
               ),
-              subtitle: futureText(
-                  context, userInformation, _auth.currentUser!.uid, 'role'),
+              subtitle: Text(
+                  '\$${widget.shop.minPrice} to \$${widget.shop.maxPrice}'), //get number from database
+            ),
+
+            //display foodplace
+            ListTile(
+              contentPadding: const EdgeInsets.only(left: 25),
+              title: const Padding(
+                padding: EdgeInsets.only(bottom: 3),
+                child: Text("Location"),
+              ),
+              subtitle: widget.shop.foodPlaceText(context),
             ),
 
             emptyBox(20),
+
+            backButton(context),
 
             //edit profile button
             bigButton("Edit Profile", () {})
