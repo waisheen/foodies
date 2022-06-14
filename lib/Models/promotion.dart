@@ -17,8 +17,8 @@ class Promotion {
   //Creating Shop object from a snapshot
   Promotion.fromSnapshot(DocumentSnapshot snapshot)
       : details = snapshot['details'],
-        startDate = snapshot['startDate'],
-        endDate = snapshot['endDate'],
+        startDate = DateTime.parse(snapshot['startDate'].toDate().toString()),
+        endDate = DateTime.parse(snapshot['endDate'].toDate().toString()),
         imageURL = snapshot['imageURL'],
         shop = snapshot['shop'].get();
 

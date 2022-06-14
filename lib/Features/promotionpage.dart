@@ -36,11 +36,11 @@ class _PromotionPageState extends State<PromotionPage> {
   }
 
   //build widget layout for each promo
-  Widget promoWidget(QueryDocumentSnapshot document) {
+  Widget promoWidget(Promotion promo) {
     return Column(
         children: <Widget>[ 
           Image(
-            image: NetworkImage(document["imageURL"]),
+            image: NetworkImage(promo.imageURL),
             height: 50.0,
             width: double.infinity,
             fit: BoxFit.fill,
