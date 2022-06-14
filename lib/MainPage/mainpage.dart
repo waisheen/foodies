@@ -46,7 +46,7 @@ class _MainPageState extends State<MainPage> {
         controller: pageController,
         children: const [
           SearchPage(),
-          DealsPage(),
+          PromotionPage(),
           LocationPage(),
           FilterPage(),
           ProfilePage()
