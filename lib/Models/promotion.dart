@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:foodies/Models/shop.dart';
 
-import '../loading.dart';
-
 class Promotion {
+  String uid;
   String details;
   DateTime startDate;
   DateTime endDate;
@@ -12,11 +10,12 @@ class Promotion {
   Future<dynamic> shop;
 
   //Initializer
-  Promotion(this.details, this.startDate, this.endDate, this.imageURL, this.shop);
+  Promotion(this.uid, this.details, this.startDate, this.endDate, this.imageURL, this.shop);
 
   //Creating Shop object from a snapshot
   Promotion.fromSnapshot(DocumentSnapshot snapshot)
-      : details = snapshot['details'],
+      : uid = snapshot.id,
+        details = snapshot['details'],
         startDate = DateTime.parse(snapshot['startDate'].toDate().toString()),
         endDate = DateTime.parse(snapshot['endDate'].toDate().toString()),
         imageURL = snapshot['imageURL'],
@@ -28,5 +27,6 @@ class Promotion {
     Shop currentShop = Shop.fromSnapshot(doc);
     return currentShop;
   }
+
 
 }
