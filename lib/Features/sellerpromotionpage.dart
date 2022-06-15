@@ -6,14 +6,14 @@ import 'package:foodies/reusablewidgets.dart';
 import '../Models/promotion.dart';
 import '../Models/shop.dart';
 
-class PromotionPage extends StatefulWidget {
-  const PromotionPage({Key? key}) : super(key: key);
+class SellerPromotionPage extends StatefulWidget {
+  const SellerPromotionPage({Key? key}) : super(key: key);
 
   @override
-  State<PromotionPage> createState() => _PromotionPageState();
+  State<SellerPromotionPage> createState() => _SellerPromotionPageState();
 }
 
-class _PromotionPageState extends State<PromotionPage> {
+class _SellerPromotionPageState extends State<SellerPromotionPage> {
   final CollectionReference promotions =
       FirebaseFirestore.instance.collection("Promotion");
 
@@ -43,10 +43,23 @@ class _PromotionPageState extends State<PromotionPage> {
         .toList(); 
         // .where((promo) => promo.endDate.isAfter(DateTime.now())).toList();  //uncomment to view current promos
 
+        //ADD FUNC TO FILTER ONLY SELLER'S PROMOTIONS
+
     //sort promos acc to startDate
     filtered.sort((a, b) => a.startDate.compareTo(b.startDate));
 
-    return filtered.map((promo) => promoWidget(promo)).toList();
+    List<Widget> widgetList = filtered.map((promo) => promoWidget(promo)).toList();
+    widgetList.add(
+      Card(
+        shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30),
+      ),
+        color: Colors.teal.shade600.withOpacity(0.5),
+        elevation: 20,
+        child: bigButton("Create New Promotion", () {})
+      ),    
+    );
+    return widgetList;
   }
 
   //build widget layout for each promo
@@ -82,8 +95,7 @@ class _PromotionPageState extends State<PromotionPage> {
                     padding: const EdgeInsets.only(bottom: 5),
                     child: Text(promo.details),
                   ),
-                  subtitle: Text(
-              "${dateFromDateTime(promo.startDate)} ~ ${dateFromDateTime(promo.endDate)} \n\n 📍  location"),
+                  subtitle: Text("${dateFromDateTime(promo.startDate)} ~ ${dateFromDateTime(promo.endDate)} \n\n 📍  location"),
                   // dateAndShopText(context, promo)
                   ),
               emptyBox(10),
@@ -106,7 +118,7 @@ class _PromotionPageState extends State<PromotionPage> {
             return const Loading();
           }
           return Text(
-              "${dateFromDateTime(promo.startDate)} ~ ${dateFromDateTime(promo.endDate)} \n\n 📍  location");
+              "${dateFromDateTime(promo.startDate)} ~ ${dateFromDateTime(promo.endDate)} \n\n 📍  ${shop.data!.name}");
         });
   }
 }

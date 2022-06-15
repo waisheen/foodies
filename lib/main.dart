@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
           // This is the theme of your application.
           primarySwatch: Colors.cyan,
         ),
-        home: const Wrapper(),
+        home: Wrapper(),
       ),
     );
   }
