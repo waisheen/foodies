@@ -87,6 +87,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       ),
                       subtitle: TextFormField(
                         initialValue: name,
+                        onChanged: (val) => setState(() => name = val),
                         validator: (val) {
                           if (val == null || val.isEmpty) {
                             return 'Cannot be empty';
@@ -118,13 +119,19 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       ),
                       subtitle: TextFormField(
                         initialValue: contact,
+                        onChanged: (val) => setState(() => contact = val),
                         validator: (val) {
                           if (val == null || val.isEmpty) {
                             return 'Cannot be empty';
                           } else if (val.length < 8) {
                             return 'Enter a valid phone number';
                           }
-                          return null;
+                          try {
+                            int.parse(val);
+                            return null;
+                          } catch (e) {
+                            return 'Enter only numbers';
+                          }
                         },
                       ))
                   : ListTile(
@@ -166,8 +173,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
               //edit profile button
               editing
-                  ? bigButton('Save Changes', () {
-                      setState(() => editing = false);
+                  ? bigButton('Save Changes', () async {
+                      if (_formKey.currentState!.validate()) {
+                        setState(() => editing = false);
+                        _auth.updateDetails(name, contact);
+                      }
                     })
                   : bigButton("Edit Profile", () {
                       setState(() => editing = true);

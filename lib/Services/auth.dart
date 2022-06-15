@@ -80,4 +80,15 @@ class AuthService {
       return e.code;
     }
   }
+
+  //Update name and contact
+  Future updateDetails(String name, String contact) async {
+    try {
+      await DatabaseService(uid: _auth.currentUser!.uid)
+          .updateUser(name, int.parse(contact));
+      return _userFromFirebase(_auth.currentUser);
+    } catch (e) {
+      return null;
+    }
+  }
 }
