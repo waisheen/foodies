@@ -14,6 +14,14 @@ class DatabaseService {
       'role': role,
     });
   }
+
+  //Update user details
+  Future updateUser(String name, int contact) async {
+    return await userInformation.doc(uid).update({
+      'name': name,
+      'contact': contact,
+    });
+  }
 }
 
 class Database {

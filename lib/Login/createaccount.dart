@@ -12,7 +12,6 @@ class CreateAccountPage extends StatefulWidget {
 }
 
 class _CreateAccountPageState extends State<CreateAccountPage> {
-  // ignore: unused_field
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
 

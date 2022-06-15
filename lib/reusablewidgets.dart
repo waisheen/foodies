@@ -11,7 +11,8 @@ Widget emptyBox(double height) {
 
 //user to input text field
 Widget inputText(String label, String hint, Widget icon,
-    String? Function(String?)? validator, void Function(String)? onChanged) {
+    String? Function(String?)? validator, void Function(String)? onChanged,
+    [String? initial]) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 30.0),
     child: TextFormField(
@@ -21,6 +22,7 @@ Widget inputText(String label, String hint, Widget icon,
           hintText: hint,
           prefixIcon: icon,
         ),
+        initialValue: initial,
         validator: validator,
         onChanged: onChanged),
   );
@@ -28,7 +30,8 @@ Widget inputText(String label, String hint, Widget icon,
 
 //user to input text field (obscured)
 Widget inputObscuredText(String label, String hint, Widget icon,
-    String? Function(String?)? validator, void Function(String)? onChanged) {
+    String? Function(String?)? validator, void Function(String)? onChanged,
+    [String? initial]) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 30.0),
     child: TextFormField(
@@ -89,8 +92,9 @@ Widget futureText(BuildContext context, CollectionReference users, String uid,
       future: users.doc(uid).get(),
       builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
+          String text = snapshot.data!.get(getter).toString();
           return Text(
-            snapshot.data!.get(getter).toString(),
+            text,
             style: const TextStyle(fontSize: 16),
           );
         }
