@@ -1,4 +1,4 @@
-export 'promotionpage.dart';
+export 'userpromotionpage.dart';
 export 'filterpage.dart';
 export 'searchpage.dart';
 export 'locationpage.dart';
