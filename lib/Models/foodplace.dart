@@ -1,15 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FoodPlace {
+  String? uid;
   String name;
   String imageURL;
 
   //Initializer
-  FoodPlace(this.name, this.imageURL);
+  FoodPlace(this.uid, this.name, this.imageURL);
 
   //Creating Shop object from a snapshot
   FoodPlace.fromSnapshot(DocumentSnapshot snapshot)
-      : name = snapshot['name'],
+      : uid = snapshot.id,
+        name = snapshot['name'],
         imageURL = snapshot['imageURL'];
 
   //Creating FoodPlace from JSON
