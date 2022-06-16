@@ -139,17 +139,12 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                                   builder: (context) => const AnonymousPage()));
                         }
                       : () async {
-                          Stream<QuerySnapshot> userReviewStream =
-                              getUserReviewSnapshot(context);
-                          bool noReview = await userReviewStream.isEmpty;
-                          if (!mounted) return;
-                          QuerySnapshot? futureUserReview = noReview
-                              ? null
-                              : await getUserReviewSnapshot(context).first;
+                          QuerySnapshot futureUserReview =
+                              await getUserReviewSnapshot(context).first;
                           Review? review;
                           try {
                             review = Review.fromSnapshot(
-                                futureUserReview!.docs.first);
+                                futureUserReview.docs.first);
                           } catch (e) {
                             review = null;
                           }
