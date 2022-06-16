@@ -5,15 +5,16 @@ import 'package:foodies/reusablewidgets.dart';
 
 import '../Models/promotion.dart';
 import '../Models/shop.dart';
+import 'shopdetails.dart';
 
-class SellerPromotionPage extends StatefulWidget {
-  const SellerPromotionPage({Key? key}) : super(key: key);
+class UserPromotionPage extends StatefulWidget {
+  const UserPromotionPage({Key? key}) : super(key: key);
 
   @override
-  State<SellerPromotionPage> createState() => _SellerPromotionPageState();
+  State<UserPromotionPage> createState() => _UserPromotionPageState();
 }
 
-class _SellerPromotionPageState extends State<SellerPromotionPage> {
+class _UserPromotionPageState extends State<UserPromotionPage> {
   final CollectionReference promotions =
       FirebaseFirestore.instance.collection("Promotion");
 
@@ -43,23 +44,10 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
         .toList(); 
         // .where((promo) => promo.endDate.isAfter(DateTime.now())).toList();  //uncomment to view current promos
 
-        //ADD FUNC TO FILTER ONLY SELLER'S PROMOTIONS
-
     //sort promos acc to startDate
     filtered.sort((a, b) => a.startDate.compareTo(b.startDate));
 
-    List<Widget> widgetList = filtered.map((promo) => promoWidget(promo)).toList();
-    widgetList.add(
-      Card(
-        shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30),
-      ),
-        color: Colors.teal.shade600.withOpacity(0.5),
-        elevation: 20,
-        child: bigButton("Create New Promotion", () {})
-      ),    
-    );
-    return widgetList;
+    return filtered.map((promo) => promoWidget(promo)).toList();
   }
 
   //build widget layout for each promo
@@ -71,7 +59,12 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
         borderRadius: BorderRadius.circular(20),
       ),
       child: InkWell(
-        onTap: () {}, //goes to shop's page
+        onTap: () async {     //goes to shop's page
+          await promo.currentShop
+          .then((shop) => Navigator.push(
+            context, 
+            MaterialPageRoute(builder: (context) => ShopDetailsPage(shop: shop))));
+        }, 
         splashColor: Colors.teal.shade600.withOpacity(0.5),
         child: Ink(
           child: Column(
@@ -95,8 +88,8 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
                     padding: const EdgeInsets.only(bottom: 5),
                     child: Text(promo.details),
                   ),
-                  subtitle: Text("${dateFromDateTime(promo.startDate)} ~ ${dateFromDateTime(promo.endDate)} \n\n 📍  location"),
-                  // dateAndShopText(context, promo)
+                  subtitle: //Text("${dateFromDateTime(promo.startDate)} ~ ${dateFromDateTime(promo.endDate)} \n\n 📍  location"),
+                  dateAndShopText(context, promo)
                   ),
               emptyBox(10),
             ],

@@ -7,10 +7,13 @@ class Promotion {
   DateTime startDate;
   DateTime endDate;
   String imageURL;
-  Future<dynamic> shop;
+  String shop_id;
+
+  final CollectionReference shops =
+      FirebaseFirestore.instance.collection("Shop");
 
   //Initializer
-  Promotion(this.uid, this.details, this.startDate, this.endDate, this.imageURL, this.shop);
+  Promotion(this.uid, this.details, this.startDate, this.endDate, this.imageURL, this.shop_id);
 
   //Creating Shop object from a snapshot
   Promotion.fromSnapshot(DocumentSnapshot snapshot)
@@ -19,11 +22,11 @@ class Promotion {
         startDate = DateTime.parse(snapshot['startDate'].toDate().toString()),
         endDate = DateTime.parse(snapshot['endDate'].toDate().toString()),
         imageURL = snapshot['imageURL'],
-        shop = snapshot['shop'].get();
+        shop_id = snapshot['shop_id'];
 
-  //Get shop object
+  // Get shop object
   Future<Shop> get currentShop async {
-    DocumentSnapshot doc = await shop;
+    DocumentSnapshot doc = await shops.doc(shop_id).get();
     Shop currentShop = Shop.fromSnapshot(doc);
     return currentShop;
   }
