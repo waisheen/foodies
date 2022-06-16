@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:foodies/Features/shopdetails.dart';
 import 'package:foodies/Services/all.dart';
 import '../Features/all.dart';
+import '../Features/sellermenupage.dart';
+import '../Promotion/sellerpromotionpage.dart';
 import '../ProfilePage/profilepage.dart';
 
-class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+class SellerMainPage extends StatefulWidget {
+  const SellerMainPage({Key? key}) : super(key: key);
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  State<SellerMainPage> createState() => _SellerMainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _SellerMainPageState extends State<SellerMainPage> {
   final AuthService _auth = AuthService();
   PageController pageController = PageController();
   int currentIndex = 0;
@@ -46,9 +49,10 @@ class _MainPageState extends State<MainPage> {
         controller: pageController,
         children: const [
           SearchPage(),
-          PromotionPage(),
-          LocationPage(),
-          FilterPage(),
+          SellerPromotionPage(),
+          SellerMenuPage(),
+          SellerMenuPage(), //placeholder before ShopDetails can be retrieved
+          //ShopDetailsPage(shop: shop),
           ProfilePage()
         ],
       ),
@@ -64,14 +68,14 @@ class _MainPageState extends State<MainPage> {
           BottomNavigationBarItem(
               icon: Icon(Icons.search_outlined), label: 'Search'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.discount_outlined), label: 'Deals'),
+              icon: Icon(Icons.discount_outlined), label: 'My Promotions'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.place_outlined),
-            label: 'Location',
+            icon: Icon(Icons.ramen_dining),
+            label: 'My Menu',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.filter_alt_outlined),
-            label: 'Filter',
+            icon: Icon(Icons.storefront),
+            label: 'My Shop',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle_rounded),
