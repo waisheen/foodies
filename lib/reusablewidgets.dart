@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foodies/Features/shopdetails.dart';
+import 'package:foodies/star.dart';
 
+import 'Models/review.dart';
 import 'Models/shop.dart';
 import 'loading.dart';
 
@@ -105,6 +107,28 @@ Widget futureText(BuildContext context, CollectionReference users, String uid,
       });
 }
 
+//Build colored boxes
+Widget colorBox(BuildContext context, bool color, String text) {
+  return Padding(
+    padding: const EdgeInsets.only(top: 2.5, right: 5),
+    child: Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: color ? Colors.green : Colors.white,
+          border: Border.all(color: Colors.black)),
+      height: 35,
+      width: 35,
+      child: Center(
+        child: Text(
+          text,
+          textAlign: TextAlign.center,
+          style: const TextStyle(color: Colors.black, fontSize: 12),
+        ),
+      ),
+    ),
+  );
+}
+
 //Builds a card with a title, image and a onTap fuction
 Widget buildCard(BuildContext context, String title, String imageURL,
     void Function() onTapped) {
@@ -141,7 +165,6 @@ Widget buildShopStream(BuildContext context, Stream<QuerySnapshot> stream) {
                 shrinkWrap: true,
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (BuildContext context, int index) {
-                  //DocumentSnapshot entity = snapshot.data!.docs[index];
                   Shop shop = Shop.fromSnapshot(snapshot.data!.docs[index]);
                   return buildCard(
                     context,
@@ -154,4 +177,74 @@ Widget buildShopStream(BuildContext context, Stream<QuerySnapshot> stream) {
                   );
                 });
           }));
+}
+
+//This is a widget for showing individual reviews
+Widget reviewContainer(BuildContext context, Review review) {
+  return Padding(
+    padding: const EdgeInsets.only(top: 15, left: 10, right: 10),
+    child: Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.black)),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              const Padding(
+                  padding: EdgeInsets.only(left: 5, top: 5),
+                  child: Icon(Icons.account_circle_rounded)),
+              review.userText(context),
+            ],
+          ),
+          emptyBox(10),
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0),
+            child:
+                StarRating(rating: review.rating, onRatingChanged: (rating) {}),
+          ),
+          emptyBox(20),
+          SizedBox(
+              width: 350,
+              child: Text(review.description,
+                  style: const TextStyle(fontSize: 14))),
+          emptyBox(20),
+        ],
+      ),
+    ),
+  );
+}
+
+//This widget displays all reviews
+Widget buildReviewStream(
+    BuildContext context, Stream<QuerySnapshot> stream, String shopID) {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: [
+      Flexible(
+          fit: FlexFit.loose,
+          child: StreamBuilder(
+              stream: stream,
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return const Loading();
+                }
+                if (snapshot.data!.docs.isEmpty) {
+                  return const Text('No Reviews Yet!');
+                }
+                return ListView.builder(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      Review review =
+                          Review.fromSnapshot(snapshot.data!.docs[index]);
+                      return reviewContainer(
+                        context,
+                        review,
+                      );
+                    });
+              })),
+    ],
+  );
 }

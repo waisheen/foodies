@@ -1,7 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:foodies/Features/createreview.dart';
+import 'package:foodies/ProfilePage/anonymouspage.dart';
 
+import '../Models/review.dart';
 import '../Models/shop.dart';
+import '../Services/all.dart';
 import '../reusablewidgets.dart';
 
 class ShopDetailsPage extends StatefulWidget {
@@ -13,13 +17,29 @@ class ShopDetailsPage extends StatefulWidget {
 }
 
 class _ShopDetailsPageState extends State<ShopDetailsPage> {
-  final CollectionReference shopInformation =
-      FirebaseFirestore.instance.collection('Shop');
+  final AuthService _auth = AuthService();
+
+  Stream<QuerySnapshot> getReviewSnapshots(BuildContext context) async* {
+    yield* FirebaseFirestore.instance
+        .collection('Review')
+        .where('shop', isEqualTo: widget.shop.uid)
+        .snapshots();
+  }
+
+  Stream<QuerySnapshot> getUserReviewSnapshot(BuildContext context) async* {
+    yield* FirebaseFirestore.instance
+        .collection('Review')
+        .where('shop', isEqualTo: widget.shop.uid)
+        .where('user', isEqualTo: _auth.currentUser!.uid)
+        .snapshots();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      extendBodyBehindAppBar: true,
+      appBar: backButton(context),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -71,7 +91,8 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                 padding: EdgeInsets.only(bottom: 3),
                 child: Text("Opening Days"),
               ),
-              subtitle: widget.shop.getDaysText(), //get number from database
+              subtitle:
+                  widget.shop.getDaysText(context), //get number from database
             ),
 
             //display minmax prices
@@ -94,13 +115,60 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
               ),
               subtitle: widget.shop.foodPlaceText(context),
             ),
+            SizedBox(
+              width: 400,
+              height: 200,
+              child: buildReviewStream(
+                context,
+                getReviewSnapshots(context),
+                widget.shop.uid,
+              ),
+            ),
+
+            //create review button
+            Padding(
+              padding: const EdgeInsets.only(left: 32.5),
+              child: Container(
+                alignment: Alignment.centerLeft,
+                child: GestureDetector(
+                  onTap: _auth.currentUser!.isAnonymous
+                      ? () async {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const AnonymousPage()));
+                        }
+                      : () async {
+                          Stream<QuerySnapshot> userReviewStream =
+                              getUserReviewSnapshot(context);
+                          bool noReview = await userReviewStream.isEmpty;
+                          if (!mounted) return;
+                          QuerySnapshot? futureUserReview = noReview
+                              ? null
+                              : await getUserReviewSnapshot(context).first;
+                          Review? review;
+                          try {
+                            review = Review.fromSnapshot(
+                                futureUserReview!.docs.first);
+                          } catch (e) {
+                            review = null;
+                          }
+                          if (!mounted) return;
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CreateReviewPage(
+                                        review: review,
+                                        shop: widget.shop,
+                                      )));
+                        },
+                  child: const Text('Leave a Review',
+                      style: TextStyle(color: Colors.blue, fontSize: 13)),
+                ),
+              ),
+            ),
 
             emptyBox(20),
-
-            backButton(context),
-
-            //edit profile button
-            bigButton("Edit Profile", () {})
           ],
         ),
       ),

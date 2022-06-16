@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:foodies/Services/all.dart';
 import 'package:foodies/reusablewidgets.dart';
 
 class AnonymousPage extends StatefulWidget {
@@ -11,7 +10,6 @@ class AnonymousPage extends StatefulWidget {
 }
 
 class _AnonymousPageState extends State<AnonymousPage> {
-  final AuthService _auth = AuthService();
   final CollectionReference userInformation =
       FirebaseFirestore.instance.collection('UserInfo');
 
@@ -29,10 +27,12 @@ class _AnonymousPageState extends State<AnonymousPage> {
             const SizedBox(
               height: 250.0,
             ),
+            backButton(context),
+            emptyBox(30),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 90.0),
               child: bigButton('Sign in', () {
-                _auth.signOut();
+                //_auth.signOut();
               }),
             ),
             emptyBox(20.0),

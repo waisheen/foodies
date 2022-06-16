@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foodies/Models/foodplace.dart';
+import 'package:foodies/reusablewidgets.dart';
 
 import '../loading.dart';
 
 class Shop {
+  String uid;
   String name;
   int minPrice;
   int maxPrice;
@@ -13,14 +15,24 @@ class Shop {
   List<String> openDays;
   String imageURL;
   Future<dynamic> foodPlace;
+  List<String> allDays = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday'
+  ];
 
   //Initializer
-  Shop(this.name, this.minPrice, this.maxPrice, this.closing, this.opening,
-      this.openDays, this.imageURL, this.foodPlace);
+  Shop(this.uid, this.name, this.minPrice, this.maxPrice, this.closing,
+      this.opening, this.openDays, this.imageURL, this.foodPlace);
 
   //Creating Shop object from a snapshot
   Shop.fromSnapshot(DocumentSnapshot snapshot)
-      : name = snapshot['name'],
+      : uid = snapshot.id,
+        name = snapshot['name'],
         minPrice = snapshot['minPrice'],
         maxPrice = snapshot['maxPrice'],
         closing = snapshot['closing'],
@@ -30,8 +42,12 @@ class Shop {
         foodPlace = snapshot['foodPlace'].get();
 
   //String representation of open days
-  Widget getDaysText() {
-    return Row(children: openDays.map((day) => Text(day)).toList());
+  Widget getDaysText(BuildContext context) {
+    return Row(
+        children: allDays
+            .map((day) =>
+                colorBox(context, openDays.contains(day), day.substring(0, 3)))
+            .toList());
   }
 
   //Get foodplace
