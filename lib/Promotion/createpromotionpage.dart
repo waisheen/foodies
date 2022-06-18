@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foodies/Services/all.dart';
 import 'package:foodies/reusablewidgets.dart';
 import '../Models/shop.dart';
 import '../loading.dart';
@@ -14,7 +13,6 @@ class CreatePromotionPage extends StatefulWidget {
 }
 
 class _CreatePromotionPageState extends State<CreatePromotionPage> {
-  final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
 
   //Variable states

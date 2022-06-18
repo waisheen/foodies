@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:foodies/Features/shopdetails.dart';
 import 'package:foodies/star.dart';
 
 import 'Models/review.dart';
-import 'Models/shop.dart';
 import 'loading.dart';
 
 Widget emptyBox(double height) {
@@ -127,56 +125,6 @@ Widget colorBox(BuildContext context, bool color, String text) {
       ),
     ),
   );
-}
-
-//Builds a card with a title, image and a onTap fuction
-Widget buildCard(BuildContext context, String title, String imageURL,
-    void Function() onTapped) {
-  return Card(
-      child: InkWell(
-          onTap: onTapped,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              SizedBox(
-                width: 500,
-                child: Text(
-                  title,
-                  style: const TextStyle(fontSize: 30.0),
-                  textAlign: TextAlign.left,
-                ),
-              ),
-              Image.network(imageURL),
-            ],
-          )));
-}
-
-//This collects info from shop database and builds a card
-Widget buildShopStream(BuildContext context, Stream<QuerySnapshot> stream) {
-  return Flexible(
-      fit: FlexFit.loose,
-      child: StreamBuilder(
-          stream: stream,
-          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (!snapshot.hasData) {
-              return const Loading();
-            }
-            return ListView.builder(
-                shrinkWrap: true,
-                itemCount: snapshot.data!.docs.length,
-                itemBuilder: (BuildContext context, int index) {
-                  Shop shop = Shop.fromSnapshot(snapshot.data!.docs[index]);
-                  return buildCard(
-                    context,
-                    shop.name,
-                    shop.imageURL,
-                    () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ShopDetailsPage(shop: shop))),
-                  );
-                });
-          }));
 }
 
 //This is a widget for showing individual reviews

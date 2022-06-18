@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:foodies/Features/recommendation.dart';
 import 'package:foodies/Services/all.dart';
 
+import '../reusablewidgets.dart';
+
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
 
@@ -49,10 +51,10 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ),
             ),
-            Container(
-              height: 30.0,
+            emptyBox(
+              30.0,
             ),
-            const SizedBox(height: 600, child: RecommendationPage()),
+            const RecommendationPage(),
           ],
         ),
       ),

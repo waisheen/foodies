@@ -148,13 +148,19 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                           } catch (e) {
                             review = null;
                           }
+                          DocumentSnapshot newDoc = await FirebaseFirestore
+                              .instance
+                              .collection('Shop')
+                              .doc(widget.shop.uid)
+                              .get();
+                          Shop newShop = Shop.fromSnapshot(newDoc);
                           if (!mounted) return;
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => CreateReviewPage(
                                         review: review,
-                                        shop: widget.shop,
+                                        shop: newShop,
                                       )));
                         },
                   child: const Text('Leave a Review',

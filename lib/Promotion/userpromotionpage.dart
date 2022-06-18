@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:foodies/loading.dart';
 import 'package:foodies/reusablewidgets.dart';
 
+import '../Features/shopdetails.dart';
 import '../Models/promotion.dart';
 import '../Models/shop.dart';
-import 'shopdetails.dart';
 
 class UserPromotionPage extends StatefulWidget {
   const UserPromotionPage({Key? key}) : super(key: key);
@@ -41,8 +41,8 @@ class _UserPromotionPageState extends State<UserPromotionPage> {
     List filtered = docsList
         //map each document to Promotion
         .map((document) => Promotion.fromSnapshot(document))
-        .toList(); 
-        // .where((promo) => promo.endDate.isAfter(DateTime.now())).toList();  //uncomment to view current promos
+        .toList();
+    // .where((promo) => promo.endDate.isAfter(DateTime.now())).toList();  //uncomment to view current promos
 
     //sort promos acc to startDate
     filtered.sort((a, b) => a.startDate.compareTo(b.startDate));
@@ -59,12 +59,13 @@ class _UserPromotionPageState extends State<UserPromotionPage> {
         borderRadius: BorderRadius.circular(20),
       ),
       child: InkWell(
-        onTap: () async {     //goes to shop's page
-          await promo.currentShop
-          .then((shop) => Navigator.push(
-            context, 
-            MaterialPageRoute(builder: (context) => ShopDetailsPage(shop: shop))));
-        }, 
+        onTap: () async {
+          //goes to shop's page
+          await promo.currentShop.then((shop) => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ShopDetailsPage(shop: shop))));
+        },
         splashColor: Colors.teal.shade600.withOpacity(0.5),
         child: Ink(
           child: Column(
@@ -89,8 +90,7 @@ class _UserPromotionPageState extends State<UserPromotionPage> {
                     child: Text(promo.details),
                   ),
                   subtitle: //Text("${dateFromDateTime(promo.startDate)} ~ ${dateFromDateTime(promo.endDate)} \n\n 📍  location"),
-                  dateAndShopText(context, promo)
-                  ),
+                      dateAndShopText(context, promo)),
               emptyBox(10),
             ],
           ),

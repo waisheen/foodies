@@ -24,8 +24,9 @@ class Wrapper extends StatelessWidget {
       return const LoginPage();
     } else {
       return FutureBuilder(
-            future: userInformation.doc(_auth.currentUser?.uid).get(),
-            builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          future: userInformation.doc(_auth.currentUser?.uid).get(),
+          builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            try {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.data!.get('role').toString() == 'User') {
                   return const UserMainPage();
@@ -33,7 +34,10 @@ class Wrapper extends StatelessWidget {
                 return const SellerMainPage();
               }
               return const Loading();
-            });
+            } catch (e) {
+              return const UserMainPage();
+            }
+          });
     }
   }
 }
