@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foodies/Features/shopdetails.dart';
 import 'package:foodies/Services/all.dart';
 import '../Features/all.dart';
 import '../Features/sellermenupage.dart';

@@ -9,6 +9,7 @@ class Promotion {
   DateTime startDate;
   DateTime endDate;
   String imageURL;
+  // ignore: non_constant_identifier_names
   String shop_id;
 
   final CollectionReference shops =
@@ -16,7 +17,8 @@ class Promotion {
 
   //Initializer
 
-  Promotion(this.uid, this.details, this.startDate, this.endDate, this.imageURL, this.shop_id);
+  Promotion(this.uid, this.details, this.startDate, this.endDate, this.imageURL,
+      this.shop_id);
 
   //Creating Promotion object from a snapshot
   Promotion.fromSnapshot(DocumentSnapshot snapshot)
@@ -27,14 +29,10 @@ class Promotion {
         imageURL = snapshot['imageURL'],
         shop_id = snapshot['shop_id'];
 
-
   // Get shop object
   Future<Shop> get currentShop async {
     DocumentSnapshot doc = await shops.doc(shop_id).get();
     Shop currentShop = Shop.fromSnapshot(doc);
     return currentShop;
   }
-
-
-
 }
