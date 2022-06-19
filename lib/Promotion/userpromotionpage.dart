@@ -28,6 +28,9 @@ class _UserPromotionPageState extends State<UserPromotionPage> {
               if (!snapshot.hasData) {
                 return const Loading();
               }
+              if (snapshot.data!.docs.isEmpty) {
+                  return const Text('No Ongoing Promotions :(');
+              }
               return ListView(
                 padding: const EdgeInsets.all(20),
                 physics: const BouncingScrollPhysics(
@@ -75,13 +78,12 @@ class _UserPromotionPageState extends State<UserPromotionPage> {
                 height: 160,
                 width: double.infinity,
                 fit: BoxFit.cover,
-                // fit: BoxFit.fill,
-                // errorBuilder: (context, error, stackTrace) {
-                //   return const Text(
-                //     'Whoops!',
-                //     style: TextStyle(fontSize: 30, color: Colors.red),
-                //   );
-                // },
+                errorBuilder: (context, error, stackTrace) {
+                  //placeholder picture in the case image cannot be displayed
+                  return const Image(
+                    image: AssetImage('assets/images/logo3.png'),
+                  );
+                },
               ),
               emptyBox(5),
               ListTile(
