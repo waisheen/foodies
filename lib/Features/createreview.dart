@@ -24,23 +24,37 @@ class _CreateReviewPageState extends State<CreateReviewPage> {
   final _formKey = GlobalKey<FormState>();
 
   //Create Review
-  Future createReview(String? reviewID, String description, double rating,
-      String shop, String user) async {
-    reviewID == null
+  Future createReview(Review? review, String description, double rating,
+      Shop shop, String user) async {
+    !hasReview
         ? await FirebaseFirestore.instance.collection('Review').add({
             'description': description,
             'rating': rating,
-            'shop': shop,
+            'shop': shop.uid,
             'user': user,
           })
         : await FirebaseFirestore.instance
             .collection('Review')
-            .doc(reviewID)
+            .doc(review!.uid)
             .set({
             'description': description,
             'rating': rating,
-            'shop': shop,
+            'shop': shop.uid,
             'user': user,
+          });
+    !hasReview
+        ? await FirebaseFirestore.instance
+            .collection('Shop')
+            .doc(shop.uid)
+            .update({
+            'totalRating': shop.totalRating + rating,
+            'totalReview': shop.totalReview + 1,
+          })
+        : await FirebaseFirestore.instance
+            .collection('Shop')
+            .doc(shop.uid)
+            .update({
+            'totalRating': shop.totalRating + rating - review!.rating,
           });
   }
 
@@ -49,8 +63,8 @@ class _CreateReviewPageState extends State<CreateReviewPage> {
       widget.review?.description == null ? '' : widget.review!.description;
   late double rating =
       widget.review?.rating == null ? 0.0 : widget.review!.rating;
-  String update = '';
   bool loading = false;
+  late bool hasReview = widget.review != null;
 
   @override
   Widget build(BuildContext context) {
@@ -121,32 +135,25 @@ class _CreateReviewPageState extends State<CreateReviewPage> {
 
                     emptyBox(15.0),
                     //create account  button
-                    bigButton(
-                        widget.review == null ? "Create Review" : 'Edit Review',
+                    bigButton(!hasReview ? "Create Review" : 'Edit Review',
                         () async {
                       if (_formKey.currentState!.validate()) {
                         setState(() => loading = true);
                         dynamic result = await createReview(
-                            widget.review?.uid,
+                            widget.review,
                             description,
                             rating,
-                            widget.shop.uid,
+                            widget.shop,
                             _auth.currentUser!.uid);
 
                         if (result == null) {
-                          setState(() => update = 'Updated');
-                          setState(() => loading = false);
+                          if (!mounted) return;
+                          Navigator.pop(context);
                         }
                       }
                     }),
 
                     emptyBox(10.0),
-
-                    Text(
-                      update,
-                      style:
-                          const TextStyle(color: Colors.green, fontSize: 15.0),
-                    ),
                   ],
                 ),
               ),
