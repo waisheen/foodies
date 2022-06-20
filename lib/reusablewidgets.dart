@@ -1,10 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:foodies/Services/all.dart';
 import 'package:foodies/star.dart';
 
 import 'Models/review.dart';
+import 'Models/shop.dart';
+import 'Services/auth.dart';
 
 // ignore: depend_on_referenced_packages
+import 'package:intl/intl.dart';
 
 CollectionReference shops = FirebaseFirestore.instance.collection("Shop");
 
@@ -164,4 +168,19 @@ Widget reviewContainer(BuildContext context, Review review) {
       ),
     ),
   );
+}
+
+Future<Shop> getSellerShop() async {
+  String currSellerID = AuthService().currentUser!.uid;
+  QuerySnapshot snapshot = await shops.get();
+  List<Shop> shopList = snapshot.docs
+      .where((snapshot) => snapshot["sellerID"] == currSellerID)
+      .map((snapshot) => Shop.fromSnapshot(snapshot))
+      .toList();
+  return shopList[0];
+}
+
+//get only date portion of DateTime
+String dateFromDateTime(DateTime dateTime) {
+  return "${dateTime.day} ${DateFormat('MMM').format(dateTime)} ${dateTime.year}";
 }
