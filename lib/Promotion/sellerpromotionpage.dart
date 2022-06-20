@@ -23,6 +23,11 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
       FirebaseFirestore.instance.collection("Promotion");
   final CollectionReference shops =
       FirebaseFirestore.instance.collection("Shop");
+  
+  //variable states
+  Color colour = Colors.teal;
+  bool sortByStart = true;
+  bool sortByEnd = false;
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +39,38 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
               if (!snapshot.hasData) {
                 return const Loading();
               }
-              return ListView(
+              return Padding(
                 padding: const EdgeInsets.all(20),
-                physics: const BouncingScrollPhysics(
+                child: CustomScrollView(
+                  physics: const BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics()),
-                children: promoList(snapshot.data!.docs),
+                  slivers: [
+                    SliverAppBar(
+                      backgroundColor: Colors.transparent,
+                      title: Row(children: [
+                          Text("Sort by:", style: TextStyle(fontSize: 15, color: colour),),
+                          const SizedBox(width: 10),
+                          sortButton("Start Date", sortByStart, () {
+                            setState(() {
+                              sortByStart = true;
+                              sortByEnd = false;
+                            });
+                          }),
+                          const SizedBox(width: 10),
+                          sortButton("End Date", sortByEnd, () {
+                            setState(() {
+                              sortByStart = false;
+                              sortByEnd = true;
+                            });
+                          }),
+                        ],
+                      ),
+                      ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(promoList(snapshot.data!.docs))
+                      ),
+                  ],
+                ),
               );
             }));
   }
@@ -53,18 +85,40 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
         //only show seller's promos
         .where((promo) => promo.shop_id == widget.shop!.uid)
         .toList();
-    //sort promos acc to startDate
-    filtered.sort((a, b) => a.startDate.compareTo(b.startDate));
+    
+    //sort promos acc to startDate or endDate
+    if (sortByStart) {
+      filtered.sort((a, b) => a.startDate.compareTo(b.startDate));
+    } else if (sortByEnd) {
+      filtered.sort((a, b) => a.endDate.compareTo(b.endDate));
+    }
 
     List<Widget> widgetList =
         filtered.map((promo) => promoWidget(promo)).toList();
+    
+    //if store has no ongoing promotions
+    if (widgetList.isEmpty) {
+      widgetList.add(
+        SizedBox(
+          height: MediaQuery.of(context).size.height / 1.8,
+          child: const Align(
+            alignment: Alignment.center,
+            child: Text("There are no ongoing promotions", 
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 15),
+              ),
+          ),
+        ),
+      );
+    }
+
     widgetList.add(
       Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),
         // color: Colors.teal.shade600.withOpacity(0.5),
-        elevation: 20,
+        elevation: 10,
         child: bigButton(
           "Create New Promotion",
           () async {
@@ -84,7 +138,7 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
   Widget promoWidget(Promotion promo) {
     return Card(
       clipBehavior: Clip.hardEdge,
-      elevation: 20,
+      elevation: 5,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
@@ -178,4 +232,25 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
         .toList();
     return shopList[0];
   }
+
+  //create sort button 
+  Widget sortButton(String text, bool selected, Function()? onPressed) {
+    return Container(
+      height: 35.0,
+      decoration: BoxDecoration(
+        color: selected ? colour : Colors.transparent,
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(color: colour),
+      ),
+      child: 
+      TextButton(
+        onPressed: onPressed,
+        child: Text(
+          text,
+          style: TextStyle(color: selected ? Colors.white : colour, fontSize: 13),
+        ),
+      ),
+    );
+  }
+
 }

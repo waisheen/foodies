@@ -17,6 +17,11 @@ class UserPromotionPage extends StatefulWidget {
 class _UserPromotionPageState extends State<UserPromotionPage> {
   final CollectionReference promotions =
       FirebaseFirestore.instance.collection("Promotion");
+  
+  //variable states
+  Color colour = Colors.teal;
+  bool sortByStart = true;
+  bool sortByEnd = false;
 
   @override
   Widget build(BuildContext context) {
@@ -28,14 +33,38 @@ class _UserPromotionPageState extends State<UserPromotionPage> {
               if (!snapshot.hasData) {
                 return const Loading();
               }
-              if (snapshot.data!.docs.isEmpty) {
-                  return const Text('No Ongoing Promotions :(');
-              }
-              return ListView(
+              return Padding(
                 padding: const EdgeInsets.all(20),
-                physics: const BouncingScrollPhysics(
+                child: CustomScrollView(
+                  physics: const BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics()),
-                children: promoList(snapshot.data!.docs),
+                  slivers: [
+                    SliverAppBar(
+                      backgroundColor: Colors.transparent,
+                      title: Row(children: [
+                          Text("Sort by:", style: TextStyle(fontSize: 15, color: colour),),
+                          const SizedBox(width: 10),
+                          sortButton("Start Date", sortByStart, () {
+                            setState(() {
+                              sortByStart = true;
+                              sortByEnd = false;
+                            });
+                          }),
+                          const SizedBox(width: 10),
+                          sortButton("End Date", sortByEnd, () {
+                            setState(() {
+                              sortByStart = false;
+                              sortByEnd = true;
+                            });
+                          }),
+                        ],
+                      ),
+                      ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(promoList(snapshot.data!.docs))
+                      ),
+                  ],
+                ),
               );
             }));
   }
@@ -47,17 +76,39 @@ class _UserPromotionPageState extends State<UserPromotionPage> {
         .toList();
     // .where((promo) => promo.endDate.isAfter(DateTime.now())).toList();  //uncomment to view current promos
 
-    //sort promos acc to startDate
-    filtered.sort((a, b) => a.startDate.compareTo(b.startDate));
+    //sort promos acc to startDate or endDate
+    if (sortByStart) {
+      filtered.sort((a, b) => a.startDate.compareTo(b.startDate));
+    } else if (sortByEnd) {
+      filtered.sort((a, b) => a.endDate.compareTo(b.endDate));
+    }
 
-    return filtered.map((promo) => promoWidget(promo)).toList();
+    List<Widget> widgetList = filtered.map((promo) => promoWidget(promo)).toList();
+
+    //if widgetList is empty i.e. there are no promotions
+    if (widgetList.isEmpty) {
+      widgetList.add(
+        SizedBox(
+          height: MediaQuery.of(context).size.height / 1.6,
+          child: const Align(
+            alignment: Alignment.center,
+            child: Text("There are no ongoing promotions", 
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 15),
+              ),
+          ),
+        ),
+      );
+    }
+
+    return widgetList;
   }
 
   //build widget layout for each promo
   Widget promoWidget(Promotion promo) {
     return Card(
       clipBehavior: Clip.hardEdge,
-      elevation: 20,
+      elevation: 5,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
@@ -115,5 +166,25 @@ class _UserPromotionPageState extends State<UserPromotionPage> {
           return Text(
               "${dateFromDateTime(promo.startDate)} ~ ${dateFromDateTime(promo.endDate)} \n\n 📍  ${shop.data!.name}");
         });
+  }
+
+  //create sort button 
+  Widget sortButton(String text, bool selected, Function()? onPressed) {
+    return Container(
+      height: 35.0,
+      decoration: BoxDecoration(
+        color: selected ? colour : Colors.transparent,
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(color: colour),
+      ),
+      child: 
+      TextButton(
+        onPressed: onPressed,
+        child: Text(
+          text,
+          style: TextStyle(color: selected ? Colors.white : colour, fontSize: 13),
+        ),
+      ),
+    );
   }
 }
