@@ -26,6 +26,7 @@ class Shop {
     'Saturday',
     'Sunday'
   ];
+  String sellerID;
   double totalRating;
   double totalReview;
 
@@ -40,6 +41,7 @@ class Shop {
       this.openDays,
       this.imageURL,
       this.foodPlace,
+      this.sellerID,
       this.totalReview,
       this.totalRating);
 
@@ -54,6 +56,7 @@ class Shop {
         openDays = List<String>.from(snapshot['openDays']),
         imageURL = snapshot['imageURL'],
         foodPlace = snapshot['foodPlace'].get(),
+        sellerID = snapshot['sellerID'],
         totalReview = snapshot['totalReview'] + 0.0,
         totalRating = snapshot['totalRating'] + 0.0;
 

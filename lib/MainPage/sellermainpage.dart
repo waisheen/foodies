@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:foodies/Services/all.dart';
 import '../Features/all.dart';
 import '../Features/sellermenupage.dart';
+import '../Models/shop.dart';
 import '../Promotion/sellerpromotionpage.dart';
 import '../ProfilePage/profilepage.dart';
+import '../reusablewidgets.dart';
 
 class SellerMainPage extends StatefulWidget {
   const SellerMainPage({Key? key}) : super(key: key);
@@ -17,6 +19,18 @@ class _SellerMainPageState extends State<SellerMainPage> {
   PageController pageController = PageController();
   int currentIndex = 0;
   final Color colour = Colors.teal.shade600;
+    // ignore: avoid_init_to_null
+  late Shop? shop = null;
+
+    @override
+  initState() {
+    super.initState();
+    getSellerShop().then((result) {
+      setState(() {
+        shop = result;
+      });
+    });
+  }
 
   void onTapped(int index) {
     setState(() => currentIndex = index);
@@ -47,13 +61,13 @@ class _SellerMainPageState extends State<SellerMainPage> {
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
-        children: const [
-          SearchPage(),
-          SellerPromotionPage(),
-          SellerMenuPage(),
-          SellerMenuPage(), //placeholder before ShopDetails can be retrieved
+        children: [
+          const SearchPage(),
+          SellerPromotionPage(shop: shop),
+          const SellerMenuPage(),
+          const SellerMenuPage(), //placeholder before ShopDetails can be retrieved
           //ShopDetailsPage(shop: shop),
-          ProfilePage()
+          const ProfilePage()
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

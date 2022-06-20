@@ -4,6 +4,10 @@ import 'package:foodies/star.dart';
 
 import 'Models/review.dart';
 
+// ignore: depend_on_referenced_packages
+
+CollectionReference shops = FirebaseFirestore.instance.collection("Shop");
+
 Widget emptyBox(double height) {
   return SizedBox(height: height);
 }
