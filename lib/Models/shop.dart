@@ -125,4 +125,22 @@ class Shop {
               rating: ratings / count, onRatingChanged: (ratings) {});
         });
   }
+
+  // convert to 24hr
+  String convert(int time) {
+    if (time < 1200) {
+      return time.toString().length == 3
+          ? '${time.toString().substring(0, 1)}:${time.toString().substring(1)} A.M.'
+          : '${time.toString().substring(0, 2)}:${time.toString().substring(2)} A.M.';
+    }
+    int afternoon = time - 1200;
+    return afternoon.toString().length == 3
+        ? '${afternoon.toString().substring(0, 1)}:${afternoon.toString().substring(1)} P.M.'
+        : '${afternoon.toString().substring(0, 2)}:${afternoon.toString().substring(2)} P.M.';
+  }
+
+//get operating hours
+  String get operatingHours {
+    return '${convert(opening)} to ${convert(closing)}';
+  }
 }

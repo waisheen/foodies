@@ -43,6 +43,7 @@ class _UserMainPageState extends State<UserMainPage> {
       ),
       backgroundColor: Colors.white,
       body: PageView(
+        physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
         children: const [
           SearchPage(),

@@ -45,6 +45,7 @@ class _SellerMainPageState extends State<SellerMainPage> {
       ),
       backgroundColor: Colors.white,
       body: PageView(
+        physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
         children: const [
           SearchPage(),

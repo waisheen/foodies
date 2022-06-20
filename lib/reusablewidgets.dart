@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:foodies/star.dart';
 
 import 'Models/review.dart';
-import 'loading.dart';
 
 Widget emptyBox(double height) {
   return SizedBox(height: height);
@@ -160,39 +159,5 @@ Widget reviewContainer(BuildContext context, Review review) {
         ],
       ),
     ),
-  );
-}
-
-//This widget displays all reviews
-Widget buildReviewStream(
-    BuildContext context, Stream<QuerySnapshot> stream, String shopID) {
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.start,
-    children: [
-      Flexible(
-          fit: FlexFit.loose,
-          child: StreamBuilder(
-              stream: stream,
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (!snapshot.hasData) {
-                  return const Loading();
-                }
-                if (snapshot.data!.docs.isEmpty) {
-                  return const Text('No Reviews Yet!');
-                }
-                return ListView.builder(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      Review review =
-                          Review.fromSnapshot(snapshot.data!.docs[index]);
-                      return reviewContainer(
-                        context,
-                        review,
-                      );
-                    });
-              })),
-    ],
   );
 }
