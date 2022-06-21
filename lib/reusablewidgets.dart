@@ -5,7 +5,7 @@ import 'package:foodies/star.dart';
 
 import 'Models/review.dart';
 import 'Models/shop.dart';
-import 'loading.dart';
+import 'Services/auth.dart';
 
 // ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
@@ -159,10 +159,15 @@ Widget reviewContainer(BuildContext context, Review review) {
                 StarRating(rating: review.rating, onRatingChanged: (rating) {}),
           ),
           emptyBox(20),
-          SizedBox(
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0),
+            child: SizedBox(
               width: 350,
               child: Text(review.description,
-                  style: const TextStyle(fontSize: 14))),
+                  style: const TextStyle(fontSize: 14),
+              ),
+            ),
+          ),
           emptyBox(20),
         ],
       ),
@@ -170,52 +175,17 @@ Widget reviewContainer(BuildContext context, Review review) {
   );
 }
 
-//This widget displays all reviews
-Widget buildReviewStream(
-    BuildContext context, Stream<QuerySnapshot> stream, String shopID) {
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.start,
-    children: [
-      Flexible(
-          fit: FlexFit.loose,
-          child: StreamBuilder(
-              stream: stream,
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (!snapshot.hasData) {
-                  return const Loading();
-                }
-                if (snapshot.data!.docs.isEmpty) {
-                  return const Text('No Reviews Yet!');
-                }
-                return ListView.builder(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      Review review =
-                          Review.fromSnapshot(snapshot.data!.docs[index]);
-                      return reviewContainer(
-                        context,
-                        review,
-                      );
-                    });
-              })),
-    ],
-  );
-}
-
 Future<Shop> getSellerShop() async {
   String currSellerID = AuthService().currentUser!.uid;
   QuerySnapshot snapshot = await shops.get();
   List<Shop> shopList = snapshot.docs
-  .where((snapshot) => snapshot["sellerID"] == currSellerID)
-  .map((snapshot) => Shop.fromSnapshot(snapshot))
-  .toList();
+      .where((snapshot) => snapshot["sellerID"] == currSellerID)
+      .map((snapshot) => Shop.fromSnapshot(snapshot))
+      .toList();
   return shopList[0];
 }
 
-
-  //get only date portion of DateTime
-  String dateFromDateTime(DateTime dateTime) {
-    return "${dateTime.day} ${DateFormat('MMM').format(dateTime)} ${dateTime.year}";
-  }
+//get only date portion of DateTime
+String dateFromDateTime(DateTime dateTime) {
+  return "${dateTime.day} ${DateFormat('MMM').format(dateTime)} ${dateTime.year}";
+}

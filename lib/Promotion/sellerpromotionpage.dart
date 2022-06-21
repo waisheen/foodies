@@ -46,7 +46,8 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
                     parent: AlwaysScrollableScrollPhysics()),
                   slivers: [
                     SliverAppBar(
-                      backgroundColor: Colors.transparent,
+                      floating: true,
+                      backgroundColor: Colors.white,
                       title: Row(children: [
                           Text("Sort by:", style: TextStyle(fontSize: 15, color: colour),),
                           const SizedBox(width: 10),
@@ -118,7 +119,7 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
           borderRadius: BorderRadius.circular(30),
         ),
         // color: Colors.teal.shade600.withOpacity(0.5),
-        elevation: 10,
+        elevation: 5,
         child: bigButton(
           "Create New Promotion",
           () async {
@@ -148,7 +149,7 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
           await promo.currentShop.then((shop) => Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ShopDetailsPage(shop: shop))));
+                  builder: (context) => ShopDetailsPage(shop: shop, showBackButton: true))));
         },
         splashColor: Colors.teal.shade600.withOpacity(0.5),
         child: Ink(
