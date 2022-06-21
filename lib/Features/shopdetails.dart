@@ -144,13 +144,12 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                 padding: EdgeInsets.only(bottom: 3),
                 child: Text("Location"),
               ),
-              subtitle: widget.shop!.foodPlaceText(context),
+              subtitle: widget.shop!.foodPlaceText(context, 16),
             ),
 
             //display reviews (2 only)
             SizedBox(
               width: 400,
-              height: 200,
               child: buildReviewStream(
                 context,
                 getReviewSnapshots(),
@@ -283,47 +282,42 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
       ),
     );
   }
-}
 
 //This widget displays all reviews
-Widget buildReviewStream(
-    BuildContext context, Stream<QuerySnapshot> stream, String shopID) {
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.start,
-    children: [
-      Flexible(
-          fit: FlexFit.loose,
-          child: StreamBuilder(
-              stream: stream,
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (!snapshot.hasData) {
-                  return const Loading();
-                }
-                if (snapshot.data!.docs.isEmpty) {
-                  return Container(
-                      alignment: Alignment.center,
-                      width: 400,
-                      height: 200,
-                      child: const Text(
-                        'No Reviews Yet!',
-                        style: TextStyle(fontSize: 18),
-                        textAlign: TextAlign.center,
-                      ));
-                }
-                return ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      Review review =
-                          Review.fromSnapshot(snapshot.data!.docs[index]);
-                      return reviewContainer(
-                        context,
-                        review,
-                      );
-                    });
-              })),
-    ],
+  Widget buildReviewStream(
+      BuildContext context, Stream<QuerySnapshot> stream, String shopID) {
+    return StreamBuilder(
+      stream: stream,
+      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (!snapshot.hasData) {
+          return const Loading();
+        }
+        if (snapshot.data!.docs.isEmpty) {
+          return Container(
+              alignment: Alignment.center,
+              width: 400,
+              height: 200,
+              child: const Text(
+                'No Reviews Yet!',
+                style: TextStyle(fontSize: 18),
+                textAlign: TextAlign.center,
+              ));
+        }
+        return ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
+            shrinkWrap: true,
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (BuildContext context, int index) {
+              Review review =
+                  Review.fromSnapshot(snapshot.data!.docs[index]);
+              return reviewContainer(
+                context,
+                review,
+              );
+            }
+        );
+      },
   );
+  }
 }

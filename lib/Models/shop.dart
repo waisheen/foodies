@@ -77,7 +77,7 @@ class Shop {
   }
 
   //Get foodplace in form of text widget
-  Widget foodPlaceText(BuildContext context) {
+  Widget foodPlaceText(BuildContext context, double size) {
     return FutureBuilder(
         future: currentFoodPlace,
         builder: (context, AsyncSnapshot<FoodPlace> newFoodPlace) {
@@ -85,8 +85,8 @@ class Shop {
             return const Loading();
           }
           return Text(
-            newFoodPlace.data!.name,
-            style: const TextStyle(fontSize: 16),
+            "📍 ${newFoodPlace.data!.name}",
+            style: TextStyle(fontSize: size),
           );
         });
   }
