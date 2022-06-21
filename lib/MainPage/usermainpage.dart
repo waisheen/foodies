@@ -28,12 +28,16 @@ class _UserMainPageState extends State<UserMainPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: colour,
+        title: const Image(
+          image: AssetImage('assets/images/logo_white.png'),
+          height: 35,
+        ),
         actions: <Widget>[
           TextButton.icon(
-            icon: const Icon(Icons.account_circle_rounded, color: Colors.black),
+            icon: const Icon(Icons.account_circle_rounded, color: Colors.white),
             label: const Text(
               'Logout',
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(color: Colors.white),
             ),
             onPressed: () async {
               await _auth.signOut();

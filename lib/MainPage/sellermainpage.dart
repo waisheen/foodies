@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodies/Services/all.dart';
 import '../Features/all.dart';
 import '../Features/sellermenupage.dart';
+import '../Features/shopdetails.dart';
 import '../Models/shop.dart';
 import '../Promotion/sellerpromotionpage.dart';
 import '../ProfilePage/profilepage.dart';
@@ -44,12 +45,16 @@ class _SellerMainPageState extends State<SellerMainPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: colour,
+        title: const Image(
+          image: AssetImage('assets/images/logo_white.png'),
+          height: 35,
+        ),
         actions: <Widget>[
           TextButton.icon(
-            icon: const Icon(Icons.account_circle_rounded, color: Colors.black),
+            icon: const Icon(Icons.account_circle_rounded, color: Colors.white),
             label: const Text(
               'Logout',
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(color: Colors.white),
             ),
             onPressed: () async {
               await _auth.signOut();
@@ -65,8 +70,8 @@ class _SellerMainPageState extends State<SellerMainPage> {
           const SearchPage(),
           SellerPromotionPage(shop: shop),
           const SellerMenuPage(),
-          const SellerMenuPage(), //placeholder before ShopDetails can be retrieved
-          //ShopDetailsPage(shop: shop),
+          // const SellerMenuPage(), //placeholder before ShopDetails can be retrieved
+          ShopDetailsPage(shop: shop, showBackButton: false),
           const ProfilePage()
         ],
       ),
