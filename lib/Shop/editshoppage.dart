@@ -43,6 +43,8 @@ class _EditShopPageState extends State<EditShopPage> {
   late List<String> openDays =  widget.shop!.openDays;
   late String imageURL =  widget.shop!.imageURL;
   late String cuisine = '';
+  late bool halal = false;
+  late bool vegetarian = false;
 
   bool loading = false;
   late List<bool> daysSelected = allDays.map((day) {
@@ -157,7 +159,7 @@ class _EditShopPageState extends State<EditShopPage> {
                 padding: EdgeInsets.only(bottom: 3),
                 child: Text("Opening Hours"),
               ),
-              subtitle: Text("${widget.shop!.opening.toString().padLeft(4, "0")}  -  ${widget.shop!.closing.toString().padLeft(4, "0")} Hours",
+              subtitle: Text("${widget.shop!.operatingHours} Hours",
                 style: const TextStyle(fontSize: 16)),
               //get number from database
             ),
@@ -193,6 +195,23 @@ class _EditShopPageState extends State<EditShopPage> {
                 ),  
             ),
 
+            emptyBox(10),
+
+            //edit dietary requirements
+            ListTile(
+              contentPadding: const EdgeInsets.only(left: 25),
+              title: const Padding(
+                padding: EdgeInsets.only(bottom: 3),
+                child: Text("Opening Days"),
+              ),
+              subtitle: Row(
+                children: [
+                  dietButton(halal, "Halal", () => setState(() => halal = !halal)),
+                  dietButton(vegetarian, "Vegetarian", () => setState(() => vegetarian = !vegetarian))
+                ]
+              ),
+            ),
+
             //display minmax prices
             ListTile(
               contentPadding: const EdgeInsets.only(left: 25),
@@ -212,7 +231,7 @@ class _EditShopPageState extends State<EditShopPage> {
                 padding: EdgeInsets.only(bottom: 3),
                 child: Text("Location"),
               ),
-              subtitle: widget.shop!.foodPlaceText(context),
+              subtitle: widget.shop!.foodPlaceText(context, 16),
             ),
 
             bigButton("Save Changes",
@@ -262,29 +281,50 @@ class _EditShopPageState extends State<EditShopPage> {
   }
 
   Widget dayButton(int index, String text) {
-  return Padding(
-    padding: const EdgeInsets.only(top: 2.5, right: 5),
-    child: Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          color: daysSelected[index] ? Colors.green : Colors.white,
-          border: Border.all(color: Colors.black)),
-      height: 35,
-      width: 45,
-      child: TextButton(
-        onPressed: () {
-          setState(() {
-            daysSelected[index] = !daysSelected[index];
-          });
-        },
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-          style: const TextStyle(color: Colors.black, fontSize: 12),
+    return Padding(
+      padding: const EdgeInsets.only(top: 2.5, right: 5),
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: daysSelected[index] ? Colors.green : Colors.white,
+            border: Border.all(color: Colors.black)),
+        height: 35,
+        width: 45,
+        child: TextButton(
+          onPressed: () {
+            setState(() {
+              daysSelected[index] = !daysSelected[index];
+            });
+          },
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.black, fontSize: 12),
+          ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
+
+  Widget dietButton(bool selected, String text, void Function()? onPressed) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 2.5, right: 5),
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: selected ? Colors.green : Colors.white,
+            border: Border.all(color: Colors.black)),
+        height: 35,
+        child: TextButton(
+          onPressed: onPressed,
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.black, fontSize: 12),
+          ),
+        ),
+      ),
+    );
+  }
 
 }

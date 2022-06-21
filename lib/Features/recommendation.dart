@@ -25,13 +25,13 @@ class _RecommendationPageState extends State<RecommendationPage> {
       children: [
         const Text('Highest ratings'),
         SizedBox(
-            height: 225,
+            height: 265,
             child: buildShopStream(
                 context, getShopSnapshots(context), ratingList)),
         emptyBox(20),
         const Text('Most reviewed'),
         SizedBox(
-            height: 225,
+            height: 265,
             child: buildShopStream(
                 context, getShopSnapshots(context), numberList)),
       ],
@@ -43,32 +43,37 @@ class _RecommendationPageState extends State<RecommendationPage> {
 Widget buildCard(BuildContext context, Shop shop, void Function() onTapped) {
   return Card(
       clipBehavior: Clip.hardEdge,
+      elevation: 5,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
       child: InkWell(
           onTap: onTapped,
           child: Column(
-            mainAxisSize: MainAxisSize.min,
+            // mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              emptyBox(10),
-              SizedBox(
-                width: 200,
-                child: Text(
-                  shop.name,
-                  style: const TextStyle(fontSize: 20.0),
-                  textAlign: TextAlign.left,
-                ),
-              ),
-              Container(
-                width: 200,
+              Image(
+                image: NetworkImage(shop.imageURL),
                 height: 150,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                  image: NetworkImage(shop.imageURL),
-                  fit: BoxFit.cover,
-                )),
+                width: 220,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  //placeholder picture in the case image cannot be displayed
+                  return const Image(
+                    image: AssetImage('assets/images/logo3.png'),
+                  );
+                },
               ),
+              
+              SizedBox(
+                width: 220,
+                child: ListTile(
+                  title: Text(shop.name,
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: shop.foodPlaceText(context, 14)),
+              ),
+
               Row(
                 children: [
                   shop.showRatings(context),
@@ -86,8 +91,7 @@ Widget buildCard(BuildContext context, Shop shop, void Function() onTapped) {
 Widget buildShopStream(
     BuildContext context,
     Stream<QuerySnapshot> stream,
-    List<Widget> Function(List<QueryDocumentSnapshot>, BuildContext context)
-        function) {
+    List<Widget> Function(List<QueryDocumentSnapshot>, BuildContext context) function) {
   return StreamBuilder(
       stream: stream,
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -96,6 +100,8 @@ Widget buildShopStream(
         }
         return ListView(
             shrinkWrap: true,
+            physics: const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
             scrollDirection: Axis.horizontal,
             children: function(snapshot.data!.docs, context));
       });
