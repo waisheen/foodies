@@ -123,7 +123,7 @@ List<Widget> ratingList(
             () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ShopDetailsPage(shop: shop))),
+                    builder: (context) => ShopDetailsPage(shop: shop, showBackButton: true))),
           ))
       .toList();
   return widgetList;
@@ -151,7 +151,7 @@ List<Widget> numberList(
             () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ShopDetailsPage(shop: shop))),
+                    builder: (context) => ShopDetailsPage(shop: shop, showBackButton: true))),
           ))
       .toList();
   return widgetList;

@@ -5,7 +5,6 @@ import '../Models/promotion.dart';
 import '../Models/shop.dart';
 import '../loading.dart';
 import 'package:bordered_text/bordered_text.dart';
-import 'sellerpromotionpage.dart';
 
 class CreatePromotionPage extends StatefulWidget {
   const CreatePromotionPage({Key? key, required this.shop, this.promo}) : super(key: key);
