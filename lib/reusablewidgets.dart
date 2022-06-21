@@ -159,10 +159,15 @@ Widget reviewContainer(BuildContext context, Review review) {
                 StarRating(rating: review.rating, onRatingChanged: (rating) {}),
           ),
           emptyBox(20),
-          SizedBox(
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0),
+            child: SizedBox(
               width: 350,
               child: Text(review.description,
-                  style: const TextStyle(fontSize: 14))),
+                  style: const TextStyle(fontSize: 14),
+              ),
+            ),
+          ),
           emptyBox(20),
         ],
       ),

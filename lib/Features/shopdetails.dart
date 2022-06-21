@@ -27,7 +27,7 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
   Stream<QuerySnapshot> getReviewSnapshots() async* {
     yield* FirebaseFirestore.instance
         .collection('Review')
-        .where('shop', isEqualTo: widget.shop.uid)
+        .where('shop', isEqualTo: widget.shop!.uid)
         .limit(2)
         .snapshots();
   }
@@ -99,7 +99,7 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                 child: Text('Opening Hours'),
               ),
               subtitle:
-                  Text(widget.shop.operatingHours), //get number from database
+                  Text(widget.shop!.operatingHours), //get number from database
             ),
 
             //display Opening Days
@@ -154,7 +154,7 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
               child: buildReviewStream(
                 context,
                 getReviewSnapshots(),
-                widget.shop.uid,
+                widget.shop!.uid,
               ),
             ),
 
@@ -169,7 +169,7 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                   onTap: () async {
                     DocumentSnapshot newDoc = await FirebaseFirestore.instance
                         .collection('Shop')
-                        .doc(widget.shop.uid)
+                        .doc(widget.shop!.uid)
                         .get();
                     Shop newShop = Shop.fromSnapshot(newDoc);
                     if (!mounted) return;
@@ -186,58 +186,9 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
               ),
             ),
 
-            emptyBox(10),
-
-            //create review button
-            Padding(
-              padding: const EdgeInsets.only(left: 32.5),
-              child: Container(
-                alignment: Alignment.centerLeft,
-                child: GestureDetector(
-                  onTap: _auth.currentUser!.isAnonymous
-                      ? () async {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const AnonymousPage()));
-                        }
-                      : () async {
-                          QuerySnapshot futureUserReview =
-                              await getUserReviewSnapshot().first;
-                          Review? review;
-                          try {
-                            review = Review.fromSnapshot(
-                                futureUserReview.docs.first);
-                          } catch (e) {
-                            review = null;
-                          }
-                          DocumentSnapshot newDoc = await FirebaseFirestore
-                              .instance
-                              .collection('Shop')
-                              .doc(widget.shop.uid)
-                              .get();
-                          Shop newShop = Shop.fromSnapshot(newDoc);
-                          if (!mounted) return;
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CreateReviewPage(
-                                        review: review,
-                                        shop: newShop,
-                                      )));
-                        },
-                  child: const Text('Leave a Review',
-                      style: TextStyle(color: Colors.blue, fontSize: 13)),
-                ),
-              ),
-                getReviewSnapshots(context),
-                widget.shop!.uid,
-              ),
-            ),
-
             emptyBox(15),
 
-            //create review button
+            //create review button (only users can leave review)
             FutureBuilder(
               future: userInformation.doc(_auth.currentUser?.uid).get(),
               builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -278,7 +229,7 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                 }
               : () async {
                   QuerySnapshot futureUserReview =
-                      await getUserReviewSnapshot(context).first;
+                      await getUserReviewSnapshot().first;
                   Review? review;
                   try {
                     review = Review.fromSnapshot(
