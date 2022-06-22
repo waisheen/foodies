@@ -22,10 +22,6 @@ class MyApp extends StatelessWidget {
       initialData: null,
       child: MaterialApp(
         title: 'Foodies',
-        theme: ThemeData(
-          // This is the theme of your application.
-          primarySwatch: Colors.cyan,
-        ),
         home: Wrapper(),
       ),
     );

@@ -24,7 +24,9 @@ Widget inputText(String label, String hint, Widget icon,
     padding: const EdgeInsets.symmetric(horizontal: 30.0),
     child: TextFormField(
         decoration: InputDecoration(
-          border: const OutlineInputBorder(),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           labelText: label,
           hintText: hint,
           prefixIcon: icon,
@@ -43,7 +45,9 @@ Widget inputObscuredText(String label, String hint, Widget icon,
     padding: const EdgeInsets.symmetric(horizontal: 30.0),
     child: TextFormField(
       decoration: InputDecoration(
-        border: const OutlineInputBorder(),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
         labelText: label,
         hintText: hint,
         prefixIcon: icon,
@@ -76,9 +80,9 @@ PreferredSizeWidget backButton(BuildContext context) {
 Widget bigButton(String text, void Function()? onPressed) {
   return Container(
     height: 50.0,
-    width: 250.0,
+    width: 320.0,
     decoration: BoxDecoration(
-      color: Colors.transparent,
+      color: Colors.teal,
       borderRadius: BorderRadius.circular(30),
       border: Border.all(color: Colors.teal),
     ),
@@ -86,7 +90,7 @@ Widget bigButton(String text, void Function()? onPressed) {
       onPressed: onPressed,
       child: Text(
         text,
-        style: const TextStyle(color: Colors.black, fontSize: 16),
+        style: const TextStyle(color: Colors.white, fontSize: 16),
       ),
     ),
   );
@@ -163,8 +167,9 @@ Widget reviewContainer(BuildContext context, Review review) {
             padding: const EdgeInsets.only(left: 10.0),
             child: SizedBox(
               width: 350,
-              child: Text(review.description,
-                  style: const TextStyle(fontSize: 14),
+              child: Text(
+                review.description,
+                style: const TextStyle(fontSize: 14),
               ),
             ),
           ),

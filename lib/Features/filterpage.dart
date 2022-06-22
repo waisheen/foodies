@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:foodies/Services/all.dart';
+
+import '../reusablewidgets.dart';
 
 class FilterPage extends StatefulWidget {
   const FilterPage({Key? key}) : super(key: key);
@@ -9,10 +10,7 @@ class FilterPage extends StatefulWidget {
 }
 
 class _FilterPageState extends State<FilterPage> {
-  // ignore: unused_field
-  final AuthService _auth = AuthService();
-  int currentIndex = 0;
-  Color color = Colors.blue;
+  RangeValues _currentRange = const RangeValues(0, 10);
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +19,27 @@ class _FilterPageState extends State<FilterPage> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Container(height: 200),
-            const Text(
-              'Coming to you soon!',
-              style: TextStyle(color: Colors.amber, fontSize: 35.0),
+            emptyBox(50),
+
+            //For slider
+            Row(
+              children: [
+                const Icon(Icons.attach_money_rounded, size: 40),
+                Expanded(
+                    child: RangeSlider(
+                        inactiveColor: Colors.teal,
+                        activeColor: Colors.teal,
+                        values: _currentRange,
+                        min: 0,
+                        max: 50,
+                        divisions: 1,
+                        labels: RangeLabels(
+                            _currentRange.start.round().toString(),
+                            _currentRange.end.round().toString()),
+                        onChanged: (RangeValues range) {
+                          setState(() => _currentRange = range);
+                        }))
+              ],
             ),
           ],
         ),

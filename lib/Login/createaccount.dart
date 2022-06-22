@@ -34,14 +34,14 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             backgroundColor: Colors.white,
             body: Stack(
               children: [
-                Container(
+                /*Container(
                   constraints: const BoxConstraints.expand(),
                   decoration: const BoxDecoration(
                       image: DecorationImage(
                     image: AssetImage('assets/images/bg1.png'),
                     fit: BoxFit.cover,
                   )),
-                ),
+                ),*/
                 SingleChildScrollView(
                   child: Form(
                     key: _formKey,
@@ -52,7 +52,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                         //sign up text
                         Center(
                           child: BorderedText(
-                            strokeColor: Colors.blue,
+                            strokeColor: Colors.teal,
                             strokeWidth: 2.0,
                             child: const Text(
                               'Sign Up',
@@ -125,9 +125,11 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 30.0),
                           child: DropdownButtonFormField(
-                            decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                prefixIcon: Icon(Icons.analytics_rounded)),
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                prefixIcon:
+                                    const Icon(Icons.analytics_rounded)),
                             hint: const Text('Choose your account type'),
                             items: const <String>['User', 'Seller']
                                 .map((String value) {
