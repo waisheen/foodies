@@ -29,21 +29,28 @@ class Shop {
   String sellerID;
   double totalRating;
   double totalReview;
+  String cuisine;
+  bool halal;
+  bool vegetarian;
 
   //Initializer
   Shop(
-      this.uid,
-      this.name,
-      this.minPrice,
-      this.maxPrice,
-      this.closing,
-      this.opening,
-      this.openDays,
-      this.imageURL,
-      this.foodPlace,
-      this.sellerID,
-      this.totalReview,
-      this.totalRating);
+    this.uid,
+    this.name,
+    this.minPrice,
+    this.maxPrice,
+    this.closing,
+    this.opening,
+    this.openDays,
+    this.imageURL,
+    this.foodPlace,
+    this.sellerID,
+    this.totalReview,
+    this.totalRating,
+    this.cuisine,
+    this.halal,
+    this.vegetarian
+  );
 
   //Creating Shop object from a snapshot
   Shop.fromSnapshot(DocumentSnapshot snapshot)
@@ -58,7 +65,10 @@ class Shop {
         foodPlace = snapshot['foodPlace'].get(),
         sellerID = snapshot['sellerID'],
         totalReview = snapshot['totalReview'] + 0.0,
-        totalRating = snapshot['totalRating'] + 0.0;
+        totalRating = snapshot['totalRating'] + 0.0,
+        cuisine = snapshot['cuisine'],
+        halal = snapshot['halal'],
+        vegetarian = snapshot['vegetarian'];
 
   //String representation of open days
   Widget getDaysText(BuildContext context) {

@@ -147,6 +147,31 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
               subtitle: widget.shop!.foodPlaceText(context, 16),
             ),
 
+            //display cuisine
+            ListTile(
+              contentPadding: const EdgeInsets.only(left: 25),
+              title: const Padding(
+                padding: EdgeInsets.only(bottom: 3),
+                child: Text("Cuisine"),
+              ),
+              subtitle: Text(widget.shop!.cuisine, style: const TextStyle(fontSize: 16)),
+            ),
+
+            //display dietary req
+            ListTile(
+              contentPadding: const EdgeInsets.only(left: 25),
+              title: const Padding(
+                padding: EdgeInsets.only(bottom: 3),
+                child: Text("Food is:"),
+              ),
+              subtitle: Row(
+                children: [
+                  dietBox(widget.shop!.halal, "Halal"),
+                  dietBox(widget.shop!.vegetarian, "Vegetarian")
+                ],
+              ),
+            ),
+
             //display reviews (2 only)
             SizedBox(
               width: 400,

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:foodies/Features/shopdetails.dart';
+import 'package:foodies/Shop/shopdetails.dart';
 
 import '../Models/shop.dart';
 import '../loading.dart';

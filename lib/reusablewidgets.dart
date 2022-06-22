@@ -120,14 +120,14 @@ Widget colorBox(BuildContext context, bool color, String text) {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
           color: color ? Colors.green : Colors.white,
-          border: Border.all(color: Colors.black)),
+          border: Border.all(color: color ? Colors.black : Colors.grey)),
       height: 35,
       width: 35,
       child: Center(
         child: Text(
           text,
           textAlign: TextAlign.center,
-          style: const TextStyle(color: Colors.black, fontSize: 12),
+          style: TextStyle(color: color ? Colors.black : Colors.grey, fontSize: 12),
         ),
       ),
     ),
@@ -188,4 +188,26 @@ Future<Shop> getSellerShop() async {
 //get only date portion of DateTime
 String dateFromDateTime(DateTime dateTime) {
   return "${dateTime.day} ${DateFormat('MMM').format(dateTime)} ${dateTime.year}";
+}
+
+//colours boxes for displaying whether halal/veg
+Widget dietBox(bool selected, String text) {
+    return Padding(
+    padding: const EdgeInsets.only(top: 2.5, right: 5),
+    child: Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: selected ? Colors.green : Colors.white,
+          border: Border.all(color: selected ? Colors.black : Colors.grey)),
+      height: 35,
+      width: 70,
+      child: Center(
+        child: Text(
+          text,
+          textAlign: TextAlign.center,
+          style: TextStyle(color: selected ? Colors.black : Colors.grey, fontSize: 12),
+        ),
+      ),
+    ),
+  );
 }

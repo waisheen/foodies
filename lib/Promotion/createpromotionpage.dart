@@ -110,7 +110,7 @@ class _CreatePromotionPageState extends State<CreatePromotionPage> {
                     GestureDetector(
                       onTap: chooseDate,
                       child: SizedBox(
-                        width: MediaQuery.of(context).size.width - 60,
+                        width: MediaQuery.of(context).size.width / 2,
                         child: Text(
                           "${dateFromDateTime(startDate)}  -  ${dateFromDateTime(endDate)}",
                           textAlign: TextAlign.center,

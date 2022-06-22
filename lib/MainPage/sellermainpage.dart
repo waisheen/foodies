@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodies/Services/all.dart';
 import '../Features/all.dart';
 import '../Features/sellermenupage.dart';
-import '../Features/shopdetails.dart';
+import '../Shop/shopdetails.dart';
 import '../Models/shop.dart';
 import '../Promotion/sellerpromotionpage.dart';
 import '../ProfilePage/profilepage.dart';

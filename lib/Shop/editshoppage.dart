@@ -153,15 +153,43 @@ class _EditShopPageState extends State<EditShopPage> {
             ),
 
             //display opening hours
+            const ListTile(
+              contentPadding: EdgeInsets.only(left: 25),
+              title: Padding(
+                padding: EdgeInsets.only(bottom: 3),
+                child: Text("Opening Hours"),
+              ),
+            ),
+            
+            GestureDetector(
+                onTap: () {},
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width / 2,
+                  child: Text(widget.shop!.operatingHours,
+                  style: const TextStyle(fontSize: 16))
+                ),
+              ),
+
+            //display minmax prices
             ListTile(
               contentPadding: const EdgeInsets.only(left: 25),
               title: const Padding(
                 padding: EdgeInsets.only(bottom: 3),
-                child: Text("Opening Hours"),
+                child: Text("Prices"),
               ),
-              subtitle: Text("${widget.shop!.operatingHours} Hours",
-                style: const TextStyle(fontSize: 16)),
-              //get number from database
+              subtitle: Text(
+                  '\$${widget.shop!.minPrice} to \$${widget.shop!.maxPrice}', //get number from database
+                  style: const TextStyle(fontSize: 16)), 
+            ),
+
+            //display foodplace
+            ListTile(
+              contentPadding: const EdgeInsets.only(left: 25),
+              title: const Padding(
+                padding: EdgeInsets.only(bottom: 3),
+                child: Text("Location"),
+              ),
+              subtitle: widget.shop!.foodPlaceText(context, 16),
             ),
 
             //choose cuisine
@@ -185,7 +213,7 @@ class _EditShopPageState extends State<EditShopPage> {
                   }).toList(),
                   validator: (val) {
                     if (val == null || (!cuisineList.contains(val))) {
-                      return 'Choose cuisine';
+                      return 'Choose a cuisine';
                     }
                     return null;
                   },
@@ -202,7 +230,7 @@ class _EditShopPageState extends State<EditShopPage> {
               contentPadding: const EdgeInsets.only(left: 25),
               title: const Padding(
                 padding: EdgeInsets.only(bottom: 3),
-                child: Text("Opening Days"),
+                child: Text("Food is:"),
               ),
               subtitle: Row(
                 children: [
@@ -212,27 +240,7 @@ class _EditShopPageState extends State<EditShopPage> {
               ),
             ),
 
-            //display minmax prices
-            ListTile(
-              contentPadding: const EdgeInsets.only(left: 25),
-              title: const Padding(
-                padding: EdgeInsets.only(bottom: 3),
-                child: Text("Prices"),
-              ),
-              subtitle: Text(
-                  '\$${widget.shop!.minPrice} to \$${widget.shop!.maxPrice}', //get number from database
-                  style: const TextStyle(fontSize: 16)), 
-            ),
-
-            //display foodplace
-            ListTile(
-              contentPadding: const EdgeInsets.only(left: 25),
-              title: const Padding(
-                padding: EdgeInsets.only(bottom: 3),
-                child: Text("Location"),
-              ),
-              subtitle: widget.shop!.foodPlaceText(context, 16),
-            ),
+            emptyBox(20),
 
             bigButton("Save Changes",
                         () async {
@@ -287,7 +295,7 @@ class _EditShopPageState extends State<EditShopPage> {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
             color: daysSelected[index] ? Colors.green : Colors.white,
-            border: Border.all(color: Colors.black)),
+            border: Border.all(color: daysSelected[index] ? Colors.black : Colors.grey)),
         height: 35,
         width: 45,
         child: TextButton(
@@ -299,7 +307,7 @@ class _EditShopPageState extends State<EditShopPage> {
           child: Text(
             text,
             textAlign: TextAlign.center,
-            style: const TextStyle(color: Colors.black, fontSize: 12),
+            style: TextStyle(color: daysSelected[index] ? Colors.black : Colors.grey, fontSize: 12),
           ),
         ),
       ),
@@ -313,14 +321,14 @@ class _EditShopPageState extends State<EditShopPage> {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
             color: selected ? Colors.green : Colors.white,
-            border: Border.all(color: Colors.black)),
+            border: Border.all(color: selected ? Colors.black : Colors.grey)),
         height: 35,
         child: TextButton(
           onPressed: onPressed,
           child: Text(
             text,
             textAlign: TextAlign.center,
-            style: const TextStyle(color: Colors.black, fontSize: 12),
+            style: TextStyle(color: selected ? Colors.black : Colors.grey, fontSize: 12),
           ),
         ),
       ),
