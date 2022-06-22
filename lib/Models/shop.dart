@@ -16,7 +16,7 @@ class Shop {
   int opening;
   List<String> openDays;
   String imageURL;
-  Future<dynamic> foodPlace;
+  String foodPlace;
   List<String> allDays = [
     'Monday',
     'Tuesday',
@@ -62,7 +62,7 @@ class Shop {
         opening = snapshot['opening'],
         openDays = List<String>.from(snapshot['openDays']),
         imageURL = snapshot['imageURL'],
-        foodPlace = snapshot['foodPlace'].get(),
+        foodPlace = snapshot['foodPlace'],
         sellerID = snapshot['sellerID'],
         totalReview = snapshot['totalReview'] + 0.0,
         totalRating = snapshot['totalRating'] + 0.0,
@@ -81,8 +81,11 @@ class Shop {
 
   //Get foodplace
   Future<FoodPlace> get currentFoodPlace async {
-    DocumentSnapshot doc = await foodPlace;
-    FoodPlace currentFoodPlace = FoodPlace.fromSnapshot(doc);
+    FoodPlace currentFoodPlace = FoodPlace.fromSnapshot(await FirebaseFirestore
+        .instance
+        .collection('FoodPlace')
+        .doc(foodPlace)
+        .get());
     return currentFoodPlace;
   }
 

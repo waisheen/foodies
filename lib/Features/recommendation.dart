@@ -23,13 +23,59 @@ class _RecommendationPageState extends State<RecommendationPage> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Text('Highest ratings'),
+        Padding(
+          padding: const EdgeInsets.only(left: 10.0),
+          child: Container(
+            alignment: Alignment.topLeft,
+            child: Row(
+              children: const [
+                Icon(
+                  Icons.star_outline,
+                  color: Colors.orange,
+                ),
+                SizedBox(width: 5),
+                Text(
+                  'Highest Ratings',
+                  style: TextStyle(
+                    fontSize: 21,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Montserrat',
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+              ],
+            ),
+          ),
+        ),
         SizedBox(
             height: 265,
             child: buildShopStream(
                 context, getShopSnapshots(context), ratingList)),
         emptyBox(20),
-        const Text('Most reviewed'),
+        Padding(
+          padding: const EdgeInsets.only(left: 10.0),
+          child: Container(
+            alignment: Alignment.topLeft,
+            child: Row(
+              children: const [
+                Icon(
+                  Icons.local_fire_department,
+                  color: Colors.orange,
+                ),
+                SizedBox(width: 5),
+                Text(
+                  'Most Popular',
+                  style: TextStyle(
+                    fontSize: 21,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Montserrat',
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+              ],
+            ),
+          ),
+        ),
         SizedBox(
             height: 265,
             child: buildShopStream(
@@ -41,39 +87,43 @@ class _RecommendationPageState extends State<RecommendationPage> {
 
 //Builds a card with a title, image and a onTap fuction
 Widget buildCard(BuildContext context, Shop shop, void Function() onTapped) {
-  return Card(
-      clipBehavior: Clip.hardEdge,
-      elevation: 5,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: InkWell(
+  return SizedBox(
+    width: 200,
+    child: Card(
+        clipBehavior: Clip.hardEdge,
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: InkWell(
           onTap: onTapped,
           child: Column(
-            // mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Image(
-                image: NetworkImage(shop.imageURL),
-                height: 150,
-                width: 220,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  //placeholder picture in the case image cannot be displayed
-                  return const Image(
-                    image: AssetImage('assets/images/logo3.png'),
-                  );
-                },
-              ),
-              
               SizedBox(
-                width: 220,
-                child: ListTile(
-                  title: Text(shop.name,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: shop.foodPlaceText(context, 14)),
+                width: 200,
+                child: Image(
+                  image: NetworkImage(shop.imageURL),
+                  height: 150,
+                  width: 200,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    //placeholder picture in the case image cannot be displayed
+                    return const Image(
+                      image: AssetImage('assets/images/logo3.png'),
+                    );
+                  },
+                ),
               ),
-
+              SizedBox(
+                width: 200,
+                child: ListTile(
+                    title: Text(
+                      shop.name,
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: shop.foodPlaceText(context, 14)),
+              ),
               Row(
                 children: [
                   shop.showRatings(context),
@@ -84,15 +134,18 @@ Widget buildCard(BuildContext context, Shop shop, void Function() onTapped) {
                 ],
               ),
             ],
-          )));
+          ),
+        )),
+  );
 }
 
 //This collects info from shop database and builds a card
 Widget buildShopStream(
     BuildContext context,
     Stream<QuerySnapshot> stream,
-    List<Widget> Function(List<QueryDocumentSnapshot>, BuildContext context) function) {
-  return StreamBuilder(
+    List<Widget> Function(List<QueryDocumentSnapshot>, BuildContext context)
+        function) {
+  return StreamBuilder<QuerySnapshot>(
       stream: stream,
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) {
@@ -100,8 +153,8 @@ Widget buildShopStream(
         }
         return ListView(
             shrinkWrap: true,
-            physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics()),
+            /*physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics()),*/
             scrollDirection: Axis.horizontal,
             children: function(snapshot.data!.docs, context));
       });
@@ -129,7 +182,8 @@ List<Widget> ratingList(
             () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ShopDetailsPage(shop: shop, showBackButton: true))),
+                    builder: (context) =>
+                        ShopDetailsPage(shop: shop, showBackButton: true))),
           ))
       .toList();
   return widgetList;
@@ -157,7 +211,8 @@ List<Widget> numberList(
             () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ShopDetailsPage(shop: shop, showBackButton: true))),
+                    builder: (context) =>
+                        ShopDetailsPage(shop: shop, showBackButton: true))),
           ))
       .toList();
   return widgetList;

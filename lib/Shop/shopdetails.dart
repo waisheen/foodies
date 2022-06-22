@@ -12,7 +12,9 @@ import '../loading.dart';
 import '../reusablewidgets.dart';
 
 class ShopDetailsPage extends StatefulWidget {
-  const ShopDetailsPage({Key? key, required this.shop, required this.showBackButton}) : super(key: key);
+  const ShopDetailsPage(
+      {Key? key, required this.shop, required this.showBackButton})
+      : super(key: key);
   final Shop? shop;
   final bool showBackButton;
 
@@ -22,13 +24,14 @@ class ShopDetailsPage extends StatefulWidget {
 
 class _ShopDetailsPageState extends State<ShopDetailsPage> {
   final AuthService _auth = AuthService();
-  final CollectionReference userInformation = FirebaseFirestore.instance.collection('UserInfo');
+  final CollectionReference userInformation =
+      FirebaseFirestore.instance.collection('UserInfo');
 
   Stream<QuerySnapshot> getReviewSnapshots() async* {
     yield* FirebaseFirestore.instance
         .collection('Review')
         .where('shop', isEqualTo: widget.shop!.uid)
-        .limit(2)
+        .limit(1)
         .snapshots();
   }
 
@@ -48,7 +51,7 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
       appBar: widget.showBackButton ? backButton(context) : null,
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics()),
+            parent: AlwaysScrollableScrollPhysics()),
         child: Column(
           children: <Widget>[
             Stack(
@@ -58,28 +61,14 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                 //backdrop image
                 Image(
                   image: NetworkImage(widget.shop!.imageURL),
-                  height: MediaQuery.of(context).size.height / 4,
+                  height: MediaQuery.of(context).size.height / 3.5,
                   width: double.infinity,
                   fit: BoxFit.cover,
-                ),
-
-                //profile picture
-                const Positioned(
-                  bottom: -70,
-                  child: CircleAvatar(
-                    radius: 70,
-                    backgroundColor: Colors.white,
-                    child: CircleAvatar(
-                      radius: 65,
-                      backgroundImage: NetworkImage(
-                          "https://m.media-amazon.com/images/M/MV5BNGFhZWFhMjAtOTU1Yy00NTk1LThmZDMtYzZiMGM4NzkyZTlhL2ltYWdlL2ltYWdlXkEyXkFqcGdeQXVyNDk2NDYyMTk@._V1_.jpg"),
-                    ),
-                  ),
                 ),
               ],
             ),
 
-            emptyBox(70),
+            emptyBox(20),
 
             //Shop name
             ListTile(
@@ -88,7 +77,9 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                   padding: EdgeInsets.only(bottom: 3),
                   child: Text("Shop Name"),
                 ),
-                subtitle: Text(widget.shop!.name, style: const TextStyle(fontSize: 16)) //get shopv name from database
+                subtitle: Text(widget.shop!.name,
+                    style: const TextStyle(
+                        fontSize: 16)) //get shopv name from database
                 ),
 
             //display opening hours
@@ -106,23 +97,11 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
             ListTile(
               contentPadding: const EdgeInsets.only(left: 25),
               title: const Padding(
-                padding: EdgeInsets.only(bottom: 3),
+                padding: EdgeInsets.only(bottom: 7),
                 child: Text("Opening Days"),
               ),
               subtitle:
                   widget.shop!.getDaysText(context), //get number from database
-            ),
-
-            //display opening hours
-            ListTile(
-              contentPadding: const EdgeInsets.only(left: 25),
-              title: const Padding(
-                padding: EdgeInsets.only(bottom: 3),
-                child: Text("Opening Hours"),
-              ),
-              subtitle: Text("${widget.shop!.opening.toString().padLeft(4, "0")}  -  ${widget.shop!.closing.toString().padLeft(4, "0")} Hours",
-                style: const TextStyle(fontSize: 16)),
-              //get number from database
             ),
 
             //display minmax prices
@@ -134,7 +113,7 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
               ),
               subtitle: Text(
                   '\$${widget.shop!.minPrice} to \$${widget.shop!.maxPrice}', //get number from database
-                  style: const TextStyle(fontSize: 16)), 
+                  style: const TextStyle(fontSize: 16)),
             ),
 
             //display location
@@ -186,7 +165,7 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
 
             //view all reviews button
             Padding(
-              padding: const EdgeInsets.only(left: 32.5),
+              padding: const EdgeInsets.only(left: 20),
               child: Container(
                 alignment: Alignment.centerLeft,
                 child: GestureDetector(
@@ -214,22 +193,22 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
 
             //create review button (only users can leave review)
             FutureBuilder(
-              future: userInformation.doc(_auth.currentUser?.uid).get(),
-              builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                try {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    if (snapshot.data!.get('role').toString() == 'User') {
-                      return leaveReviewButton();
-                    } else if (AuthService().currentUser!.uid == widget.shop!.sellerID) {
-                    return editShopButton();
+                future: userInformation.doc(_auth.currentUser?.uid).get(),
+                builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                  try {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.data!.get('role').toString() == 'User') {
+                        return leaveReviewButton();
+                      } else if (AuthService().currentUser!.uid ==
+                          widget.shop!.sellerID) {
+                        return editShopButton();
+                      }
                     }
+                    return emptyBox(1);
+                  } catch (e) {
+                    return emptyBox(1);
                   }
-                  return emptyBox(1);
-                } catch (e) {
-                  return emptyBox(1);
-                }
-              }
-            ),
+                }),
 
             emptyBox(20)
           ],
@@ -240,7 +219,7 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
 
   Widget leaveReviewButton() {
     return Padding(
-      padding: const EdgeInsets.all(30),
+      padding: const EdgeInsets.only(left: 20),
       child: Container(
         alignment: Alignment.centerLeft,
         child: GestureDetector(
@@ -256,13 +235,11 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                       await getUserReviewSnapshot().first;
                   Review? review;
                   try {
-                    review = Review.fromSnapshot(
-                        futureUserReview.docs.first);
+                    review = Review.fromSnapshot(futureUserReview.docs.first);
                   } catch (e) {
                     review = null;
                   }
-                  DocumentSnapshot newDoc = await FirebaseFirestore
-                      .instance
+                  DocumentSnapshot newDoc = await FirebaseFirestore.instance
                       .collection('Shop')
                       .doc(widget.shop!.uid)
                       .get();
@@ -295,10 +272,9 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
       child: TextButton(
         onPressed: () {
           Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    EditShopPage(shop: widget.shop)));
+              context,
+              MaterialPageRoute(
+                  builder: (context) => EditShopPage(shop: widget.shop)));
         },
         child: const Text(
           "Edit Shop Details",
@@ -319,14 +295,15 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
         }
         if (snapshot.data!.docs.isEmpty) {
           return Container(
-              alignment: Alignment.center,
-              width: 400,
-              height: 200,
-              child: const Text(
-                'No Reviews Yet!',
-                style: TextStyle(fontSize: 18),
-                textAlign: TextAlign.center,
-              ));
+            alignment: Alignment.center,
+            width: 300,
+            height: 150,
+            child: const Text(
+              'No Reviews Yet!',
+              style: TextStyle(fontSize: 18),
+              textAlign: TextAlign.center,
+            ),
+          );
         }
         return ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
@@ -334,15 +311,13 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
             shrinkWrap: true,
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (BuildContext context, int index) {
-              Review review =
-                  Review.fromSnapshot(snapshot.data!.docs[index]);
+              Review review = Review.fromSnapshot(snapshot.data!.docs[index]);
               return reviewContainer(
                 context,
                 review,
               );
-            }
-        );
+            });
       },
-  );
+    );
   }
 }

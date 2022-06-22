@@ -1,26 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:foodies/Location/showshops.dart';
-import 'package:foodies/Models/nus_location.dart';
 import 'package:foodies/loading.dart';
 import 'package:foodies/reusablewidgets.dart';
 
+import '../Features/shopdetails.dart';
 import '../Models/foodplace.dart';
+import '../Models/shop.dart';
 
-class FoodPlacesPage extends StatefulWidget {
-  const FoodPlacesPage({Key? key, required this.location}) : super(key: key);
-  final NUSLocation location;
+class ShowShopsPage extends StatefulWidget {
+  const ShowShopsPage({Key? key, required this.foodPlace}) : super(key: key);
+  final FoodPlace foodPlace;
 
   @override
-  State<FoodPlacesPage> createState() => _FoodPlacesPageState();
+  State<ShowShopsPage> createState() => _ShowShopsPageState();
 }
 
-class _FoodPlacesPageState extends State<FoodPlacesPage> {
-  //Stream of foodplaces at location
-  Stream<QuerySnapshot> getFoodPlaceSnapshots() async* {
+class _ShowShopsPageState extends State<ShowShopsPage> {
+  //Stream of shops at foodplaces
+  Stream<QuerySnapshot> getShopSnapshots() async* {
     yield* FirebaseFirestore.instance
-        .collection('FoodPlace')
-        .where('location', isEqualTo: widget.location.uid)
+        .collection('Shop')
+        .where('foodPlace', isEqualTo: widget.foodPlace.uid)
         .snapshots();
   }
 
@@ -30,7 +30,7 @@ class _FoodPlacesPageState extends State<FoodPlacesPage> {
         extendBodyBehindAppBar: true,
         appBar: backButton(context),
         body: StreamBuilder(
-            stream: getFoodPlaceSnapshots(),
+            stream: getShopSnapshots(),
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (!snapshot.hasData) {
@@ -40,19 +40,19 @@ class _FoodPlacesPageState extends State<FoodPlacesPage> {
                 padding: const EdgeInsets.all(20),
                 physics: const BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics()),
-                children: getFoodPlaces(snapshot.data!.docs),
+                children: getShops(snapshot.data!.docs),
               );
             }));
   }
 
-  List<Widget> getFoodPlaces(List<QueryDocumentSnapshot> docs) {
-    List<FoodPlace> filtered =
-        docs.map((document) => FoodPlace.fromSnapshot(document)).toList();
-    return filtered.map((foodplace) => foodPlaceCard(foodplace)).toList();
+  List<Widget> getShops(List<QueryDocumentSnapshot> docs) {
+    List<Shop> filtered =
+        docs.map((document) => Shop.fromSnapshot(document)).toList();
+    return filtered.map((shop) => shopCard(shop)).toList();
   }
 
   //build widget layout for each promo
-  Widget foodPlaceCard(FoodPlace foodplace) {
+  Widget shopCard(Shop shop) {
     return Card(
       clipBehavior: Clip.hardEdge,
       elevation: 20,
@@ -63,15 +63,14 @@ class _FoodPlacesPageState extends State<FoodPlacesPage> {
         onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ShowShopsPage(
-                      foodPlace: foodplace,
-                    ))),
+                builder: (context) =>
+                    ShopDetailsPage(shop: shop, showBackButton: true))),
         splashColor: Colors.teal.shade600.withOpacity(0.5),
         child: Ink(
           child: Column(
             children: <Widget>[
               Image(
-                image: NetworkImage(foodplace.imageURL),
+                image: NetworkImage(shop.imageURL),
                 height: 180,
                 width: double.infinity,
                 fit: BoxFit.cover,
@@ -80,9 +79,9 @@ class _FoodPlacesPageState extends State<FoodPlacesPage> {
               ListTile(
                 title: Padding(
                   padding: const EdgeInsets.only(bottom: 5),
-                  child: Text(foodplace.name),
+                  child: Text(shop.name),
                 ),
-                subtitle: Text(widget.location.name),
+                subtitle: Text(shop.operatingHours),
               ),
               emptyBox(10),
             ],
