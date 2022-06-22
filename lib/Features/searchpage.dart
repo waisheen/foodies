@@ -23,7 +23,7 @@ class _SearchPageState extends State<SearchPage> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(
-          parent: AlwaysScrollableScrollPhysics()),
+            parent: AlwaysScrollableScrollPhysics()),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -48,7 +48,7 @@ class _SearchPageState extends State<SearchPage> {
                 color: Colors.transparent,
                 child: const Text(
                   '  Recommendations',
-                  style: TextStyle(fontSize: 30, color: Colors.blue),
+                  style: TextStyle(fontSize: 30, color: Colors.teal),
                   textAlign: TextAlign.left,
                 ),
               ),
