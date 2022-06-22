@@ -265,10 +265,15 @@ class _EditShopPageState extends State<EditShopPage> {
                         if (_formKey.currentState!.validate()) {
                           setState(() => loading = true);
                           dynamic result = await editShop(name, openDays, opening, closing, options);
+                          DocumentSnapshot newDoc = await FirebaseFirestore.instance
+                            .collection('Shop')
+                            .doc(widget.shop!.uid)
+                            .get();
+                            Shop newShop = Shop.fromSnapshot(newDoc);
 
                           if (result == null) {
                             if (!mounted) return;
-                            Navigator.pop(context);
+                            Navigator.pop(context, newShop);
                           }
                         }
                       }),
