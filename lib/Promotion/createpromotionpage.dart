@@ -107,16 +107,18 @@ class _CreatePromotionPageState extends State<CreatePromotionPage> {
 
                     emptyBox(15.0),
 
-                    GestureDetector(
-                      onTap: chooseDate,
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width / 2,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                        onTap: chooseDate,
                         child: Text(
-                          "${dateFromDateTime(startDate)}  -  ${dateFromDateTime(endDate)}",
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(fontSize: 17),
+                            "${dateFromDateTime(startDate)}  -  ${dateFromDateTime(endDate)}",
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 16),
+                          ),
                         ),
-                      ),
+                      ]
                     ),
 
                     emptyBox(30.0),

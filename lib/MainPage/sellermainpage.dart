@@ -6,6 +6,7 @@ import '../Shop/shopdetails.dart';
 import '../Models/shop.dart';
 import '../Promotion/sellerpromotionpage.dart';
 import '../ProfilePage/profilepage.dart';
+import '../loading.dart';
 import '../reusablewidgets.dart';
 
 class SellerMainPage extends StatefulWidget {
@@ -21,17 +22,20 @@ class _SellerMainPageState extends State<SellerMainPage> {
   int currentIndex = 0;
   final Color colour = Colors.teal.shade600;
     // ignore: avoid_init_to_null
-  late Shop? shop = null;
+  late Shop shop;
+  bool loading = true;
 
-    @override
+  @override
   initState() {
     super.initState();
     getSellerShop().then((result) {
       setState(() {
         shop = result;
+        loading = false;
       });
     });
   }
+
 
   void onTapped(int index) {
     setState(() => currentIndex = index);
@@ -42,7 +46,8 @@ class _SellerMainPageState extends State<SellerMainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? const Loading() : 
+    Scaffold(
       appBar: AppBar(
         backgroundColor: colour,
         title: const Image(
@@ -70,7 +75,6 @@ class _SellerMainPageState extends State<SellerMainPage> {
           const SearchPage(),
           SellerPromotionPage(shop: shop),
           const SellerMenuPage(),
-          // const SellerMenuPage(), //placeholder before ShopDetails can be retrieved
           ShopDetailsPage(shop: shop, showBackButton: false),
           const ProfilePage()
         ],

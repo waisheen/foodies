@@ -26,6 +26,9 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
   final AuthService _auth = AuthService();
   final CollectionReference userInformation =
       FirebaseFirestore.instance.collection('UserInfo');
+  final CollectionReference shops =
+      FirebaseFirestore.instance.collection('Shop');
+  // late Shop shop;
 
   Stream<QuerySnapshot> getReviewSnapshots() async* {
     yield* FirebaseFirestore.instance
@@ -64,6 +67,12 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                   height: MediaQuery.of(context).size.height / 3.5,
                   width: double.infinity,
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                  //placeholder picture in the case image cannot be displayed
+                  return const Image(
+                    image: AssetImage('assets/images/logo3.png'),
+                  );
+                  },
                 ),
               ],
             ),
@@ -133,7 +142,7 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                 padding: EdgeInsets.only(bottom: 3),
                 child: Text("Cuisine"),
               ),
-              subtitle: Text(widget.shop!.cuisine, style: const TextStyle(fontSize: 16)),
+              subtitle: Text(getCuisine(widget.shop!.options), style: const TextStyle(fontSize: 16)),
             ),
 
             //display dietary req
@@ -145,8 +154,8 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
               ),
               subtitle: Row(
                 children: [
-                  dietBox(widget.shop!.halal, "Halal"),
-                  dietBox(widget.shop!.vegetarian, "Vegetarian")
+                  dietBox(isHalal(widget.shop!.options), "Halal"),
+                  dietBox(isVegetarian(widget.shop!.options), "Vegetarian")
                 ],
               ),
             ),
@@ -274,7 +283,10 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => EditShopPage(shop: widget.shop)));
+                  builder: (BuildContext context) => EditShopPage(shop: widget.shop)))
+                  .then((value) => ((value) {
+                    setState(() => {});
+                  }));
         },
         child: const Text(
           "Edit Shop Details",
