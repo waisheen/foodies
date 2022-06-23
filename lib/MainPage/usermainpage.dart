@@ -30,7 +30,7 @@ class _UserMainPageState extends State<UserMainPage> {
         backgroundColor: colour,
         title: const Image(
           image: AssetImage('assets/images/logo_white.png'),
-          height: 35,
+          height: 50,
         ),
         actions: <Widget>[
           TextButton.icon(

@@ -15,7 +15,7 @@ class ShopDetailsPage extends StatefulWidget {
   const ShopDetailsPage(
       {Key? key, required this.shop, required this.showBackButton})
       : super(key: key);
-  final Shop? shop;
+  final Shop shop;
   final bool showBackButton;
 
   @override
@@ -26,11 +26,14 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
   final AuthService _auth = AuthService();
   final CollectionReference userInformation =
       FirebaseFirestore.instance.collection('UserInfo');
+  final CollectionReference shops =
+      FirebaseFirestore.instance.collection('Shop');
+  late Shop shop = widget.shop;
 
   Stream<QuerySnapshot> getReviewSnapshots() async* {
     yield* FirebaseFirestore.instance
         .collection('Review')
-        .where('shop', isEqualTo: widget.shop!.uid)
+        .where('shop', isEqualTo: widget.shop.uid)
         .limit(1)
         .snapshots();
   }
@@ -38,7 +41,7 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
   Stream<QuerySnapshot> getUserReviewSnapshot() async* {
     yield* FirebaseFirestore.instance
         .collection('Review')
-        .where('shop', isEqualTo: widget.shop!.uid)
+        .where('shop', isEqualTo: widget.shop.uid)
         .where('user', isEqualTo: _auth.currentUser!.uid)
         .snapshots();
   }
@@ -60,10 +63,16 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
               children: [
                 //backdrop image
                 Image(
-                  image: NetworkImage(widget.shop!.imageURL),
+                  image: NetworkImage(shop.imageURL),
                   height: MediaQuery.of(context).size.height / 3.5,
                   width: double.infinity,
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                  //placeholder picture in the case image cannot be displayed
+                  return const Image(
+                    image: AssetImage('assets/images/logo3.png'),
+                  );
+                  },
                 ),
               ],
             ),
@@ -77,7 +86,7 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                   padding: EdgeInsets.only(bottom: 3),
                   child: Text("Shop Name"),
                 ),
-                subtitle: Text(widget.shop!.name,
+                subtitle: Text(shop.name,
                     style: const TextStyle(
                         fontSize: 16)) //get shopv name from database
                 ),
@@ -90,7 +99,7 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                 child: Text('Opening Hours'),
               ),
               subtitle:
-                  Text(widget.shop!.operatingHours), //get number from database
+                  Text(shop.operatingHours), //get number from database
             ),
 
             //display Opening Days
@@ -101,7 +110,7 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                 child: Text("Opening Days"),
               ),
               subtitle:
-                  widget.shop!.getDaysText(context), //get number from database
+                  shop.getDaysText(context), //get number from database
             ),
 
             //display minmax prices
@@ -112,7 +121,7 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                 child: Text("Prices"),
               ),
               subtitle: Text(
-                  '\$${widget.shop!.minPrice} to \$${widget.shop!.maxPrice}', //get number from database
+                  '\$${shop.minPrice} to \$${shop.maxPrice}', //get number from database
                   style: const TextStyle(fontSize: 16)),
             ),
 
@@ -123,7 +132,32 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                 padding: EdgeInsets.only(bottom: 3),
                 child: Text("Location"),
               ),
-              subtitle: widget.shop!.foodPlaceText(context, 16),
+              subtitle: shop.foodPlaceText(context, 16),
+            ),
+
+            //display cuisine
+            ListTile(
+              contentPadding: const EdgeInsets.only(left: 25),
+              title: const Padding(
+                padding: EdgeInsets.only(bottom: 3),
+                child: Text("Cuisine"),
+              ),
+              subtitle: Text(getCuisine(shop.options), style: const TextStyle(fontSize: 16)),
+            ),
+
+            //display dietary req
+            ListTile(
+              contentPadding: const EdgeInsets.only(left: 25),
+              title: const Padding(
+                padding: EdgeInsets.only(bottom: 3),
+                child: Text("Food is:"),
+              ),
+              subtitle: Row(
+                children: [
+                  dietBox(isHalal(shop.options), "Halal"),
+                  dietBox(isVegetarian(shop.options), "Vegetarian")
+                ],
+              ),
             ),
 
             //display reviews (2 only)
@@ -132,7 +166,7 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
               child: buildReviewStream(
                 context,
                 getReviewSnapshots(),
-                widget.shop!.uid,
+                shop.uid,
               ),
             ),
 
@@ -147,7 +181,7 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                   onTap: () async {
                     DocumentSnapshot newDoc = await FirebaseFirestore.instance
                         .collection('Shop')
-                        .doc(widget.shop!.uid)
+                        .doc(shop.uid)
                         .get();
                     Shop newShop = Shop.fromSnapshot(newDoc);
                     if (!mounted) return;
@@ -175,7 +209,7 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                       if (snapshot.data!.get('role').toString() == 'User') {
                         return leaveReviewButton();
                       } else if (AuthService().currentUser!.uid ==
-                          widget.shop!.sellerID) {
+                          shop.sellerID) {
                         return editShopButton();
                       }
                     }
@@ -216,7 +250,7 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                   }
                   DocumentSnapshot newDoc = await FirebaseFirestore.instance
                       .collection('Shop')
-                      .doc(widget.shop!.uid)
+                      .doc(shop.uid)
                       .get();
                   Shop newShop = Shop.fromSnapshot(newDoc);
                   if (!mounted) return;
@@ -245,11 +279,16 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
         border: Border.all(color: Colors.red),
       ),
       child: TextButton(
-        onPressed: () {
+        onPressed: () async {
+          // final newShop = await
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => EditShopPage(shop: widget.shop)));
+                  builder: (BuildContext context) => EditShopPage(shop: shop)))
+                  .then((result) => setState(() => shop = result));
+          // if (newShop) {
+          //   setState(() => shop = newShop);
+          // }
         },
         child: const Text(
           "Edit Shop Details",

@@ -29,21 +29,35 @@ class Shop {
   String sellerID;
   double totalRating;
   double totalReview;
+  List<String> options;
+
+  List<String> cuisineList = [
+    'Chinese',
+    'Malay',
+    'Indian',
+    'Western',
+    'Japanese',
+    'Korean',
+    'Drinks',
+    'Others'
+  ];
 
   //Initializer
   Shop(
-      this.uid,
-      this.name,
-      this.minPrice,
-      this.maxPrice,
-      this.closing,
-      this.opening,
-      this.openDays,
-      this.imageURL,
-      this.foodPlace,
-      this.sellerID,
-      this.totalReview,
-      this.totalRating);
+    this.uid,
+    this.name,
+    this.minPrice,
+    this.maxPrice,
+    this.closing,
+    this.opening,
+    this.openDays,
+    this.imageURL,
+    this.foodPlace,
+    this.sellerID,
+    this.totalReview,
+    this.totalRating,
+    this.options,
+  );
 
   //Creating Shop object from a snapshot
   Shop.fromSnapshot(DocumentSnapshot snapshot)
@@ -58,7 +72,8 @@ class Shop {
         foodPlace = snapshot['foodPlace'],
         sellerID = snapshot['sellerID'],
         totalReview = snapshot['totalReview'] + 0.0,
-        totalRating = snapshot['totalRating'] + 0.0;
+        totalRating = snapshot['totalRating'] + 0.0,
+        options = List<String>.from(snapshot['options']);
 
   //String representation of open days
   Widget getDaysText(BuildContext context) {
@@ -132,21 +147,9 @@ class Shop {
         });
   }
 
-  // convert to 24hr
-  String convert(int time) {
-    if (time < 1200) {
-      return time.toString().length == 3
-          ? '${time.toString().substring(0, 1)}:${time.toString().substring(1)} A.M.'
-          : '${time.toString().substring(0, 2)}:${time.toString().substring(2)} A.M.';
-    }
-    int afternoon = time - 1200;
-    return afternoon.toString().length == 3
-        ? '${afternoon.toString().substring(0, 1)}:${afternoon.toString().substring(1)} P.M.'
-        : '${afternoon.toString().substring(0, 2)}:${afternoon.toString().substring(2)} P.M.';
+  //get operating hours
+  String get operatingHours {
+    return '${convertIntToTime(opening)} to ${convertIntToTime(closing)}';
   }
 
-//get operating hours
-  String get operatingHours {
-    return '${convert(opening)} to ${convert(closing)}';
-  }
 }

@@ -6,7 +6,7 @@ import 'package:foodies/reusablewidgets.dart';
 
 import '../Models/promotion.dart';
 import '../Models/shop.dart';
-import '../Features/shopdetails.dart';
+import '../Shop/shopdetails.dart';
 import '../Services/auth.dart';
 
 class SellerPromotionPage extends StatefulWidget {
@@ -89,9 +89,19 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
     
     //sort promos acc to startDate or endDate
     if (sortByStart) {
-      filtered.sort((a, b) => a.startDate.compareTo(b.startDate));
+      filtered.sort((a, b) {
+        if (a.startDate == b.startDate) {
+          return a.endDate.compareTo(b.endDate);
+        }
+        return a.startDate.compareTo(b.startDate);
+        });
     } else if (sortByEnd) {
-      filtered.sort((a, b) => a.endDate.compareTo(b.endDate));
+      filtered.sort((a, b) {
+        if (a.endDate == b.endDate) {
+          return a.startDate.compareTo(b.startDate);
+        }
+        return a.endDate.compareTo(b.endDate);
+      });
     }
 
     List<Widget> widgetList =
