@@ -17,7 +17,7 @@ class Shop {
   List<String> openDays;
   String imageURL;
   String foodPlace;
-  List<String> allDays = [
+  static List<String> allDays = [
     'Monday',
     'Tuesday',
     'Wednesday',
@@ -29,6 +29,24 @@ class Shop {
   String sellerID;
   double totalRating;
   double totalReview;
+  static List<String> allOptions = [
+    'Halal',
+    'Vegetarian',
+    'Western',
+    'Chinese',
+    'Thai',
+    'Korean',
+    'Japanese',
+    'Soup',
+    'Fast Food',
+    'Drinks',
+    'Dessert',
+    'Snack',
+    'Indian',
+    'Alcohol',
+    'Dim Sum'
+  ];
+  List<String> options;
 
   //Initializer
   Shop(
@@ -43,6 +61,7 @@ class Shop {
       this.foodPlace,
       this.sellerID,
       this.totalReview,
+      this.options,
       this.totalRating);
 
   //Creating Shop object from a snapshot
@@ -57,6 +76,7 @@ class Shop {
         imageURL = snapshot['imageURL'],
         foodPlace = snapshot['foodPlace'],
         sellerID = snapshot['sellerID'],
+        options = List<String>.from(snapshot['options']),
         totalReview = snapshot['totalReview'] + 0.0,
         totalRating = snapshot['totalRating'] + 0.0;
 

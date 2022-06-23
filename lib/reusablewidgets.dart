@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foodies/Services/all.dart';
@@ -193,4 +195,13 @@ Future<Shop> getSellerShop() async {
 //get only date portion of DateTime
 String dateFromDateTime(DateTime dateTime) {
   return "${dateTime.day} ${DateFormat('MMM').format(dateTime)} ${dateTime.year}";
+}
+
+//Calculate Distance
+int distance(lat1, lon1, lat2, lon2) {
+  double a = 0.017453292519943295;
+  double b = 0.5 -
+      cos((lat2 - lat1) * a) / 2 +
+      cos(lat1 * a) * cos(lat2 * a) * (1 - cos((lon2 - lon1) * a)) / 2;
+  return 12742 * asin(sqrt(b)).round();
 }
