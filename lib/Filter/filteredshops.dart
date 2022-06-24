@@ -5,8 +5,11 @@ import '../Features/shopdetails.dart';
 import '../Models/shop.dart';
 
 class FilteredShopsPage extends StatefulWidget {
-  const FilteredShopsPage({Key? key, required this.shopList}) : super(key: key);
+  const FilteredShopsPage(
+      {Key? key, required this.shopList, required this.distances})
+      : super(key: key);
   final List<Shop> shopList;
+  final List<int> distances;
 
   @override
   State<FilteredShopsPage> createState() => _FilteredShopsPageState();
@@ -22,14 +25,23 @@ class _FilteredShopsPageState extends State<FilteredShopsPage> {
           padding: const EdgeInsets.all(20),
           physics: const BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics()),
-          children:
-              widget.shopList.map((shop) => shopCard(context, shop)).toList(),
+          children: getWidgets(context, widget.shopList, widget.distances),
         ));
   }
 }
 
+//building widget list from 2 lists
+List<Widget> getWidgets(
+    BuildContext context, List<Shop> shopList, List<int> distances) {
+  List<Widget> widgetList = List<Widget>.empty(growable: true);
+  for (int i = 0; i < shopList.length; i++) {
+    widgetList.add(shopCard(context, shopList[i], distances[i]));
+  }
+  return widgetList;
+}
+
 //build widget layout for each promo
-Widget shopCard(BuildContext context, Shop shop) {
+Widget shopCard(BuildContext context, Shop shop, int distance) {
   return Card(
     clipBehavior: Clip.hardEdge,
     elevation: 20,
@@ -54,12 +66,11 @@ Widget shopCard(BuildContext context, Shop shop) {
             ),
             emptyBox(5),
             ListTile(
-              title: Padding(
-                padding: const EdgeInsets.only(bottom: 5),
-                child: Text(shop.name),
-              ),
-              subtitle: Text(shop.operatingHours),
-            ),
+                title: Padding(
+                  padding: const EdgeInsets.only(bottom: 5),
+                  child: Text(shop.name),
+                ),
+                subtitle: Text('$distance m')),
             emptyBox(10),
           ],
         ),

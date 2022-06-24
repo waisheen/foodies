@@ -203,5 +203,5 @@ int distance(lat1, lon1, lat2, lon2) {
   double b = 0.5 -
       cos((lat2 - lat1) * a) / 2 +
       cos(lat1 * a) * cos(lat2 * a) * (1 - cos((lon2 - lon1) * a)) / 2;
-  return 12742 * asin(sqrt(b)).round();
+  return (12742 * asin(sqrt(b))).round();
 }

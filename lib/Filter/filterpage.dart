@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:foodies/Filter/filteredshops.dart';
 import 'package:foodies/Models/nus_location.dart';
 import 'package:awesome_select/awesome_select.dart';
+import 'package:location/location.dart';
 
+import '../Models/foodplace.dart';
 import '../Models/shop.dart';
 import '../loading.dart';
 import '../reusablewidgets.dart';
@@ -53,7 +55,7 @@ class _FilterPageState extends State<FilterPage> {
                         ),
                         Expanded(
                             child: RangeSlider(
-                                inactiveColor: Colors.teal,
+                                inactiveColor: Colors.grey,
                                 activeColor: Colors.teal,
                                 values: _currentRange,
                                 min: 0,
@@ -100,7 +102,7 @@ class _FilterPageState extends State<FilterPage> {
                                     Icons.place,
                                     color: Colors.red,
                                   )),
-                              hint: const Text('All'),
+                              hint: Text(selectedLocation),
                               isExpanded: true,
                               items: options.map((String value) {
                                 return DropdownMenuItem<String>(
@@ -259,6 +261,9 @@ class _FilterPageState extends State<FilterPage> {
                     //Filter shops based on foodplaces
                     List<String> foodPlaces =
                         foodplaceSnapshots.docs.map((docs) => docs.id).toList();
+                    List<FoodPlace> places = foodplaceSnapshots.docs
+                        .map((docs) => FoodPlace.fromSnapshot(docs))
+                        .toList();
                     shops = shops
                         .where((shop) => (foodPlaces.contains(shop.foodPlace)))
                         .toList();
@@ -272,18 +277,51 @@ class _FilterPageState extends State<FilterPage> {
                     }).toList();
 
                     //Filter by options
+                    List<String> options = _selectedOptions.isEmpty
+                        ? Shop.allOptions
+                        : _selectedOptions;
                     shops = shops
-                        .where((shop) => shop.options
-                            .any((opt) => _selectedOptions.contains(opt)))
+                        .where((shop) =>
+                            shop.options.any((opt) => options.contains(opt)))
                         .toList();
-                    setState(() => loading = false);
+
+                    //Get distances and combine into the list
+                    List<GeoPoint> geoPoints = shops
+                        .map((shop) => getGeoPoint(places, shop)!)
+                        .toList();
+                    LocationData location = await Location().getLocation();
+                    List<int> distances = geoPoints
+                        .map((geoPoint) => distance(
+                            geoPoint.latitude,
+                            geoPoint.longitude,
+                            location.latitude,
+                            location.longitude))
+                        .toList();
+
+                    //Some random bubble sorting
+                    for (int i = 0; i < shops.length - 1; i++) {
+                      for (int j = i; j < shops.length; j++) {
+                        if (distances[i] > distances[j]) {
+                          int temp = distances[j];
+                          distances[j] = distances[i];
+                          distances[i] = temp;
+                          Shop tempShop = shops[j];
+                          shops[j] = shops[i];
+                          shops[i] = tempShop;
+                        }
+                      }
+                    }
+
+                    //Set state to not loading
 
                     if (!mounted) return;
+                    setState(() => loading = false);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => FilteredShopsPage(
                                   shopList: shops,
+                                  distances: distances,
                                 )));
                   })
                 ],
@@ -291,4 +329,14 @@ class _FilterPageState extends State<FilterPage> {
             ),
           );
   }
+}
+
+//Functions
+GeoPoint? getGeoPoint(List<FoodPlace> foodplaces, Shop shop) {
+  for (var foodplace in foodplaces) {
+    if (foodplace.uid == shop.foodPlace) {
+      return foodplace.coordinates;
+    }
+  }
+  return null;
 }
