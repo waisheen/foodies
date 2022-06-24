@@ -22,7 +22,7 @@ class _SellerMainPageState extends State<SellerMainPage> {
   int currentIndex = 0;
   final Color colour = Colors.teal.shade600;
     // ignore: avoid_init_to_null
-  late Shop shop;
+  late Shop? shop;
   bool loading = true;
 
   @override

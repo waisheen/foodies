@@ -183,14 +183,17 @@ Widget reviewContainer(BuildContext context, Review review) {
   );
 }
 
-Future<Shop> getSellerShop() async {
+Future<Shop?> getSellerShop() async {
   String currSellerID = AuthService().currentUser!.uid;
   QuerySnapshot snapshot = await shops.get();
   List<Shop> shopList = snapshot.docs
       .where((snapshot) => snapshot["sellerID"] == currSellerID)
       .map((snapshot) => Shop.fromSnapshot(snapshot))
       .toList();
-  return shopList[0];
+  if (shopList.isNotEmpty) {
+    return shopList[0];
+  }
+  return null;
 }
 
 //get only date portion of DateTime
@@ -259,4 +262,20 @@ String getCuisine(List<String> list) {
     return option;
   }
   return "Others";
+}
+
+Widget noShopText(BuildContext context) {
+  return Padding(
+    padding: const EdgeInsets.all(20),
+    child: SizedBox(
+      height: MediaQuery.of(context).size.height,
+      child: const Align(
+        alignment: Alignment.center,
+        child: Text("No shop is associated with your account, contact admin", 
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 15),
+          ),
+      ),
+    ),
+  );
 }

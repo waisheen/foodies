@@ -31,7 +31,9 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return widget.shop == null ? 
+    noShopText(context) :
+    Scaffold(
         body: StreamBuilder(
             stream: promotions.snapshots(),
             builder:
