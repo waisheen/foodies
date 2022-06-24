@@ -26,14 +26,15 @@ class _ShowReviewsPageState extends State<ShowReviewsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        extendBodyBehindAppBar: true,
-        appBar: backButton(context),
-        body: Padding(
-          padding: const EdgeInsets.only(top: 50, left: 15, right: 15),
-          child: buildAllReviewStream(
-              context, getReviewSnapshots(), widget.shop.uid),
-        ));
+      backgroundColor: Colors.white,
+      extendBodyBehindAppBar: false,
+      appBar: backButton(context),
+      body: Padding(
+        padding: const EdgeInsets.only(left: 15, right: 15),
+        child: buildAllReviewStream(
+            context, getReviewSnapshots(), widget.shop.uid),
+      ),
+    );
   }
 }
 
@@ -44,29 +45,32 @@ Widget buildAllReviewStream(
     mainAxisAlignment: MainAxisAlignment.start,
     children: [
       Flexible(
-          fit: FlexFit.loose,
-          child: StreamBuilder(
-              stream: stream,
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (!snapshot.hasData) {
-                  return const Loading();
-                }
-                if (snapshot.data!.docs.isEmpty) {
-                  return const Text('No Reviews Yet!');
-                }
-                return ListView.builder(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      Review review =
-                          Review.fromSnapshot(snapshot.data!.docs[index]);
-                      return reviewContainer(
-                        context,
-                        review,
-                      );
-                    });
-              })),
+        fit: FlexFit.loose,
+        child: StreamBuilder(
+          stream: stream,
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (!snapshot.hasData) {
+              return const Loading();
+            }
+            if (snapshot.data!.docs.isEmpty) {
+              return const Text('No Reviews Yet!');
+            }
+            return ListView.builder(
+              padding: EdgeInsets.zero,
+              shrinkWrap: true,
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (BuildContext context, int index) {
+                Review review =
+                    Review.fromSnapshot(snapshot.data!.docs[index]);
+                return reviewContainer(
+                  context,
+                  review,
+                );
+              }
+            );
+          }
+        ),
+      ),
     ],
   );
 }

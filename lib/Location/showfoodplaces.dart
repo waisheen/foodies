@@ -31,7 +31,7 @@ class _FoodPlacesPageState extends State<FoodPlacesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        extendBodyBehindAppBar: true,
+        extendBodyBehindAppBar: false,
         appBar: backButton(context),
         body: StreamBuilder(
             stream: getFoodPlaceSnapshots(),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:foodies/reusablewidgets.dart';
 
-import '../Features/shopdetails.dart';
 import '../Models/shop.dart';
+import '../Shop/shopdetails.dart';
 
 class FilteredShopsPage extends StatefulWidget {
   const FilteredShopsPage(

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:foodies/loading.dart';
 import 'package:foodies/reusablewidgets.dart';
 
-import '../Features/shopdetails.dart';
+import '../Shop/shopdetails.dart';
 import '../Models/foodplace.dart';
 import '../Models/shop.dart';
 
