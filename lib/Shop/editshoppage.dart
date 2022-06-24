@@ -409,8 +409,8 @@ class _EditShopPageState extends State<EditShopPage> {
 
   //gets list of cuisines
   List<String> getAllCuisines() {
-    List<String> options = Shop.allOptions;
-    options.removeWhere((option) => option == "Halal" || option == "Vegetarian");
-    return options;
+    List<String> cuisines = Shop.allOptions;
+    cuisines.removeWhere((option) => option == "Halal" || option == "Vegetarian");
+    return cuisines;
   }
 }

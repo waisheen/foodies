@@ -75,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 labelText: "Password",
-                                hintText: "Choose your password",
+                                hintText: "Enter your password",
                                 prefixIcon: const Icon(Icons.lock_outlined),
                               ),
                               validator: (val) {

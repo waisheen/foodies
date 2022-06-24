@@ -30,7 +30,6 @@ class _AnonymousPageState extends State<AnonymousPage> {
             const SizedBox(
               height: 250.0,
             ),
-            backButton(context),
             emptyBox(30),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 90.0),
