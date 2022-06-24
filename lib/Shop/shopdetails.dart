@@ -212,7 +212,13 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                         return leaveReviewButton();
                       } else if (AuthService().currentUser!.uid ==
                           shop!.sellerID) {
-                        return editShopButton();
+                        return bigButton("Edit Shop Details", () async {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) => EditShopPage(shop: shop)))
+                                  .then((result) => setState(() => shop = result));
+                        });
                       }
                     }
                     return emptyBox(1);
@@ -271,36 +277,7 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
     );
   }
 
-  Widget editShopButton() {
-    return Container(
-      height: 50.0,
-      width: 300.0,
-      decoration: BoxDecoration(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: Colors.red),
-      ),
-      child: TextButton(
-        onPressed: () async {
-          // final newShop = await
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => EditShopPage(shop: shop)))
-                  .then((result) => setState(() => shop = result));
-          // if (newShop) {
-          //   setState(() => shop = newShop);
-          // }
-        },
-        child: const Text(
-          "Edit Shop Details",
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
-    );
-  }
-
-//This widget displays all reviews
+  //This widget displays all reviews
   Widget buildReviewStream(
       BuildContext context, Stream<QuerySnapshot> stream, String shopID) {
     return StreamBuilder(

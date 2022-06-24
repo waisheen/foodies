@@ -32,7 +32,7 @@ class _FoodPlacesPageState extends State<FoodPlacesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         extendBodyBehindAppBar: false,
-        appBar: backButton(context),
+        appBar: backButton(context, "Food Places"),
         body: StreamBuilder(
             stream: getFoodPlaceSnapshots(),
             builder:

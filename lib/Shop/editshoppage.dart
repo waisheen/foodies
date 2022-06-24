@@ -216,7 +216,7 @@ class _EditShopPageState extends State<EditShopPage> {
                         decoration:
                             const InputDecoration(border: OutlineInputBorder()),
                         hint: const Text('Choose cuisine'),
-                        items: Shop.allOptions.map((String value) {
+                        items: getAllCuisines().map((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value),
@@ -405,5 +405,12 @@ class _EditShopPageState extends State<EditShopPage> {
       'closing': closing,
       'options': options
     });
+  }
+
+  //gets list of cuisines
+  List<String> getAllCuisines() {
+    List<String> options = Shop.allOptions;
+    options.removeWhere((option) => option == "Halal" || option == "Vegetarian");
+    return options;
   }
 }

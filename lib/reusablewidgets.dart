@@ -62,7 +62,7 @@ Widget inputObscuredText(String label, String hint, Widget icon,
 }
 
 //back button
-PreferredSizeWidget backButton(BuildContext context) {
+PreferredSizeWidget backButton(BuildContext context, [String title = ""]) {
   return AppBar(
     backgroundColor: Colors.transparent,
     elevation: 0,
@@ -75,6 +75,7 @@ PreferredSizeWidget backButton(BuildContext context) {
       onPressed: () => Navigator.pop(context),
       label: Container(),
     ),
+    title: Text(title, style: const TextStyle(color: Colors.black))
   );
 }
 

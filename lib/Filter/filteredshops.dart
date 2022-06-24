@@ -19,8 +19,8 @@ class _FilteredShopsPageState extends State<FilteredShopsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: backButton(context),
+        extendBodyBehindAppBar: false,
+        appBar: backButton(context, "Results"),
         body: ListView(
           padding: const EdgeInsets.all(20),
           physics: const BouncingScrollPhysics(

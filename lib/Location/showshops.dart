@@ -27,8 +27,8 @@ class _ShowShopsPageState extends State<ShowShopsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: backButton(context),
+        extendBodyBehindAppBar: false,
+        appBar: backButton(context, "Stores"),
         body: StreamBuilder(
             stream: getShopSnapshots(),
             builder:
