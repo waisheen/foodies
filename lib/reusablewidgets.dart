@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foodies/Services/all.dart';
@@ -131,7 +133,8 @@ Widget colorBox(BuildContext context, bool color, String text) {
         child: Text(
           text,
           textAlign: TextAlign.center,
-          style: TextStyle(color: color ? Colors.black : Colors.grey, fontSize: 12),
+          style: TextStyle(
+              color: color ? Colors.black : Colors.grey, fontSize: 12),
         ),
       ),
     ),
@@ -180,14 +183,17 @@ Widget reviewContainer(BuildContext context, Review review) {
   );
 }
 
-Future<Shop> getSellerShop() async {
+Future<Shop?> getSellerShop() async {
   String currSellerID = AuthService().currentUser!.uid;
   QuerySnapshot snapshot = await shops.get();
   List<Shop> shopList = snapshot.docs
       .where((snapshot) => snapshot["sellerID"] == currSellerID)
       .map((snapshot) => Shop.fromSnapshot(snapshot))
       .toList();
-  return shopList[0];
+  if (shopList.isNotEmpty) {
+    return shopList[0];
+  }
+  return null;
 }
 
 //get only date portion of DateTime
@@ -195,9 +201,18 @@ String dateFromDateTime(DateTime dateTime) {
   return "${dateTime.day} ${DateFormat('MMM').format(dateTime)} ${dateTime.year}";
 }
 
+//Calculate Distance
+int distance(lat1, lon1, lat2, lon2) {
+  double a = 0.017453292519943295;
+  double b = 0.5 -
+      cos((lat2 - lat1) * a) / 2 +
+      cos(lat1 * a) * cos(lat2 * a) * (1 - cos((lon2 - lon1) * a)) / 2;
+  return (12742 * asin(sqrt(b))).round();
+}
+
 //colours boxes for displaying whether halal/veg
 Widget dietBox(bool selected, String text) {
-    return Padding(
+  return Padding(
     padding: const EdgeInsets.only(top: 2.5, right: 5),
     child: Container(
       decoration: BoxDecoration(
@@ -210,7 +225,8 @@ Widget dietBox(bool selected, String text) {
         child: Text(
           text,
           textAlign: TextAlign.center,
-          style: TextStyle(color: selected ? Colors.black : Colors.grey, fontSize: 12),
+          style: TextStyle(
+              color: selected ? Colors.black : Colors.grey, fontSize: 12),
         ),
       ),
     ),
@@ -246,4 +262,20 @@ String getCuisine(List<String> list) {
     return option;
   }
   return "Others";
+}
+
+Widget noShopText(BuildContext context) {
+  return Padding(
+    padding: const EdgeInsets.all(20),
+    child: SizedBox(
+      height: MediaQuery.of(context).size.height,
+      child: const Align(
+        alignment: Alignment.center,
+        child: Text("No shop is associated with your account, contact admin", 
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 15),
+          ),
+      ),
+    ),
+  );
 }

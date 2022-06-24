@@ -4,6 +4,7 @@ import 'package:foodies/Location/showshops.dart';
 import 'package:foodies/Models/nus_location.dart';
 import 'package:foodies/loading.dart';
 import 'package:foodies/reusablewidgets.dart';
+import 'package:location/location.dart';
 
 import '../Models/foodplace.dart';
 
@@ -16,6 +17,9 @@ class FoodPlacesPage extends StatefulWidget {
 }
 
 class _FoodPlacesPageState extends State<FoodPlacesPage> {
+  //Current GPS location
+  Future<LocationData> gps = Location().getLocation();
+
   //Stream of foodplaces at location
   Stream<QuerySnapshot> getFoodPlaceSnapshots() async* {
     yield* FirebaseFirestore.instance
@@ -82,7 +86,17 @@ class _FoodPlacesPageState extends State<FoodPlacesPage> {
                   padding: const EdgeInsets.only(bottom: 5),
                   child: Text(foodplace.name),
                 ),
-                subtitle: Text(widget.location.name),
+                subtitle: FutureBuilder(
+                  future: gps,
+                  builder:
+                      (BuildContext context, AsyncSnapshot<LocationData> data) {
+                    if (!data.hasData) {
+                      return const Text('Calculating distance...');
+                    }
+                    return Text(
+                        '${foodplace.distanceFrom(data.data!.latitude, data.data!.longitude)} m');
+                  },
+                ),
               ),
               emptyBox(10),
             ],

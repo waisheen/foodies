@@ -17,7 +17,7 @@ class Shop {
   List<String> openDays;
   String imageURL;
   String foodPlace;
-  List<String> allDays = [
+  static List<String> allDays = [
     'Monday',
     'Tuesday',
     'Wednesday',
@@ -29,35 +29,40 @@ class Shop {
   String sellerID;
   double totalRating;
   double totalReview;
-  List<String> options;
-
-  List<String> cuisineList = [
-    'Chinese',
-    'Malay',
-    'Indian',
+  static List<String> allOptions = [
+    'Halal',
+    'Vegetarian',
     'Western',
-    'Japanese',
+    'Chinese',
+    'Thai',
     'Korean',
+    'Japanese',
+    'Soup',
+    'Fast Food',
     'Drinks',
-    'Others'
+    'Dessert',
+    'Snack',
+    'Indian',
+    'Alcohol',
+    'Dim Sum'
   ];
+  List<String> options;
 
   //Initializer
   Shop(
-    this.uid,
-    this.name,
-    this.minPrice,
-    this.maxPrice,
-    this.closing,
-    this.opening,
-    this.openDays,
-    this.imageURL,
-    this.foodPlace,
-    this.sellerID,
-    this.totalReview,
-    this.totalRating,
-    this.options,
-  );
+      this.uid,
+      this.name,
+      this.minPrice,
+      this.maxPrice,
+      this.closing,
+      this.opening,
+      this.openDays,
+      this.imageURL,
+      this.foodPlace,
+      this.sellerID,
+      this.totalReview,
+      this.options,
+      this.totalRating);
 
   //Creating Shop object from a snapshot
   Shop.fromSnapshot(DocumentSnapshot snapshot)
@@ -71,9 +76,9 @@ class Shop {
         imageURL = snapshot['imageURL'],
         foodPlace = snapshot['foodPlace'],
         sellerID = snapshot['sellerID'],
+        options = List<String>.from(snapshot['options']),
         totalReview = snapshot['totalReview'] + 0.0,
-        totalRating = snapshot['totalRating'] + 0.0,
-        options = List<String>.from(snapshot['options']);
+        totalRating = snapshot['totalRating'] + 0.0;
 
   //String representation of open days
   Widget getDaysText(BuildContext context) {
@@ -151,5 +156,4 @@ class Shop {
   String get operatingHours {
     return '${convertIntToTime(opening)} to ${convertIntToTime(closing)}';
   }
-
 }
