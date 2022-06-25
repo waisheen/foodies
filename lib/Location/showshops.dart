@@ -51,7 +51,7 @@ class _ShowShopsPageState extends State<ShowShopsPage> {
     return filtered.map((shop) => shopCard(shop)).toList();
   }
 
-  //build widget layout for each promo
+  //build widget layout for each shop
   Widget shopCard(Shop shop) {
     return Card(
       clipBehavior: Clip.hardEdge,
