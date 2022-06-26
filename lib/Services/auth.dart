@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:foodies/Services/database.dart';
 import '../Models/appuser.dart';
@@ -40,7 +41,7 @@ class AuthService {
     try {
       return await _auth.signOut();
     } catch (e) {
-      return null;
+      return 'Error';
     }
   }
 
@@ -87,6 +88,32 @@ class AuthService {
       await DatabaseService(uid: _auth.currentUser!.uid)
           .updateUser(name, int.parse(contact));
       return _userFromFirebase(_auth.currentUser);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  //Deleting user
+  Future deleteUser() async {
+    try {
+      User user = _auth.currentUser!;
+      await FirebaseFirestore.instance
+          .collection('UserInfo')
+          .doc(user.uid)
+          .delete();
+      await user.delete();
+      return 'Success';
+    } catch (e) {
+      return null;
+    }
+  }
+
+  //Deleting anonymous user
+  Future deleteAnonymousUser() async {
+    try {
+      User user = _auth.currentUser!;
+      await user.delete();
+      return 'Success';
     } catch (e) {
       return null;
     }
