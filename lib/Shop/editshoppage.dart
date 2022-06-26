@@ -245,9 +245,9 @@ class _EditShopPageState extends State<EditShopPage> {
                       ),
                       subtitle: Row(children: [
                         dietButton(isHalal(options), "Halal",
-                            () => setState(() => toggleOptions("halal"))),
+                            () => setState(() => toggleOptions("Halal"))),
                         dietButton(isVegetarian(options), "Vegetarian",
-                            () => setState(() => toggleOptions("vegetarian")))
+                            () => setState(() => toggleOptions("Vegetarian")))
                       ]),
                     ),
 
@@ -358,9 +358,9 @@ class _EditShopPageState extends State<EditShopPage> {
 
   //toggles options list
   void toggleOptions(String option) {
-    if (option == "halal") {
+    if (option == "Halal") {
       isHalal(options) ? options.remove(option) : options.add(option);
-    } else if (option == "vegetarian") {
+    } else if (option == "Vegetarian") {
       isVegetarian(options) ? options.remove(option) : options.add(option);
     } else {
       String currCuisine = getCuisine(options);

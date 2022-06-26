@@ -71,8 +71,11 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) {
                   //placeholder picture in the case image cannot be displayed
-                  return const Image(
-                    image: AssetImage('assets/images/logo3.png'),
+                  return Image(
+                    image: const AssetImage('assets/images/logo5.png'),
+                    height: MediaQuery.of(context).size.height / 3.5,
+                    width: double.infinity,
+                    fit: BoxFit.contain
                   );
                   },
                 ),

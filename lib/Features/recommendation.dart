@@ -109,7 +109,10 @@ Widget buildCard(BuildContext context, Shop shop, void Function() onTapped) {
                   errorBuilder: (context, error, stackTrace) {
                     //placeholder picture in the case image cannot be displayed
                     return const Image(
-                      image: AssetImage('assets/images/logo3.png'),
+                      image: AssetImage('assets/images/logo5.png'),
+                      height: 150,
+                      width: 200,
+                      fit: BoxFit.contain
                     );
                   },
                 ),

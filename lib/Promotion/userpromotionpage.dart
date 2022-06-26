@@ -143,7 +143,10 @@ class _UserPromotionPageState extends State<UserPromotionPage> {
                 errorBuilder: (context, error, stackTrace) {
                   //placeholder picture in the case image cannot be displayed
                   return const Image(
-                    image: AssetImage('assets/images/logo3.png'),
+                    height: 160,
+                    width: double.infinity,
+                    fit: BoxFit.contain,
+                    image: AssetImage('assets/images/logo5.png'),
                   );
                 },
               ),

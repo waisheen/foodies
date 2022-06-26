@@ -248,16 +248,16 @@ String convertIntToTime(int time) {
 }
 
 bool isHalal(List<String> list) {
-  return list.contains("halal");
+  return list.contains("Halal");
 }
 
 bool isVegetarian(List<String> list) {
-  return list.contains("vegetarian");
+  return list.contains("Vegetarian");
 }
 
 String getCuisine(List<String> list) {
   for (String option in list) {
-    if (option == "halal" || option == "vegetarian") {
+    if (option == "Halal" || option == "Vegetarian") {
       continue;
     }
     return option;
