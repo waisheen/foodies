@@ -47,7 +47,15 @@ class _EditShopPageState extends State<EditShopPage> {
         : Scaffold(
             backgroundColor: Colors.white,
             extendBodyBehindAppBar: true,
-            appBar: backButton(context),
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              leading: TextButton.icon(
+                icon: const Icon(Icons.arrow_back_rounded, color: Colors.black),
+                onPressed: () => Navigator.pop(context, shop),
+                label: Container(),
+              ),
+            ),
             body: SingleChildScrollView(
               physics: const BouncingScrollPhysics(
                   parent: AlwaysScrollableScrollPhysics()),
@@ -313,7 +321,7 @@ class _EditShopPageState extends State<EditShopPage> {
             border: Border.all(
                 color: daysSelected[index] ? Colors.black : Colors.grey)),
         height: 35,
-        width: 45,
+        width: 40,
         child: TextButton(
           onPressed: () {
             setState(() {
@@ -327,7 +335,7 @@ class _EditShopPageState extends State<EditShopPage> {
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: daysSelected[index] ? Colors.black : Colors.grey,
-                fontSize: 12),
+                fontSize: 10),
           ),
         ),
       ),
