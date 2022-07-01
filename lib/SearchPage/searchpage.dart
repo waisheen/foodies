@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:foodies/Features/recommendation.dart';
+import 'package:foodies/SearchPage/recommendation.dart';
 import 'package:foodies/Services/all.dart';
 
 import '../Models/shop.dart';
@@ -36,7 +36,7 @@ class _SearchPageState extends State<SearchPage> {
                 children: <Widget>[
                   emptyBox(10),
                   Padding(
-                    //choose user type
+                    //search bar
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: AppBar(
                         backgroundColor: Colors.white,
@@ -45,7 +45,7 @@ class _SearchPageState extends State<SearchPage> {
                           TextButton(
                             child: Container(
                               height: 50,
-                              width: 350,
+                              width: MediaQuery.of(context).size.width - 40,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5),
                                 border: Border.all(color: Colors.grey),

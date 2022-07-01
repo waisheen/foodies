@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodies/Services/all.dart';
-import '../Features/all.dart';
-import '../Features/sellermenupage.dart';
+import '../SearchPage/searchpage.dart';
+import '../SellerMenu/sellermenupage.dart';
 import '../Shop/shopdetails.dart';
 import '../Models/shop.dart';
 import '../Promotion/sellerpromotionpage.dart';
