@@ -12,6 +12,9 @@ import 'Services/auth.dart';
 // ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
 
+//OVERALL DESIGN/THEME
+Color themeColour = Colors.teal;
+
 CollectionReference shops = FirebaseFirestore.instance.collection("Shop");
 
 Widget emptyBox(double height) {
@@ -85,9 +88,9 @@ Widget bigButton(String text, void Function()? onPressed) {
     height: 50.0,
     width: 320.0,
     decoration: BoxDecoration(
-      color: Colors.teal,
+      color: themeColour,
       borderRadius: BorderRadius.circular(30),
-      border: Border.all(color: Colors.teal),
+      border: Border.all(color: themeColour),
     ),
     child: TextButton(
       onPressed: onPressed,

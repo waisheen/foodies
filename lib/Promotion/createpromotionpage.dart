@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foodies/reusablewidgets.dart';
+import 'package:foodies/theme.dart';
 import '../Models/promotion.dart';
 import '../Models/shop.dart';
 import '../loading.dart';
@@ -53,7 +54,7 @@ class _CreatePromotionPageState extends State<CreatePromotionPage> {
                     //Promotion
                     Center(
                       child: BorderedText(
-                        strokeColor: Colors.teal,
+                        strokeColor: themeColour,
                         strokeWidth: 2.0,
                         child: const Text(
                           'Promotion',

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodies/Services/all.dart';
+import 'package:foodies/reusablewidgets.dart';
 import '../Filter/filterpage.dart';
 import '../Location/locationpage.dart';
 import '../ProfilePage/profilepage.dart';
@@ -17,7 +18,7 @@ class _UserMainPageState extends State<UserMainPage> {
   final AuthService _auth = AuthService();
   PageController pageController = PageController();
   int currentIndex = 0;
-  final Color colour = Colors.teal.shade600;
+  final Color colour = themeColour;
 
   void onTapped(int index) {
     setState(() => currentIndex = index);

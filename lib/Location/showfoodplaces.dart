@@ -70,7 +70,7 @@ class _FoodPlacesPageState extends State<FoodPlacesPage> {
                 builder: (context) => ShowShopsPage(
                       foodPlace: foodplace,
                     ))),
-        splashColor: Colors.teal.shade600.withOpacity(0.5),
+        splashColor: themeColour.withOpacity(0.5),
         child: Ink(
           child: Column(
             children: <Widget>[

@@ -92,9 +92,9 @@ class _SearchPageState extends State<SearchPage> {
                     width: double.infinity,
                     child: Container(
                       color: Colors.transparent,
-                      child: const Text(
+                      child: Text(
                         '  Recommendations',
-                        style: TextStyle(fontSize: 30, color: Colors.teal),
+                        style: TextStyle(fontSize: 30, color: themeColour),
                         textAlign: TextAlign.left,
                       ),
                     ),
@@ -196,7 +196,7 @@ class CustomSearchDelegate extends SearchDelegate {
             MaterialPageRoute(
                 builder: (context) =>
                     ShopDetailsPage(shop: shop, showBackButton: true))),
-        splashColor: Colors.teal.shade600.withOpacity(0.5),
+        splashColor: themeColour.withOpacity(0.5),
         child: Ink(
           child: Column(
             children: <Widget>[

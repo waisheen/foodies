@@ -20,7 +20,7 @@ class _SellerMainPageState extends State<SellerMainPage> {
   final AuthService _auth = AuthService();
   PageController pageController = PageController();
   int currentIndex = 0;
-  final Color colour = Colors.teal.shade600;
+  final Color colour = themeColour;
     // ignore: avoid_init_to_null
   late Shop? shop;
   bool loading = true;
@@ -74,7 +74,7 @@ class _SellerMainPageState extends State<SellerMainPage> {
         children: [
           const SearchPage(),
           SellerPromotionPage(shop: shop),
-          const SellerMenuPage(),
+          SellerMenuPage(shop: shop),
           ShopDetailsPage(shop: shop, showBackButton: false),
           const ProfilePage()
         ],

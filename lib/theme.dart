@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:foodies/reusablewidgets.dart';
 
 //Edit for theme data
 ThemeData theme() {
@@ -7,7 +8,7 @@ ThemeData theme() {
       scaffoldBackgroundColor: const Color.fromARGB(255, 227, 226, 226),
       fontFamily: 'Montserrat',
       appBarTheme: AppBarTheme(
-          color: Colors.teal.shade600,
+          color: themeColour,
           elevation: 0,
           systemOverlayStyle:
               const SystemUiOverlayStyle(statusBarBrightness: Brightness.light),

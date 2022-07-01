@@ -65,7 +65,7 @@ class _ShowShopsPageState extends State<ShowShopsPage> {
             MaterialPageRoute(
                 builder: (context) =>
                     ShopDetailsPage(shop: shop, showBackButton: true))),
-        splashColor: Colors.teal.shade600.withOpacity(0.5),
+        splashColor: themeColour.withOpacity(0.5),
         child: Ink(
           child: Column(
             children: <Widget>[

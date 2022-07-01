@@ -48,15 +48,15 @@ class _FilterPageState extends State<FilterPage> {
                     title: const Text('Price Range'),
                     subtitle: Row(
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.attach_money_rounded,
                           size: 35,
-                          color: Colors.teal,
+                          color: themeColour,
                         ),
                         Expanded(
                             child: RangeSlider(
                                 inactiveColor: Colors.grey,
-                                activeColor: Colors.teal,
+                                activeColor: themeColour,
                                 values: _currentRange,
                                 min: 0,
                                 max: 25,
@@ -138,8 +138,8 @@ class _FilterPageState extends State<FilterPage> {
                             modalValidation: (value) {
                               return value.isEmpty ? 'Select at least one' : '';
                             },
-                            modalHeaderStyle: const S2ModalHeaderStyle(
-                                backgroundColor: Colors.teal),
+                            modalHeaderStyle: S2ModalHeaderStyle(
+                                backgroundColor: themeColour),
                             onChange: (selected) {
                               setState(
                                   () => _selectedOptions = selected!.value!);
@@ -149,8 +149,8 @@ class _FilterPageState extends State<FilterPage> {
                                     title: string, value: string))
                                 .toList(),
                             choiceType: S2ChoiceType.switches,
-                            choiceActiveStyle: const S2ChoiceStyle(
-                              color: Colors.teal,
+                            choiceActiveStyle: S2ChoiceStyle(
+                              color: themeColour,
                             ),
                             modalFilter: true,
                             modalConfirm: true,

@@ -19,7 +19,7 @@ class _UserPromotionPageState extends State<UserPromotionPage> {
       FirebaseFirestore.instance.collection("Promotion");
   
   //variable states
-  Color colour = Colors.teal;
+  Color colour = themeColour;
   bool sortByStart = true;
   bool sortByEnd = false;
 
@@ -131,7 +131,7 @@ class _UserPromotionPageState extends State<UserPromotionPage> {
               MaterialPageRoute(
                   builder: (context) => ShopDetailsPage(shop: shop, showBackButton: true))));
         },
-        splashColor: Colors.teal.shade600.withOpacity(0.5),
+        splashColor: themeColour.withOpacity(0.5),
         child: Ink(
           child: Column(
             children: <Widget>[
