@@ -3,7 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:foodies/Models/shop.dart';
 
-class Promotion {
+class Menu {
   String uid;
   String details;
   DateTime startDate;
@@ -17,11 +17,11 @@ class Promotion {
 
   //Initializer
 
-  Promotion(this.uid, this.details, this.startDate, this.endDate, this.imageURL,
+  Menu(this.uid, this.details, this.startDate, this.endDate, this.imageURL,
       this.shop_id);
 
   //Creating Promotion object from a snapshot
-  Promotion.fromSnapshot(DocumentSnapshot snapshot)
+  Menu.fromSnapshot(DocumentSnapshot snapshot)
       : uid = snapshot.id,
         details = snapshot['details'],
         startDate = DateTime.parse(snapshot['startDate'].toDate().toString()),

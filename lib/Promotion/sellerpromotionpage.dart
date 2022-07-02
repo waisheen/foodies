@@ -84,7 +84,7 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
   List<Widget> promoList(List<QueryDocumentSnapshot<Object?>> docsList) {
     List filtered = docsList
         //map each document to Promotion
-        .map((document) => Promotion.fromSnapshot(document))
+        .map((document) => Menu.fromSnapshot(document))
         //uncomment to view current promos only
         .where((promo) => promo.endDate.isAfter(DateTime.now())).toList()
         //only show seller's promos
@@ -149,7 +149,7 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
   }
 
   //build widget layout for each promo
-  Widget promoWidget(Promotion promo) {
+  Widget promoWidget(Menu promo) {
     return Card(
       clipBehavior: Clip.hardEdge,
       elevation: 5,
@@ -227,7 +227,7 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
     );
   }
 
-  Widget dateAndShopText(BuildContext context, Promotion promo) {
+  Widget dateAndShopText(BuildContext context, Menu promo) {
     return FutureBuilder(
         future: promo.currentShop,
         builder: (context, AsyncSnapshot<Shop> shop) {

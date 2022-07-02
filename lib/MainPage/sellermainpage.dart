@@ -74,7 +74,7 @@ class _SellerMainPageState extends State<SellerMainPage> {
         children: [
           const SearchPage(),
           SellerPromotionPage(shop: shop),
-          SellerMenuPage(shop: shop),
+          SellerMenuPage(shop: shop, showBackButton: false),
           ShopDetailsPage(shop: shop, showBackButton: false),
           const ProfilePage()
         ],

@@ -2,11 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foodies/Reviews/createreview.dart';
 import 'package:foodies/ProfilePage/anonymouspage.dart';
+import 'package:foodies/SellerMenu/showitems.dart';
 import 'package:foodies/Shop/editshoppage.dart';
 
+import '../Models/menu.dart';
 import '../Models/review.dart';
 import '../Models/shop.dart';
 import '../Reviews/showreview.dart';
+import '../SellerMenu/sellermenupage.dart';
 import '../Services/all.dart';
 import '../loading.dart';
 import '../reusablewidgets.dart';
@@ -24,11 +27,11 @@ class ShopDetailsPage extends StatefulWidget {
 
 class _ShopDetailsPageState extends State<ShopDetailsPage> {
   final AuthService _auth = AuthService();
-  final CollectionReference userInformation =
-      FirebaseFirestore.instance.collection('UserInfo');
-  final CollectionReference shops =
-      FirebaseFirestore.instance.collection('Shop');
+  final CollectionReference userInformation = FirebaseFirestore.instance.collection('UserInfo');
+  final CollectionReference shops = FirebaseFirestore.instance.collection('Shop');
+  final CollectionReference menus = FirebaseFirestore.instance.collection('Menu');
   late Shop? shop = widget.shop;
+  late bool isOwner = widget.shop!.sellerID == _auth.currentUser!.uid;
 
   Stream<QuerySnapshot> getReviewSnapshots() async* {
     yield* FirebaseFirestore.instance
@@ -43,6 +46,14 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
         .collection('Review')
         .where('shop', isEqualTo: widget.shop!.uid)
         .where('user', isEqualTo: _auth.currentUser!.uid)
+        .snapshots();
+  }
+
+  Stream<QuerySnapshot> getMenuSnapshot() async* {
+    yield* FirebaseFirestore.instance
+        .collection('Menu')
+        .where('shop', isEqualTo: widget.shop!.uid)
+        .limit(3)
         .snapshots();
   }
 
@@ -165,45 +176,85 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
               ),
             ),
 
-            //display reviews (2 only)
-            SizedBox(
-              width: 400,
-              child: buildReviewStream(
-                context,
-                getReviewSnapshots(),
-                shop!.uid,
+            emptyBox(20),
+
+            //display menu
+            ListTile(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 25),
+              title: const Padding(
+                padding: EdgeInsets.only(bottom: 3),
+                child: Text("Menu"),
+              ),
+              subtitle: Column(
+                children: [
+                  ShowItemsPage(shop: shop),
+
+                  emptyBox(10),
+
+                  //show all items button
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SellerMenuPage(shop: shop, showBackButton: true)
+                          ),
+                        );
+                      },
+                      child: const Text('View all items',
+                          style: TextStyle(color: Colors.blue, fontSize: 13)),
+                    ),
+                  ),
+                ],
               ),
             ),
 
             emptyBox(10),
 
-            //view all reviews button
-            Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Container(
-                alignment: Alignment.centerLeft,
-                child: GestureDetector(
-                  onTap: () async {
-                    DocumentSnapshot newDoc = await FirebaseFirestore.instance
-                        .collection('Shop')
-                        .doc(shop!.uid)
-                        .get();
-                    Shop newShop = Shop.fromSnapshot(newDoc);
-                    if (!mounted) return;
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ShowReviewsPage(
-                                  shop: newShop,
-                                )));
-                  },
-                  child: const Text('View all reviews',
-                      style: TextStyle(color: Colors.blue, fontSize: 13)),
-                ),
-              ),
-            ),
+            //display reviews
+            ListTile(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 25),
+              title: const Text("Reviews") ,      
+              subtitle: Column(
+                children: [
+                  //show review
+                  buildReviewStream(
+                    context,
+                    getReviewSnapshots(),
+                    shop!.uid,
+                  ),
 
-            emptyBox(15),
+                  emptyBox(10),
+
+                  //view all reviews button
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: GestureDetector(
+                      onTap: () async {
+                        DocumentSnapshot newDoc = await FirebaseFirestore.instance
+                            .collection('Shop')
+                            .doc(shop!.uid)
+                            .get();
+                        Shop newShop = Shop.fromSnapshot(newDoc);
+                        if (!mounted) return;
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ShowReviewsPage(
+                                      shop: newShop,
+                                    )));
+                      },
+                      child: const Text('View all reviews',
+                          style: TextStyle(color: Colors.blue, fontSize: 13)),
+                    ),
+                  ),
+                ],
+              ),
+            ),       
+
+            emptyBox(5),
 
             //create review button (only users can leave review)
             FutureBuilder(
@@ -213,8 +264,7 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                     if (snapshot.connectionState == ConnectionState.done) {
                       if (snapshot.data!.get('role').toString() == 'User') {
                         return leaveReviewButton();
-                      } else if (AuthService().currentUser!.uid ==
-                          shop!.sellerID) {
+                      } else if (isOwner) {
                         return bigButton("Edit Shop Details", () async {
                           Navigator.push(
                               context,
@@ -239,7 +289,7 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
 
   Widget leaveReviewButton() {
     return Padding(
-      padding: const EdgeInsets.only(left: 20),
+      padding: const EdgeInsets.only(left: 25),
       child: Container(
         alignment: Alignment.centerLeft,
         child: GestureDetector(
@@ -293,7 +343,7 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
           return Container(
             alignment: Alignment.center,
             width: 300,
-            height: 150,
+            height: 50,
             child: const Text(
               'No Reviews Yet!',
               style: TextStyle(fontSize: 18),
@@ -302,17 +352,18 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
           );
         }
         return ListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.zero,
-            shrinkWrap: true,
-            itemCount: snapshot.data!.docs.length,
-            itemBuilder: (BuildContext context, int index) {
-              Review review = Review.fromSnapshot(snapshot.data!.docs[index]);
-              return reviewContainer(
-                context,
-                review,
-              );
-            });
+          physics: const NeverScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(0),
+          shrinkWrap: true,
+          itemCount: snapshot.data!.docs.length,
+          itemBuilder: (BuildContext context, int index) {
+            Review review = Review.fromSnapshot(snapshot.data!.docs[index]);
+            return reviewContainer(
+              context,
+              review,
+            );
+          },
+        );
       },
     );
   }

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodies/SellerMenu/addmenuitem.dart';
 import 'package:foodies/theme.dart';
 
 import '../Models/menu.dart';
@@ -10,8 +11,9 @@ import '../loading.dart';
 import '../reusablewidgets.dart';
 
 class SellerMenuPage extends StatefulWidget {
-  const SellerMenuPage({Key? key, required this.shop}) : super(key: key);
+  const SellerMenuPage({Key? key, required this.shop, required this.showBackButton}) : super(key: key);
   final Shop? shop;
+  final bool showBackButton;
 
   @override
   State<SellerMenuPage> createState() => _SellerMenuPageState();
@@ -21,7 +23,7 @@ class _SellerMenuPageState extends State<SellerMenuPage> {
   final AuthService _auth = AuthService();
   final CollectionReference menus = FirebaseFirestore.instance.collection("Menu");
 
-  late bool canEdit = widget.shop!.sellerID == _auth.currentUser!.uid;
+  late bool isOwner = widget.shop!.sellerID == _auth.currentUser!.uid;
 
   @override
   Widget build(BuildContext context) {
@@ -35,52 +37,46 @@ class _SellerMenuPageState extends State<SellerMenuPage> {
             return const Loading();
           }
           return Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: CustomScrollView(
               physics: const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics()),
               slivers: [
                 SliverAppBar(
+                  leading: widget.showBackButton ? TextButton.icon(
+                    icon: const Icon(Icons.arrow_back_rounded, color: Colors.black),
+                    onPressed: () => Navigator.pop(context),
+                    label: Container(),
+                  ) : null,
                   floating: true,
                   backgroundColor: Colors.white,
                   title: Text("Menu", style: TextStyle(color: themeColour, fontSize: 30))
                   ),
                 SliverGrid(
-                  delegate: SliverChildListDelegate(menuList(snapshot.data!.docs)),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                  delegate: SliverChildListDelegate(
+                    menuList(snapshot.data!.docs, context, isOwner, widget.shop!.uid)
                   ),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                ),
               ],
             ),
           );
         },
       ),
     );
-  }
+  }  
+}
 
-  List<Widget> menuList(List<QueryDocumentSnapshot<Object?>> docsList) {
-    List filtered = docsList
-        .map((document) => Menu.fromSnapshot(document))
-        .where((menu) => menu.shop_id == widget.shop!.uid)
-        .toList();
+List<Widget> menuList(List<QueryDocumentSnapshot<Object?>> docsList, BuildContext context, bool canEdit,
+  String shopID) {
+  List filtered = docsList
+      .map((document) => Menu.fromSnapshot(document))
+      .where((menu) => menu.shop_id == shopID)
+      .toList();
 
-    List<Widget> widgetList = filtered.map((menu) => menuWidget(menu)).toList();
-    
-    //if store has no menu items 
-    if (widgetList.isEmpty) {
-      widgetList.add(
-        SizedBox(
-          height: MediaQuery.of(context).size.height / 1.8,
-          child: const Align(
-            alignment: Alignment.center,
-            child: Text("There are no items on the menu", 
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 15),
-              ),
-          ),
-        ),
-      );
-    }
-
+  List<Widget> widgetList = filtered.map((menu) => menuWidget(menu, context, canEdit)).toList();
+  
+  if (canEdit) {
     widgetList.add(
       Card(
         shape: RoundedRectangleBorder(
@@ -90,20 +86,23 @@ class _SellerMenuPageState extends State<SellerMenuPage> {
         child: bigButton(
           "Add Menu Item",
           () async {
-            // //goes to create promotion page
-            // await getSellerShop().then((shop) => Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //         builder: (context) => CreatePromotionPage(shop: shop))));
+            //goes to add menu item page
+            await getSellerShop().then((shop) => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AddMenuItemPage(shop: shop))));
           },
         ),
       ),
     );
-    return widgetList;
   }
+  return widgetList;
+}
 
-  Widget menuWidget(Menu item) {
-    return Card(
+Widget menuWidget(Menu item, BuildContext context, bool canEdit) {
+  return SizedBox(
+    width: 150,
+    child: Card(
       clipBehavior: Clip.hardEdge,
       elevation: 5,
       shape: RoundedRectangleBorder(
@@ -133,7 +132,13 @@ class _SellerMenuPageState extends State<SellerMenuPage> {
               Padding(
                 padding: const EdgeInsets.all(2),
                 child: GestureDetector(
-                  onTap: () {},
+                  onTap: () async {
+                    //goes to add menu item page
+                    await getSellerShop().then((shop) => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AddMenuItemPage(shop: shop, item: item))));
+                  },
                   child: Icon(CupertinoIcons.pencil_circle_fill, 
                     color: Colors.grey[700]!.withOpacity(0.8),
                     size: 30,
@@ -147,13 +152,14 @@ class _SellerMenuPageState extends State<SellerMenuPage> {
           emptyBox(8),
           
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 7),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Flexible(
                   child: Text(item.name, style: const TextStyle(fontSize: 13)),
                 ),
-                const SizedBox(width: 15),
+                const SizedBox(width: 5),
                 Text("\$${item.price.toStringAsFixed(2)}", style: const TextStyle(fontSize: 13)),
               ],
             ),
@@ -161,6 +167,6 @@ class _SellerMenuPageState extends State<SellerMenuPage> {
           
         ],
       ),
-    );
-  }
+    ),
+  );
 }

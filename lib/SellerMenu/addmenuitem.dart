@@ -1,38 +1,37 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:foodies/reusablewidgets.dart';
 import 'package:foodies/theme.dart';
-import '../Models/promotion.dart';
+import '../Models/menu.dart';
 import '../Models/shop.dart';
 import '../loading.dart';
 import 'package:bordered_text/bordered_text.dart';
 // ignore: depend_on_referenced_packages, unused_import
 import 'package:intl/intl.dart';
 
-class CreatePromotionPage extends StatefulWidget {
-  const CreatePromotionPage({Key? key, required this.shop, this.promo})
+class AddMenuItemPage extends StatefulWidget {
+  const AddMenuItemPage({Key? key, required this.shop, this.item})
       : super(key: key);
-  final Shop shop;
-  final Menu? promo;
+  final Shop? shop;
+  final Menu? item;
 
   @override
-  State<CreatePromotionPage> createState() => _CreatePromotionPageState();
+  State<AddMenuItemPage> createState() => _AddMenuItemPageState();
 }
 
-class _CreatePromotionPageState extends State<CreatePromotionPage> {
+class _AddMenuItemPageState extends State<AddMenuItemPage> {
   final _formKey = GlobalKey<FormState>();
 
   //Variable states
-  late String details = widget.promo == null ? '' : widget.promo!.details;
-  late String imageURL = widget.promo == null ? '' : widget.promo!.imageURL;
-  late String shopID = widget.shop.uid;
-  late DateTime startDate =
-      widget.promo == null ? DateTime.now() : widget.promo!.startDate;
-  late DateTime endDate =
-      widget.promo == null ? DateTime.now() : widget.promo!.endDate;
+  late String name = widget.item == null ? '' : widget.item!.name;
+  late double price = widget.item == null ? 0 : widget.item!.price;
+  late String imageURL = widget.item == null ? '' : widget.item!.imageURL;
+  late String shopID = widget.shop!.uid;
 
   bool loading = false;
-  late bool hasPromo = widget.promo != null;
+  late bool hasItem = widget.item != null;
+  late String priceString = widget.item == null ? "0.00" : widget.item!.price.toStringAsFixed(2);
 
   @override
   Widget build(BuildContext context) {
@@ -49,13 +48,13 @@ class _CreatePromotionPageState extends State<CreatePromotionPage> {
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
-                    //Promotion
+                    //Menu Item
                     Center(
                       child: BorderedText(
                         strokeColor: themeColour,
                         strokeWidth: 2.0,
                         child: const Text(
-                          'Promotion',
+                          'Menu Item',
                           style: TextStyle(
                             color: Colors.transparent,
                             fontSize: 55.0,
@@ -66,61 +65,69 @@ class _CreatePromotionPageState extends State<CreatePromotionPage> {
 
                     emptyBox(25.0),
 
-                    //enter details
+                    //enter name
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 30.0),
                       child: TextFormField(
-                        maxLines: 10,
+                        // maxLines: 2,
                         decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 20, horizontal: 20),
+                          contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                           border: OutlineInputBorder(),
-                          labelText: "Description",
-                          hintText: "Enter promotional details",
+                          labelText: "Name",
+                          hintText: "Enter name of item",
                         ),
-                        initialValue: details,
+                        initialValue: name,
                         validator: (val) {
                           if (val == null || val.isEmpty) {
                             return 'Cannot be empty';
                           }
-                          if (val.length > 1000) {
-                            return 'Max Length: 1000 characters';
+                          if (val.length > 100) {
+                            return 'Max Length: 100 characters';
                           }
                           return null;
                         },
-                        onChanged: (val) => setState(() => details = val),
+                        onChanged: (val) => setState(() => name = val),
                       ),
                     ),
 
                     emptyBox(15.0),
 
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width - 60,
-                      child: const Text(
-                        "Promotional Period:",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            fontSize: 17, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-
-                    emptyBox(15.0),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                        onTap: chooseDate,
-                        child: Text(
-                            "${dateFromDateTime(startDate)}  -  ${dateFromDateTime(endDate)}",
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(fontSize: 16),
-                          ),
+                    //enter price
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        // inputFormatters: <TextInputFormatter>[
+                        //   FilteringTextInputFormatter.
+                        // ],
+                        decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                          border: OutlineInputBorder(),
+                          labelText: "Price",
+                          hintText: "Enter price",
+                          prefixText: "\$ "
                         ),
-                      ]
+                        initialValue: priceString,
+                        validator: (val) {
+                          if (val == null || val.isEmpty) {
+                            return 'Cannot be empty';
+                          }
+                          try {
+                            double.parse(val);
+                            return null;
+                          } catch (e) {
+                            return 'Enter only numbers';
+                          }
+                        },
+                        onChanged: (val) => setState(() {
+                          double newPrice = double.parse(val);
+                          priceString = newPrice.toStringAsFixed(2);
+                          price = newPrice;
+                        }),
+                      ),
                     ),
 
-                    emptyBox(30.0),
+                    emptyBox(15.0),
 
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 30.0),
@@ -131,7 +138,7 @@ class _CreatePromotionPageState extends State<CreatePromotionPage> {
                               vertical: 20, horizontal: 20),
                           border: OutlineInputBorder(),
                           labelText: "Image",
-                          hintText: "Enter link of promotional image",
+                          hintText: "Enter link of menu item",
                         ),
                         initialValue: imageURL,
                         validator: (val) {
@@ -151,12 +158,11 @@ class _CreatePromotionPageState extends State<CreatePromotionPage> {
                     emptyBox(30.0),
 
                     //create Promotion button
-                    bigButton(hasPromo ? "Save Changes" : 'Create Promotion',
+                    bigButton(hasItem ? "Save Changes" : 'Add Menu Item',
                         () async {
                       if (_formKey.currentState!.validate()) {
                         setState(() => loading = true);
-                        dynamic result = await createPromotion(
-                            details, startDate, endDate, imageURL, shopID);
+                        dynamic result = await addItem(name, price, imageURL, shopID);
 
                         if (result == null) {
                           if (!mounted) return;
@@ -167,9 +173,9 @@ class _CreatePromotionPageState extends State<CreatePromotionPage> {
 
                     emptyBox(20.0),
 
-                    hasPromo
-                        ? bigButton("Delete Promotion", () async {
-                            dynamic result = await deletePromotion();
+                    hasItem
+                        ? bigButton("Delete Item", () async {
+                            dynamic result = await deleteItem();
 
                             if (result == null) {
                               if (!mounted) return;
@@ -186,46 +192,31 @@ class _CreatePromotionPageState extends State<CreatePromotionPage> {
           );
   }
 
-  void chooseDate() async {
-    DateTimeRange? dateRange = await showDateRangePicker(
-        context: context, firstDate: DateTime(2000), lastDate: DateTime(2100));
-
-    if (dateRange != null) {
-      setState(() {
-        startDate = dateRange.start;
-        endDate = dateRange.end;
-      });
-    }
-  }
-
   //create Promotion
-  Future createPromotion(String details, DateTime startDate, DateTime endDate,
-      String imageURL, String shopID) async {
-    hasPromo
+  Future addItem(String name, double price, String imageURL, String shopID) async {
+    hasItem
         ? await FirebaseFirestore.instance
-            .collection('Promotion')
-            .doc(widget.promo!.uid)
+            .collection('Menu')
+            .doc(widget.item!.uid)
             .set({
-            'details': details,
-            'startDate': startDate,
-            'endDate': endDate,
+            'name': name,
+            'price' : price,
             'imageURL': imageURL,
-            'shop_id': shopID
+            'shop': shopID
           })
-        : await FirebaseFirestore.instance.collection('Promotion').add({
-            'details': details,
-            'startDate': startDate,
-            'endDate': endDate,
+        : await FirebaseFirestore.instance.collection('Menu').add({
+            'name': name,
+            'price' : price,
             'imageURL': imageURL,
-            'shop_id': shopID
+            'shop': shopID
           });
   }
 
-  //delete promotion
-  Future deletePromotion() async {
+  //delete item
+  Future deleteItem() async {
     await FirebaseFirestore.instance
-        .collection('Promotion')
-        .doc(widget.promo!.uid)
+        .collection('Menu')
+        .doc(widget.item!.uid)
         .delete();
   }
 }
