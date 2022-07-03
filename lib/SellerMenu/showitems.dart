@@ -45,7 +45,7 @@ class _ShowItemsPageState extends State<ShowItemsPage> {
               width: MediaQuery.of(context).size.width,
               child: const Text(
                 'No Menu Items Yet!',
-                style: TextStyle(fontSize: 18),
+                style: TextStyle(fontSize: 15),
                 textAlign: TextAlign.center,
               ),
             );

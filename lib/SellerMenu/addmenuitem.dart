@@ -36,160 +36,176 @@ class _AddMenuItemPageState extends State<AddMenuItemPage> {
   @override
   Widget build(BuildContext context) {
     return loading
-        ? const Loading()
-        : Scaffold(
-            extendBodyBehindAppBar: false,
-            appBar: backButton(context),
-            backgroundColor: Colors.white,
-            body: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(
-                  parent: AlwaysScrollableScrollPhysics()),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: <Widget>[
-                    //Menu Item
-                    Center(
-                      child: BorderedText(
-                        strokeColor: themeColour,
-                        strokeWidth: 2.0,
-                        child: const Text(
-                          'Menu Item',
-                          style: TextStyle(
-                            color: Colors.transparent,
-                            fontSize: 55.0,
+    ? const Loading()
+    : Scaffold(
+        // extendBodyBehindAppBar: false,
+        // appBar: backButton(context),
+        backgroundColor: Colors.white,
+        body: CustomScrollView(
+          physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics()),
+          slivers: [ 
+            sliverAppBar(context, "Menu Item"),
+
+            SliverList(
+              delegate: SliverChildListDelegate(
+              [
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      //Menu Item
+                      // Center(
+                      //   child: BorderedText(
+                      //     strokeColor: themeColour,
+                      //     strokeWidth: 2.0,
+                      //     child: const Text(
+                      //       'Menu Item',
+                      //       style: TextStyle(
+                      //         color: Colors.transparent,
+                      //         fontSize: 55.0,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+
+                      emptyBox(20),
+                          
+                      heading(context, "Enter item:"),
+
+                      //enter name
+                      Padding(
+                        padding: const EdgeInsets.only(left: 30.0, right: 30, top: 15),
+                        child: TextFormField(
+                          // maxLines: 2,
+                          decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                            border: OutlineInputBorder(),
+                            labelText: "Name",
+                            hintText: "Enter name of item",
                           ),
-                        ),
-                      ),
-                    ),
-
-                    emptyBox(25.0),
-
-                    //enter name
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                      child: TextFormField(
-                        // maxLines: 2,
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                          border: OutlineInputBorder(),
-                          labelText: "Name",
-                          hintText: "Enter name of item",
-                        ),
-                        initialValue: name,
-                        validator: (val) {
-                          if (val == null || val.isEmpty) {
-                            return 'Cannot be empty';
-                          }
-                          if (val.length > 100) {
-                            return 'Max Length: 100 characters';
-                          }
-                          return null;
-                        },
-                        onChanged: (val) => setState(() => name = val),
-                      ),
-                    ),
-
-                    emptyBox(15.0),
-
-                    //enter price
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        // inputFormatters: <TextInputFormatter>[
-                        //   FilteringTextInputFormatter.
-                        // ],
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                          border: OutlineInputBorder(),
-                          labelText: "Price",
-                          hintText: "Enter price",
-                          prefixText: "\$ "
-                        ),
-                        initialValue: priceString,
-                        validator: (val) {
-                          if (val == null || val.isEmpty) {
-                            return 'Cannot be empty';
-                          }
-                          try {
-                            double.parse(val);
-                            return null;
-                          } catch (e) {
-                            return 'Enter only numbers';
-                          }
-                        },
-                        onChanged: (val) => setState(() {
-                          double newPrice = double.parse(val);
-                          priceString = newPrice.toStringAsFixed(2);
-                          price = newPrice;
-                        }),
-                      ),
-                    ),
-
-                    emptyBox(15.0),
-
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                      child: TextFormField(
-                        maxLines: 2,
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 20, horizontal: 20),
-                          border: OutlineInputBorder(),
-                          labelText: "Image",
-                          hintText: "Enter link of menu item",
-                        ),
-                        initialValue: imageURL,
-                        validator: (val) {
-                          if (val == null || val.isEmpty) {
-                            return 'Cannot be empty';
-                          }
-                          return null;
-                        },
-                        onChanged: (val) => setState(() => imageURL = val),
-                      ),
-                    ),
-
-                    emptyBox(15.0),
-
-                    showImage(imageURL),
-
-                    emptyBox(30.0),
-
-                    //create Promotion button
-                    bigButton(hasItem ? "Save Changes" : 'Add Menu Item',
-                        () async {
-                      if (_formKey.currentState!.validate()) {
-                        setState(() => loading = true);
-                        dynamic result = await addItem(name, price, imageURL, shopID);
-
-                        if (result == null) {
-                          if (!mounted) return;
-                          Navigator.pop(context);
-                        }
-                      }
-                    }),
-
-                    emptyBox(20.0),
-
-                    hasItem
-                        ? bigButton("Delete Item", () async {
-                            dynamic result = await deleteItem();
-
-                            if (result == null) {
-                              if (!mounted) return;
-                              Navigator.pop(context);
+                          initialValue: name,
+                          validator: (val) {
+                            if (val == null || val.isEmpty) {
+                              return 'Cannot be empty';
                             }
-                          })
-                        : emptyBox(1.0),
+                            if (val.length > 100) {
+                              return 'Max Length: 100 characters';
+                            }
+                            return null;
+                          },
+                          onChanged: (val) => setState(() => name = val),
+                        ),
+                      ),
 
-                    emptyBox(50.0),
-                  ],
+                      emptyBox(30.0),
+
+                      heading(context, "Enter price:"),
+
+                      //enter price
+                      Padding(
+                        padding: const EdgeInsets.only(left: 30.0, right: 30, top: 15),
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          // inputFormatters: <TextInputFormatter>[
+                          //   FilteringTextInputFormatter.
+                          // ],
+                          decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                            border: OutlineInputBorder(),
+                            labelText: "Price",
+                            hintText: "Enter price",
+                            prefixText: "\$ "
+                          ),
+                          initialValue: priceString,
+                          validator: (val) {
+                            if (val == null || val.isEmpty) {
+                              return 'Cannot be empty';
+                            }
+                            try {
+                              double.parse(val);
+                              return null;
+                            } catch (e) {
+                              return 'Enter only numbers';
+                            }
+                          },
+                          onChanged: (val) => setState(() {
+                            double newPrice = double.parse(val);
+                            priceString = newPrice.toStringAsFixed(2);
+                            price = newPrice;
+                          }),
+                        ),
+                      ),
+
+                      emptyBox(30.0),
+
+                      heading(context, "Enter image link:"),
+
+                      Padding(
+                        padding: const EdgeInsets.only(left: 30.0, right: 30, top: 15),
+                        child: TextFormField(
+                          maxLines: 2,
+                          decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 20),
+                            border: OutlineInputBorder(),
+                            labelText: "Image",
+                            hintText: "Enter link of menu item",
+                          ),
+                          initialValue: imageURL,
+                          validator: (val) {
+                            if (val == null || val.isEmpty) {
+                              return 'Cannot be empty';
+                            }
+                            return null;
+                          },
+                          onChanged: (val) => setState(() => imageURL = val),
+                        ),
+                      ),
+
+                      emptyBox(15.0),
+
+                      showImage(imageURL),
+
+                      emptyBox(30.0),
+
+                      //create Promotion button
+                      bigButton(hasItem ? "Save Changes" : 'Add Menu Item',
+                          () async {
+                        if (_formKey.currentState!.validate()) {
+                          setState(() => loading = true);
+                          dynamic result = await addItem(name, price, imageURL, shopID);
+
+                          if (result == null) {
+                            if (!mounted) return;
+                            Navigator.pop(context);
+                          }
+                        }
+                      }),
+
+                      emptyBox(20.0),
+
+                      hasItem
+                      ? bigButton("Delete Item", () async {
+                          dynamic result = await deleteItem();
+
+                          if (result == null) {
+                            if (!mounted) return;
+                            Navigator.pop(context);
+                          }
+                        })
+                      : emptyBox(1.0),
+
+                      emptyBox(50.0),
+                    ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          );
+          ),
+        ],
+      ),
+    );
   }
 
   //create Promotion
