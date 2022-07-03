@@ -19,6 +19,9 @@ If you would like to try out the app, do follow the intructions below:
 2. Install the app onto your device by following the instructions that are appear. Do allow the permissions that are requested during installation. 
 3. Once installed, click on the app icon to run it!
 
+# Detailed Documentation
+For detailed documentation on the project, do refer to the link [here](https://docs.google.com/document/d/1s0gJMcxUtR9Nez6d2XyC_h4tIFBrB-31Xc6zF2vcSlM/edit#heading=h.1vjixcg8y918)
+
 # Motivation
 We believe that at times when we are with our friends in NUS, we ask this question, “Where are we going to eat?”, and usually the replies range from “I don’t know” to “There’s nothing suitable here”. There is a plethora of food choices in NUS and many different kinds of food at diverse price ranges to cater to everyone. Sometimes, people prefer to save money and pick cheaper options. Other times, people need to find halal options or just grab a quick lunch nearby. However, NUS students or staff may not know what all their available options are. 
 
@@ -55,37 +58,52 @@ As a Muslim NUS student, I want to know which places offer halal food
 
 Our application will feature a login system at the start page. Users who have an account can choose to login with their email and password. New users can also create an account via the click of a button at the start page. The signup and login feature is for users to leave reviews and ratings about the food outlets on the application. For users who just want to use the app without the functionality of leaving reviews and ratings do not need to go through the hassle of creating a new account, and they can choose to login as a guest instead. There will be a password reset system for users who forgot their password.
 
-In addition to normal users, sellers who own the food outlets can choose to sign up on the app as a seller too. As a seller, signing up and logging in on the app will allow them to perform several tasks such as submitting a request to update their store information (e.g. menu, operating hours) and also create new promotions to attract people to their stores, which will be shown in one of the features. As a seller, they will not be able to leave a review like the normal users and they have to be manually approved, with additional information required such as the outlets they own.
+In addition to normal users, sellers who own the food outlets can choose to sign up on the app as a seller too. As a seller, signing up and logging in on the app will allow them to perform several tasks such as updating their store information (e.g. menu, operating hours) and also create new promotions to attract people to their stores, which will be shown in one of the features. As a seller, they will not be able to leave a review like the normal users and seller accounts have to be manually approved, with additional information required such as the outlets they own.
 
-**2. Filtering**
 
-Under the filter function on the main page of the application, the user can choose to filter food outlets based on several metrics they have chosen to fit their tastes and preferences. Information of the food outlets will be stored and filtered accordingly.
+**2. Search and Recommendation**
 
-Firstly, the user will be able to choose the price range of the food they want to consume. They can adjust the slider to choose food outlets that have food options around the price range. Next, they will be able to filter the proximity of the food outlets from their current location. It will be ranked according to the distance and they can pick which location is within traveling distance for them. Lastly, the food outlets will be tagged according to the dietary requirements (e.g. halal or vegetarian) and cuisines (e.g. Japanese, Western) that they offer. The user will then be able to filter out these options as they deem fit.
+The first function on the main page of the application is the search function. Via the search function, the users can search for specific outlets. They will be able to find out more about the specific outlets such as their opening hours, menu or user ratings and reviews for the outlet itself. 
 
-After selecting all the options that fit their criteria, they can press the filter button and the remaining suitable choices that fit all these metrics will be displayed to the user.
+Besides searching for specific outlets, there will be a recommendations section. Certain shops can be recommended to the user via metrics such as ratings, and number of reviews.
 
 
 **3. Deals and Promotions**
 
-The next function on the main page of the application is the deals and promotions tab, where the users can find out the ongoing deals that are offered to food outlets on campus. The user can press on it to find out about the details of the promotion, such as the start and end dates, the outlets offering the promotions or other relevant information.
+The next function on the main page of the application is the deals and promotions tab, where the users can find out the ongoing deals that are offered to food outlets on campus. The user can see details of the promotion, such as the start and end dates, the outlets offering the promotions or other relevant information. Clicking on the promotion leads to the store’s page.
 
-The deals and promotions can be manually updated, or it can also be updated by approved and verified sellers. These sellers can create an account on the app, then create new promotions or deals featuring their shops and providing the relevant details.
+The deals and promotions can be manually updated, or it can also be updated by approved and verified sellers. These sellers can create an account on the app, then create, edit and delete new promotions or deals featuring their shops by providing the relevant details.
 
-**4. Locations**
+These promotions can be sorted according to their start and end dates. 
+
+
+**4. Location**
 
 There will be a location function on the main page of the application, where the user can press to find out about the different locations in the school (e.g. School of Computing, UTown, Faculty of Science). The user will then be able to press on the different locations and find out about the food places and shops that are available in the general location. There will also be an additional feature where the approximate current location of the user is shown on the map to ease exploring different food choices nearby.
 
-**5. Search**
+**5. Filter**
 
-The next function on the main page of the application is the search function. Via the search function, the users can search for specific outlets. They will be able to find out more about the specific outlets such as their opening hours, menu or user ratings and reviews for the outlet itself. 
+Under the filter function on the main page of the application, the user can choose to filter food outlets based on several metrics they have chosen to fit their tastes and preferences. Information of the food outlets will be stored and filtered accordingly.
 
-The user can also choose to leave their ratings and reviews for the specific outlet given that they have created an account and logged in onto the application. The user will be able to only leave one review for the outlet, and they can edit so afterwards.
+Firstly, the user will be able to choose the price range of the food they want to consume. They can adjust the slider to choose food outlets that have food options around the price range. Next, they will be able to filter the proximity of the food outlets from their current location. It will be ranked according to the distance and they can pick which location is within travelling distance for them. Lastly, the food outlets will be tagged according to the dietary requirements (e.g. halal or vegetarian) and cuisines (e.g. Japanese, Western) that they offer. The user will then be able to filter out these options as they deem fit.
 
-Besides searching for specific outlets, there will be a recommendations tab upon pressing on the search function. Certain outlets can be recommended to the user via metrics such as ratings.
+After selecting all the options that fit their criteria, they can press the filter button and the remaining suitable choices that fit all these metrics will be displayed to the user.
 
-## Possible Extensions
+**6. Shop and Menu**
+
+For sellers, they can link their shop to their account. From the app, they are able to update details and information on their shop such as name, display image, opening days and hours, cuisine, and whether it is halal or vegetarian. There is also a section of the app where sellers can add, edit or delete items and prices to their store’s menu. 
+
+Whenever a user views a store’s information, all these details will be displayed, in addition to a review section. The review section consists of the latest review, as well as the option(s) to view all reviews (for all reviews) or leave a review (for registered users only). Users can also view the menu from the store’s page. 
+
+**7. Reviews**
+
+Users can choose to leave their ratings and reviews for the specific outlet given that they have created an account and logged in onto the application. The user will be able to only leave one review for the outlet, and they can edit so afterwards.
+
+## **Possible Extensions**
 Several extensions can be integrated into the application if time allows. One of the possible extensions is announcements at the main page of the application to show any important information or special arrangements, such as different operating hours during school holidays. There can also be the integration of real-time location into the application. There can be approximate crowd levels shown at different hours of the days in specific food outlets.
+
+# Programme Flow
+![programme flow](diagrams/ProgrammeFlow.png)
 
 # Class Diagram
 ![class diagram](diagrams/ClassDiagram.png)
@@ -98,15 +116,14 @@ Several extensions can be integrated into the application if time allows. One of
 ![promotion diagram](diagrams/Promotion.png)
 ![user info diagram](diagrams/UserInformation.png)
 
-# Programme Flow
-![programme flow](diagrams/ProgrammeFlow.png)
-
-# Detailed Documentation
-For detailed documentation, do refer to the link [here](https://docs.google.com/document/d/1s0gJMcxUtR9Nez6d2XyC_h4tIFBrB-31Xc6zF2vcSlM/edit#heading=h.1vjixcg8y918)
-
 # Progress
 - [Introductory Video / Basic Overview](https://drive.google.com/file/d/1Yywd7pKEY0sadhKXFboSPynAFABf-8-M/view?usp=sharing)
 
 ## Milestone 1
 - [Poster](https://drive.google.com/file/d/1h-1K361ssC8_updcyy1M5O_Oz2IlgRGk/view?usp=sharing)
 - [Technical Proof-Of-Concept Video](https://drive.google.com/file/d/1EpQ1p2o1Wk2iREh1d8WxDZ-3jSGvJiyd/view?usp=sharing)
+
+## Milestone 2
+- [Poster](https://drive.google.com/file/d/1iFC5eZ2nYgtnvwNysK5TZl7tlQwdgo6D/view?usp=sharing)
+- [Technical Proof-Of-Concept Video](https://drive.google.com/file/d/1kuT09nOEeUdbagNn2jxBXbkR1Gb6oFzm/view?usp=sharing)
+

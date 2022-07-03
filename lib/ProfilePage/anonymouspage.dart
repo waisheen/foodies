@@ -34,7 +34,8 @@ class _AnonymousPageState extends State<AnonymousPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 90.0),
               child: bigButton('Sign in', () {
-                _auth.signOut();
+                // _auth.signOut();
+                _auth.deleteAnonymousUser();
               }),
             ),
             emptyBox(20.0),

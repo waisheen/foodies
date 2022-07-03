@@ -52,7 +52,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                         //sign up text
                         Center(
                           child: BorderedText(
-                            strokeColor: Colors.teal,
+                            strokeColor: themeColour,
                             strokeWidth: 2.0,
                             child: const Text(
                               'Sign Up',

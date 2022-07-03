@@ -12,6 +12,9 @@ import 'Services/auth.dart';
 // ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
 
+//OVERALL DESIGN/THEME
+Color themeColour = Colors.teal;
+
 CollectionReference shops = FirebaseFirestore.instance.collection("Shop");
 
 Widget emptyBox(double height) {
@@ -85,9 +88,9 @@ Widget bigButton(String text, void Function()? onPressed) {
     height: 50.0,
     width: 320.0,
     decoration: BoxDecoration(
-      color: Colors.teal,
+      color: themeColour,
       borderRadius: BorderRadius.circular(30),
-      border: Border.all(color: Colors.teal),
+      border: Border.all(color: themeColour),
     ),
     child: TextButton(
       onPressed: onPressed,
@@ -145,7 +148,7 @@ Widget colorBox(BuildContext context, bool color, String text) {
 //This is a widget for showing individual reviews
 Widget reviewContainer(BuildContext context, Review review) {
   return Padding(
-    padding: const EdgeInsets.only(top: 15, left: 10, right: 10),
+    padding: const EdgeInsets.only(top: 15),
     child: Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -155,7 +158,7 @@ Widget reviewContainer(BuildContext context, Review review) {
           Row(
             children: [
               const Padding(
-                  padding: EdgeInsets.only(left: 5, top: 5),
+                  padding: EdgeInsets.all(10),
                   child: Icon(Icons.account_circle_rounded)),
               review.userText(context),
             ],
@@ -168,7 +171,7 @@ Widget reviewContainer(BuildContext context, Review review) {
           ),
           emptyBox(20),
           Padding(
-            padding: const EdgeInsets.only(left: 10.0),
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: SizedBox(
               width: 350,
               child: Text(
@@ -277,6 +280,25 @@ Widget noShopText(BuildContext context) {
           style: TextStyle(fontSize: 15),
           ),
       ),
+    ),
+  );
+}
+
+//displays image if link is valid
+Widget showImage(String url) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 20),
+    child: Image(
+      image: NetworkImage(url),
+      height: 160,
+      width: double.infinity,
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) {
+        return Text(
+          (url == '' ? 'No image uplaoded' : 'Image cannot be shown'),
+          style: const TextStyle(fontSize: 15),
+        );
+      },
     ),
   );
 }

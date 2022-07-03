@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodies/Services/all.dart';
-import '../Features/all.dart';
-import '../Features/sellermenupage.dart';
+import '../SearchPage/searchpage.dart';
+import '../SellerMenu/sellermenupage.dart';
 import '../Shop/shopdetails.dart';
 import '../Models/shop.dart';
 import '../Promotion/sellerpromotionpage.dart';
@@ -20,7 +20,7 @@ class _SellerMainPageState extends State<SellerMainPage> {
   final AuthService _auth = AuthService();
   PageController pageController = PageController();
   int currentIndex = 0;
-  final Color colour = Colors.teal.shade600;
+  final Color colour = themeColour;
     // ignore: avoid_init_to_null
   late Shop? shop;
   bool loading = true;
@@ -74,7 +74,7 @@ class _SellerMainPageState extends State<SellerMainPage> {
         children: [
           const SearchPage(),
           SellerPromotionPage(shop: shop),
-          const SellerMenuPage(),
+          SellerMenuPage(shop: shop, showBackButton: false),
           ShopDetailsPage(shop: shop, showBackButton: false),
           const ProfilePage()
         ],

@@ -25,7 +25,7 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
       FirebaseFirestore.instance.collection("Shop");
   
   //variable states
-  Color colour = Colors.teal;
+  Color colour = themeColour;
   bool sortByStart = true;
   bool sortByEnd = false;
 
@@ -34,57 +34,59 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
     return widget.shop == null ? 
     noShopText(context) :
     Scaffold(
-        body: StreamBuilder(
-            stream: promotions.snapshots(),
-            builder:
-                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (!snapshot.hasData) {
-                return const Loading();
-              }
-              return Padding(
-                padding: const EdgeInsets.all(20),
-                child: CustomScrollView(
-                  physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics()),
-                  slivers: [
-                    SliverAppBar(
-                      floating: true,
-                      backgroundColor: Colors.white,
-                      title: Row(children: [
-                          Text("Sort by:", style: TextStyle(fontSize: 15, color: colour),),
-                          const SizedBox(width: 10),
-                          sortButton("Start Date", sortByStart, () {
-                            setState(() {
-                              sortByStart = true;
-                              sortByEnd = false;
-                            });
-                          }),
-                          const SizedBox(width: 10),
-                          sortButton("End Date", sortByEnd, () {
-                            setState(() {
-                              sortByStart = false;
-                              sortByEnd = true;
-                            });
-                          }),
-                        ],
-                      ),
-                      ),
-                    SliverList(
-                      delegate: SliverChildListDelegate(promoList(snapshot.data!.docs))
-                      ),
-                  ],
+      body: StreamBuilder(
+        stream: promotions.snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return const Loading();
+          }
+          return Padding(
+            padding: const EdgeInsets.all(20),
+            child: CustomScrollView(
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics()),
+              slivers: [
+                SliverAppBar(
+                  floating: true,
+                  backgroundColor: Colors.white,
+                  title: Row(
+                    children: [
+                      Text("Sort by:", style: TextStyle(fontSize: 15, color: colour),),
+                      const SizedBox(width: 10),
+                      sortButton("Start Date", sortByStart, () {
+                        setState(() {
+                          sortByStart = true;
+                          sortByEnd = false;
+                        });
+                      }),
+                      const SizedBox(width: 10),
+                      sortButton("End Date", sortByEnd, () {
+                        setState(() {
+                          sortByStart = false;
+                          sortByEnd = true;
+                        });
+                      }),
+                    ],
+                  ),
                 ),
-              );
-            }));
+                SliverList(
+                  delegate: SliverChildListDelegate(promoList(snapshot.data!.docs))
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 
   //creates a list of promo widgets
   List<Widget> promoList(List<QueryDocumentSnapshot<Object?>> docsList) {
     List filtered = docsList
         //map each document to Promotion
-        .map((document) => Promotion.fromSnapshot(document))
-        //uncomment to view current promos
-        // .where((promo) => promo.endDate.isAfter(DateTime.now())).toList();
+        .map((document) => Menu.fromSnapshot(document))
+        //uncomment to view current promos only
+        .where((promo) => promo.endDate.isAfter(DateTime.now())).toList()
         //only show seller's promos
         .where((promo) => promo.shop_id == widget.shop!.uid)
         .toList();
@@ -130,7 +132,6 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),
-        // color: Colors.teal.shade600.withOpacity(0.5),
         elevation: 5,
         child: bigButton(
           "Create New Promotion",
@@ -148,7 +149,7 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
   }
 
   //build widget layout for each promo
-  Widget promoWidget(Promotion promo) {
+  Widget promoWidget(Menu promo) {
     return Card(
       clipBehavior: Clip.hardEdge,
       elevation: 5,
@@ -163,7 +164,7 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
               MaterialPageRoute(
                   builder: (context) => ShopDetailsPage(shop: shop, showBackButton: true))));
         },
-        splashColor: Colors.teal.shade600.withOpacity(0.5),
+        splashColor: themeColour.withOpacity(0.5),
         child: Ink(
           child: Column(
             children: <Widget>[
@@ -226,7 +227,7 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
     );
   }
 
-  Widget dateAndShopText(BuildContext context, Promotion promo) {
+  Widget dateAndShopText(BuildContext context, Menu promo) {
     return FutureBuilder(
         future: promo.currentShop,
         builder: (context, AsyncSnapshot<Shop> shop) {

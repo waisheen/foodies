@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:foodies/Services/all.dart';
-import '../Features/all.dart';
+import 'package:foodies/reusablewidgets.dart';
+import '../Filter/filterpage.dart';
+import '../Location/locationpage.dart';
 import '../ProfilePage/profilepage.dart';
+import '../Promotion/userpromotionpage.dart';
+import '../SearchPage/searchpage.dart';
 
 class UserMainPage extends StatefulWidget {
   const UserMainPage({Key? key}) : super(key: key);
@@ -14,7 +18,7 @@ class _UserMainPageState extends State<UserMainPage> {
   final AuthService _auth = AuthService();
   PageController pageController = PageController();
   int currentIndex = 0;
-  final Color colour = Colors.teal.shade600;
+  final Color colour = themeColour;
 
   void onTapped(int index) {
     setState(() => currentIndex = index);
@@ -40,7 +44,8 @@ class _UserMainPageState extends State<UserMainPage> {
               style: TextStyle(color: Colors.white),
             ),
             onPressed: () async {
-              await _auth.signOut();
+              _auth.currentUser!.isAnonymous ? 
+              await _auth.deleteAnonymousUser() : _auth.signOut();
             },
           ),
         ],
