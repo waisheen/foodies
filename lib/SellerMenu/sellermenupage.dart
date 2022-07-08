@@ -140,7 +140,7 @@ Widget menuWidget(Menu item, BuildContext context, bool canEdit) {
                         builder: (context) => AddMenuItemPage(shop: shop, item: item))));
                   },
                   child: Icon(CupertinoIcons.pencil_circle_fill, 
-                    color: Colors.grey[700]!.withOpacity(0.8),
+                    color: Colors.white.withOpacity(0.7),
                     size: 30,
                   ),
                 ),

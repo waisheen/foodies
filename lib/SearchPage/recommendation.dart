@@ -39,7 +39,6 @@ class _RecommendationPageState extends State<RecommendationPage> {
                   style: TextStyle(
                     fontSize: 21,
                     fontWeight: FontWeight.w500,
-                    fontFamily: 'Montserrat',
                   ),
                   textAlign: TextAlign.left,
                 ),
@@ -68,7 +67,6 @@ class _RecommendationPageState extends State<RecommendationPage> {
                   style: TextStyle(
                     fontSize: 21,
                     fontWeight: FontWeight.w500,
-                    fontFamily: 'Montserrat',
                   ),
                   textAlign: TextAlign.left,
                 ),

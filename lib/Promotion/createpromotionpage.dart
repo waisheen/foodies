@@ -166,14 +166,19 @@ class _CreatePromotionPageState extends State<CreatePromotionPage> {
 
                           hasPromo
                           ? bigButton("Delete Promotion", 
-                            () async {
-                              dynamic result = await deletePromotion();
+                            () => confirmationPopUp(
+                              context, 
+                              "Are you sure you want to delete this promotion?",
+                              () async {
+                                dynamic result = await deletePromotion();
 
-                              if (result == null) {
-                                if (!mounted) return;
-                                Navigator.pop(context);
-                              }
-                            })
+                                if (result == null) {
+                                  if (!mounted) return;
+                                  Navigator.pop(context);
+                                }
+                              },
+                            ),
+                          )
                           : emptyBox(1.0),
 
                           emptyBox(50.0),

@@ -43,10 +43,14 @@ class _UserMainPageState extends State<UserMainPage> {
               'Logout',
               style: TextStyle(color: Colors.white),
             ),
-            onPressed: () async {
-              _auth.currentUser!.isAnonymous ? 
-              await _auth.deleteAnonymousUser() : _auth.signOut();
-            },
+            onPressed: () => confirmationPopUp(
+              context, 
+              "Are you sure you want to log out?",
+              () async {
+                _auth.currentUser!.isAnonymous ? 
+                await _auth.deleteAnonymousUser() : _auth.signOut();
+              },
+            ),
           ),
         ],
       ),

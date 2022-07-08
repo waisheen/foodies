@@ -320,6 +320,7 @@ Widget sliverAppBar(BuildContext context, String title) {
       onPressed: () => Navigator.pop(context),
       label: Container(),
     ),
+    // onStretchTrigger: 
   );
 }
 
@@ -335,5 +336,41 @@ Widget heading(BuildContext context, String field) {
         fontWeight: FontWeight.bold
       ),
     ),
+  );
+}
+
+void confirmationPopUp(BuildContext context, String text, Function func) {
+  showDialog(
+    context: context, 
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Confirm Action'),
+        content: Text(text),
+        actions: [
+          // Cancel button
+          TextButton(
+            onPressed: () {
+              // Close the dialog
+              Navigator.of(context).pop();
+            },
+            child: const Text('Cancel', 
+              // style: TextStyle(color: Colors.red)
+            ),
+          ),
+
+          // The "Yes" button
+          TextButton(
+            onPressed: () async {
+              // Close the dialog
+              Navigator.of(context).pop();
+
+              // Carry out action
+              func();
+            },
+            child: const Text('Yes'),
+          ),
+        ],
+      );
+    },
   );
 }

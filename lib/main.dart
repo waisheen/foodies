@@ -3,6 +3,7 @@ import 'package:foodies/Models/appuser.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'Services/auth.dart';
+import 'theme.dart';
 import 'wrapper.dart';
 
 void main() async {
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
       value: AuthService().user,
       initialData: null,
       child: MaterialApp(
+        theme: theme(),
         title: 'Foodies',
         home: Wrapper(),
       ),

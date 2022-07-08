@@ -186,14 +186,21 @@ class _AddMenuItemPageState extends State<AddMenuItemPage> {
                       emptyBox(20.0),
 
                       hasItem
-                      ? bigButton("Delete Item", () async {
-                          dynamic result = await deleteItem();
+                      ? bigButton(
+                        "Delete Item", 
+                        () => confirmationPopUp(
+                          context, 
+                          "Are you sure you want to delete this item?",
+                          () async {
+                            dynamic result = await deleteItem();
 
-                          if (result == null) {
-                            if (!mounted) return;
-                            Navigator.pop(context);
-                          }
-                        })
+                            if (result == null) {
+                              if (!mounted) return;
+                              Navigator.pop(context);
+                            }
+                          },
+                        ),
+                      )
                       : emptyBox(1.0),
 
                       emptyBox(50.0),
