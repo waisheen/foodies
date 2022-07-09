@@ -67,6 +67,9 @@ class _SellerMainPageState extends State<SellerMainPage> {
               () async {
                 _auth.currentUser!.isAnonymous ? 
                 await _auth.deleteAnonymousUser() : _auth.signOut();
+                setState(() {
+                  successFlushBar(context, "Logged out successfully", true);
+                });
               },
             ),
           ),

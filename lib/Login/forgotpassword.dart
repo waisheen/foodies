@@ -54,13 +54,13 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     }, (val) => setState(() => email = val)),
 
                     //error message (if any)
-                    Text(
-                      error,
-                      style: const TextStyle(
-                          color: Colors.red, fontSize: 15.0),
-                    ),
+                    // Text(
+                    //   error,
+                    //   style: const TextStyle(
+                    //       color: Colors.red, fontSize: 15.0),
+                    // ),
 
-                    emptyBox(10.0),
+                    emptyBox(20.0),
 
                     //reset password button
                     bigButton("Reset Password", () async {
@@ -69,11 +69,20 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         dynamic result = await _auth.resetPassword(email);
 
                         if (result == "invalid-email") {
-                          setState(() => error = 'Invalid email');
+                          setState(() {
+                            error = 'Invalid email';
+                            redFlushBar(context, error, true);
+                          });
                         } else if (result == "user-not-found") {
-                          setState(() => error = "No existing account found");
+                          setState(() {
+                            error = "No existing account found";
+                            redFlushBar(context, error, true);
+                          });
                         } else {
-                          setState(() => error = "Check your inbox/spam inbox to reset password");
+                          setState(() {
+                            error = "Check your inbox/spam inbox to reset password";
+                            successFlushBar(context, error, true);
+                            });
                         }
                         setState(() => loading = false);
                       }

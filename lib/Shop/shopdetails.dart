@@ -255,7 +255,7 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                               return leaveReviewButton();
                             } else if (isOwner) {
                                 return Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                                  padding: const EdgeInsets.all(25),
                                   child: bigButton("Edit Shop Details",
                                     () async {
                                   Navigator.push(

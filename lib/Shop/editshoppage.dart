@@ -276,6 +276,7 @@ class _EditShopPageState extends State<EditShopPage> {
                         if (result == null) {
                           if (!mounted) return;
                           Navigator.pop(context, newShop);
+                          successFlushBar(context, "Changes saved", true);
                         }
                       }
                     }),

@@ -179,6 +179,9 @@ class _AddMenuItemPageState extends State<AddMenuItemPage> {
                           if (result == null) {
                             if (!mounted) return;
                             Navigator.pop(context);
+                            successFlushBar(context, 
+                              hasItem ? "Changes saved" : "Item added", 
+                              true);
                           }
                         }
                       }),
@@ -197,6 +200,9 @@ class _AddMenuItemPageState extends State<AddMenuItemPage> {
                             if (result == null) {
                               if (!mounted) return;
                               Navigator.pop(context);
+                              redFlushBar(context, 
+                                "Item deleted", 
+                                true);
                             }
                           },
                         ),

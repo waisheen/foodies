@@ -47,7 +47,7 @@ class _RecommendationPageState extends State<RecommendationPage> {
           ),
         ),
         SizedBox(
-            height: 265,
+            height: 200,
             child: buildShopStream(
                 context, getShopSnapshots(context), ratingList)),
         emptyBox(20),
@@ -75,7 +75,7 @@ class _RecommendationPageState extends State<RecommendationPage> {
           ),
         ),
         SizedBox(
-            height: 265,
+            height: 200,
             child: buildShopStream(
                 context, getShopSnapshots(context), numberList)),
       ],
@@ -85,58 +85,77 @@ class _RecommendationPageState extends State<RecommendationPage> {
 
 //Builds a card with a title, image and a onTap fuction
 Widget buildCard(BuildContext context, Shop shop, void Function() onTapped) {
-  return SizedBox(
-    width: 200,
-    child: Card(
-        clipBehavior: Clip.hardEdge,
-        elevation: 5,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: InkWell(
-          onTap: onTapped,
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                width: 200,
-                child: Image(
-                  image: NetworkImage(shop.imageURL),
-                  height: 150,
-                  width: 200,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    //placeholder picture in the case image cannot be displayed
-                    return const Image(
-                      image: AssetImage('assets/images/logo5.png'),
-                      height: 150,
-                      width: 200,
-                      fit: BoxFit.contain
-                    );
-                  },
-                ),
+  return Card(
+    clipBehavior: Clip.hardEdge,
+    elevation: 5,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(20),
+    ),
+    child: InkWell(
+      onTap: onTapped,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(
+            width: 180,
+            child: Image(
+              image: NetworkImage(shop.imageURL),
+              height: 100,
+              width: 180,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                //placeholder picture in the case image cannot be displayed
+                return const Image(
+                  image: AssetImage('assets/images/logo5.png'),
+                  height: 100,
+                  width: 180,
+                  fit: BoxFit.cover
+                );
+              },
+            ),
+          ),
+          
+          SizedBox(
+            width: 180,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10, top: 10),
+              child:Text(
+                shop.name,
+                style: const TextStyle(
+                    fontSize: 15, fontWeight: FontWeight.bold),
               ),
-              SizedBox(
-                width: 200,
-                child: ListTile(
-                    title: Text(
-                      shop.name,
-                      style: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: shop.foodPlaceText(context, 14)),
-              ),
-              Row(
+            ),
+          ),
+
+          SizedBox(
+            width: 180,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10, top: 3),
+              child: shop.foodPlaceText(context, 13),
+            ),
+          ),
+
+          emptyBox(10),
+
+          SizedBox(
+            width: 180,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   shop.showRatings(context),
-                  Container(
-                    width: 5,
+
+                  Text('${shop.averageRating.toStringAsFixed(1)}/5.0',
+                    style: const TextStyle(fontSize: 11),
                   ),
-                  Text('${shop.averageRating.toStringAsFixed(1)}/5.0')
                 ],
               ),
-            ],
+            ),
           ),
-        )),
+        ],
+      ),
+    ),
   );
 }
 

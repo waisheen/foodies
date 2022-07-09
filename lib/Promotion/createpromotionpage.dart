@@ -158,6 +158,9 @@ class _CreatePromotionPageState extends State<CreatePromotionPage> {
                               if (result == null) {
                                 if (!mounted) return;
                                 Navigator.pop(context);
+                                successFlushBar(context, 
+                                  hasPromo ? "Changes saved" : 'Promotion created', 
+                                  true);
                               }
                             }
                           }),
@@ -175,6 +178,9 @@ class _CreatePromotionPageState extends State<CreatePromotionPage> {
                                 if (result == null) {
                                   if (!mounted) return;
                                   Navigator.pop(context);
+                                  redFlushBar(context, 
+                                  "Promotion deleted", 
+                                  true);
                                 }
                               },
                             ),

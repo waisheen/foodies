@@ -179,6 +179,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       if (_formKey.currentState!.validate()) {
                         setState(() => editing = false);
                         _auth.updateDetails(name, contact);
+                        successFlushBar(context, "Changes saved", true);
                       }
                     })
                   : bigButton("Edit Profile", () {
@@ -194,7 +195,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     context, 
                     "Are you sure you want to delete your account?",
                     () async {
-                      _auth.deleteUser();
+                      _auth.deleteUser().then(
+                        (value) => redFlushBar(context, "Account deleted successfully", true));
                     },
                   ))
                   : emptyBox(1),

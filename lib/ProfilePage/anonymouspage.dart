@@ -45,7 +45,7 @@ class _AnonymousPageState extends State<AnonymousPage> {
 
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 30),
-              child: Text("Sign up now to access more features such as leaving reviews, and more! :D",
+              child: Text("Sign up now to access more features such as leaving reviews, and more that is to come! :D",
                 // textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 13,

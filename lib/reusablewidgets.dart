@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foodies/Services/all.dart';
 import 'package:foodies/star.dart';
-import 'package:foodies/theme.dart';
+import 'package:another_flushbar/flushbar.dart';
 
 import 'Models/review.dart';
 import 'Models/shop.dart';
@@ -373,4 +373,41 @@ void confirmationPopUp(BuildContext context, String text, Function func) {
       );
     },
   );
+}
+
+//success snack bar
+void successFlushBar(BuildContext context, String message, bool bottom) {
+  Flushbar(
+    margin: const EdgeInsets.all(10),
+    borderRadius: BorderRadius.circular(8),
+    backgroundGradient: LinearGradient(colors: [Colors.deepPurple.shade300, Colors.purple.shade700,]),
+    duration: const Duration(seconds: 4),
+    icon: const Icon(Icons.check_circle_outline_outlined, color: Colors.white),
+    // mainButton: TextButton(
+    //   child: const Text("Dismiss", style: TextStyle(color: Colors.white)),
+    //   onPressed: () {},
+    // ),
+    shouldIconPulse: false,
+    forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+    message: message,
+    flushbarPosition: bottom ? FlushbarPosition.BOTTOM : FlushbarPosition.TOP, 
+  ).show(context);
+}
+
+void redFlushBar(BuildContext context, String message, bool bottom) {
+  Flushbar(
+    margin: const EdgeInsets.all(10),
+    borderRadius: BorderRadius.circular(8),
+    backgroundGradient: LinearGradient(colors: [Colors.red.shade600, Colors.red.shade300,]),
+    duration: const Duration(seconds: 4),
+    icon: const Icon(Icons.info_outline, color: Colors.white),
+    // mainButton: TextButton(
+    //   child: const Text("Dismiss", style: TextStyle(color: Colors.white)),
+    //   onPressed: () {},
+    // ),
+    shouldIconPulse: false,
+    forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+    message: message,
+    flushbarPosition: bottom ? FlushbarPosition.BOTTOM : FlushbarPosition.TOP, 
+  ).show(context);
 }

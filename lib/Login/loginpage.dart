@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../loading.dart';
 import '../reusablewidgets.dart';
@@ -92,11 +93,11 @@ class _LoginPageState extends State<LoginPage> {
                       emptyBox(5.0),
 
                       //error message (if any)
-                      Text(
-                        error,
-                        style:
-                            const TextStyle(color: Colors.red, fontSize: 15.0),
-                      ),
+                      // Text(
+                      //   error,
+                      //   style:
+                      //       const TextStyle(color: Colors.red, fontSize: 15.0),
+                      // ),
 
                       //forgot password button
                       TextButton(
@@ -120,7 +121,17 @@ class _LoginPageState extends State<LoginPage> {
                             setState(() {
                               loading = false;
                               error = 'Invalid email or password';
+                              redFlushBar(context, error, true);
                             });
+                          } else {
+                            //not working
+                            var user = await FirebaseFirestore.instance
+                              .collection('UserInfo')
+                              .doc(AuthService().currentUser!.uid)
+                              .get();
+                            String name = user.get("name");
+                            
+                            setState(() => successFlushBar(context, "Welcome $name!", false));
                           }
                         }
                       }),
@@ -129,8 +140,11 @@ class _LoginPageState extends State<LoginPage> {
 
                       //sign in as guest button
                       bigButton("Sign in as Guest", () async {
-                        setState(() => loading = true);
                         await _auth.signInAnonymous();
+                        setState(() {
+                          loading = true;
+                          successFlushBar(context, "Welcome!", false);
+                        });
                       }),
 
                       emptyBox(50.0),

@@ -134,8 +134,9 @@ class _CreateReviewPageState extends State<CreateReviewPage> {
                                 setState(() => description = val))),
 
                     emptyBox(15.0),
-                    //create account  button
-                    bigButton(!hasReview ? "Create Review" : 'Edit Review',
+                    
+                    //create review button
+                    bigButton(!hasReview ? "Create Review" : 'Save Changes',
                         () async {
                       if (_formKey.currentState!.validate()) {
                         setState(() => loading = true);
@@ -149,11 +150,15 @@ class _CreateReviewPageState extends State<CreateReviewPage> {
                         if (result == null) {
                           if (!mounted) return;
                           Navigator.pop(context);
+                          successFlushBar(
+                            context, 
+                            hasReview ? "Changes saved" : "Review created", 
+                            true);
                         }
                       }
                     }),
 
-                    emptyBox(10.0),
+                    emptyBox(20.0),
                   ],
                 ),
               ),
