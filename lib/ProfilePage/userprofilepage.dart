@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:foodies/Services/all.dart';
 import 'package:foodies/reusablewidgets.dart';
 
+import '../Models/review.dart';
+
 class UserProfilePage extends StatefulWidget {
   const UserProfilePage({Key? key}) : super(key: key);
 
@@ -13,8 +15,8 @@ class UserProfilePage extends StatefulWidget {
 class _UserProfilePageState extends State<UserProfilePage> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
-  final CollectionReference userInformation =
-      FirebaseFirestore.instance.collection('UserInfo');
+  final CollectionReference userInformation = FirebaseFirestore.instance.collection('UserInfo');
+  final CollectionReference reviews = FirebaseFirestore.instance.collection('Review');
 
   bool editing = false;
   String name = 'Loading...';
@@ -195,6 +197,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     context, 
                     "Are you sure you want to delete your account?",
                     () async {
+                      //delete reviews from this user
+                      deleteCurrUserReviews();
                       _auth.deleteUser().then(
                         (value) => redFlushBar(context, "Account deleted successfully", true));
                     },
@@ -207,5 +211,16 @@ class _UserProfilePageState extends State<UserProfilePage> {
         ),
       ),
     );
+  }
+
+  void deleteCurrUserReviews() {
+    reviews.get().then((snapshot) {
+      List<Review> reviewList = snapshot.docs.map((doc) => Review.fromSnapshot(doc)).toList();
+      for (Review review in reviewList) {
+        if (review.user == _auth.currentUser!.uid) {
+          reviews.doc(review.uid).delete();
+        }
+      }
+    });
   }
 }

@@ -116,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
                         if (_formKey.currentState!.validate()) {
                           setState(() => loading = true);
                           dynamic result = await _auth.signIn(email, password);
-
+                          // setState(() => successFlushBar(context, "Welcomeee", false));
                           if (result == null) {
                             setState(() {
                               loading = false;
@@ -127,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                             //not working
                             var user = await FirebaseFirestore.instance
                               .collection('UserInfo')
-                              .doc(AuthService().currentUser!.uid)
+                              .doc(result.uid)
                               .get();
                             String name = user.get("name");
                             

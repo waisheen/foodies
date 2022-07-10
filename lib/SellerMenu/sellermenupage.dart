@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodies/SellerMenu/addmenuitem.dart';
-import 'package:foodies/theme.dart';
 
 import '../Models/menu.dart';
 import '../Models/shop.dart';

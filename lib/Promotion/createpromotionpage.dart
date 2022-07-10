@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foodies/reusablewidgets.dart';
-import 'package:foodies/theme.dart';
 import '../Models/promotion.dart';
 import '../Models/shop.dart';
 import '../loading.dart';
-import 'package:bordered_text/bordered_text.dart';
 // ignore: depend_on_referenced_packages, unused_import
 import 'package:intl/intl.dart';
 

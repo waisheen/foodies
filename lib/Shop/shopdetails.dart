@@ -7,7 +7,6 @@ import 'package:foodies/SellerMenu/showitems.dart';
 import 'package:foodies/Shop/editshoppage.dart';
 import 'package:foodies/Shop/shopdetailsheader.dart';
 
-import '../Models/menu.dart';
 import '../Models/review.dart';
 import '../Models/shop.dart';
 import '../Reviews/showallreviews.dart';
