@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foodies/Services/all.dart';
 import '../SearchPage/searchpage.dart';
@@ -29,10 +30,19 @@ class _SellerMainPageState extends State<SellerMainPage> {
   initState() {
     super.initState();
     getSellerShop().then((result) {
-      setState(() {
-        shop = result;
-        loading = false;
-      });
+      setState(
+        () async {
+          shop = result;
+          loading = false;
+          var user = await FirebaseFirestore.instance
+            .collection('UserInfo')
+            .doc(_auth.currentUser!.uid)
+            .get();
+          String name = user.get("name");
+          
+          setState(() => successFlushBar(context, "Welcome $name!", false));
+        },
+      );
     });
   }
 
@@ -61,9 +71,17 @@ class _SellerMainPageState extends State<SellerMainPage> {
               'Logout',
               style: TextStyle(color: Colors.white),
             ),
-            onPressed: () async {
-              await _auth.signOut();
-            },
+            onPressed: () => confirmationPopUp(
+              context, 
+              "Are you sure you want to log out?",
+              () async {
+                _auth.currentUser!.isAnonymous ? 
+                await _auth.deleteAnonymousUser() : _auth.signOut();
+                setState(() {
+                  successFlushBar(context, "Logged out successfully", true);
+                });
+              },
+            ),
           ),
         ],
       ),

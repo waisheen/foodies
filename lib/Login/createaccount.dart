@@ -43,6 +43,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   )),
                 ),*/
                 SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -161,25 +162,32 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                 name, phone, email, type, password);
 
                             if (result == null) {
-                              setState(() => error = 'Invalid email');
+                              setState(() {
+                                error = 'Invalid email';
+                                redFlushBar(context, error, true);
+                              });
                             } else {
-                              setState(() => error = 'Success!');
-                              _auth.signOut();
+                              setState(() {
+                                error = 'Success!';
+                                Navigator.pop(context);
+                                _auth.signOut();
+                                successFlushBar(context, "Account created successfully", true);
+                              });
                             }
                             setState(() => loading = false);
                           }
                         }),
 
-                        emptyBox(10.0),
+                        emptyBox(30.0),
 
-                        Text(
-                          error,
-                          style: TextStyle(
-                              color: error == 'Success!'
-                                  ? Colors.green
-                                  : Colors.red,
-                              fontSize: 15.0),
-                        ),
+                        // Text(
+                        //   error,
+                        //   style: TextStyle(
+                        //       color: error == 'Success!'
+                        //           ? Colors.green
+                        //           : Colors.red,
+                        //       fontSize: 15.0),
+                        // ),
                       ],
                     ),
                   ),

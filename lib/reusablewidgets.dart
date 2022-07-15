@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foodies/Services/all.dart';
 import 'package:foodies/star.dart';
+import 'package:another_flushbar/flushbar.dart';
 
 import 'Models/review.dart';
 import 'Models/shop.dart';
@@ -70,7 +71,7 @@ PreferredSizeWidget backButton(BuildContext context, [String title = ""]) {
     backgroundColor: Colors.transparent,
     elevation: 0,
     leading: TextButton.icon(
-      icon: const Icon(Icons.arrow_back_rounded, color: Colors.black),
+      icon: const Icon(Icons.chevron_left, color: Colors.black),
       /*label: const Text(
     'Back',
     style: TextStyle(color: Colors.black),
@@ -129,7 +130,7 @@ Widget colorBox(BuildContext context, bool color, String text) {
     child: Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          color: color ? Colors.green : Colors.white,
+          color: color ? themeColour : Colors.white,
           border: Border.all(color: color ? Colors.black : Colors.grey)),
       height: 35,
       width: 35,
@@ -138,7 +139,7 @@ Widget colorBox(BuildContext context, bool color, String text) {
           text,
           textAlign: TextAlign.center,
           style: TextStyle(
-              color: color ? Colors.black : Colors.grey, fontSize: 12),
+              color: color ? Colors.white : Colors.grey, fontSize: 12),
         ),
       ),
     ),
@@ -221,7 +222,7 @@ Widget dietBox(bool selected, String text) {
     child: Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          color: selected ? Colors.green : Colors.white,
+          color: selected ? themeColour : Colors.white,
           border: Border.all(color: selected ? Colors.black : Colors.grey)),
       height: 35,
       width: 70,
@@ -230,7 +231,7 @@ Widget dietBox(bool selected, String text) {
           text,
           textAlign: TextAlign.center,
           style: TextStyle(
-              color: selected ? Colors.black : Colors.grey, fontSize: 12),
+              color: selected ? Colors.white : Colors.grey, fontSize: 12),
         ),
       ),
     ),
@@ -301,4 +302,112 @@ Widget showImage(String url) {
       },
     ),
   );
+}
+
+Widget sliverAppBar(BuildContext context, String title) {
+  return SliverAppBar(
+    floating: true,
+    // pinned: true,
+    stretch: true,
+    backgroundColor: themeColour,
+    centerTitle: true,
+    title: Text(
+      title, 
+      style: const TextStyle(color: Colors.white)
+    ),
+    leading: TextButton.icon(
+      icon: const Icon(Icons.chevron_left, color: Colors.white),
+      onPressed: () => Navigator.pop(context),
+      label: Container(),
+    ),
+    // onStretchTrigger: 
+  );
+}
+
+Widget heading(BuildContext context, String field) {
+  return SizedBox(
+    width: MediaQuery.of(context).size.width - 60,
+    child: Text(
+      field,
+      textAlign: TextAlign.left,
+      style: TextStyle(
+        color: themeColour,
+        fontSize: 17, 
+        fontWeight: FontWeight.bold
+      ),
+    ),
+  );
+}
+
+void confirmationPopUp(BuildContext context, String text, Function func) {
+  showDialog(
+    context: context, 
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Confirm Action'),
+        content: Text(text),
+        actions: [
+          // Cancel button
+          TextButton(
+            onPressed: () {
+              // Close the dialog
+              Navigator.of(context).pop();
+            },
+            child: const Text('Cancel', 
+              // style: TextStyle(color: Colors.red)
+            ),
+          ),
+
+          // The "Yes" button
+          TextButton(
+            onPressed: () async {
+              // Close the dialog
+              Navigator.of(context).pop();
+
+              // Carry out action
+              func();
+            },
+            child: const Text('Yes'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+//success snack bar
+void successFlushBar(BuildContext context, String message, bool bottom) {
+  Flushbar(
+    margin: const EdgeInsets.all(10),
+    borderRadius: BorderRadius.circular(8),
+    backgroundGradient: LinearGradient(colors: [Colors.deepPurple.shade300, Colors.purple.shade700,]),
+    duration: const Duration(seconds: 4),
+    icon: const Icon(Icons.check_circle_outline_outlined, color: Colors.white),
+    // mainButton: TextButton(
+    //   child: const Text("Dismiss", style: TextStyle(color: Colors.white)),
+    //   onPressed: () {},
+    // ),
+    shouldIconPulse: false,
+    forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+    message: message,
+    flushbarPosition: bottom ? FlushbarPosition.BOTTOM : FlushbarPosition.TOP, 
+  ).show(context);
+}
+
+void redFlushBar(BuildContext context, String message, bool bottom) {
+  Flushbar(
+    margin: const EdgeInsets.all(10),
+    borderRadius: BorderRadius.circular(8),
+    backgroundGradient: LinearGradient(colors: [Colors.red.shade600, Colors.red.shade300,]),
+    duration: const Duration(seconds: 4),
+    icon: const Icon(Icons.info_outline, color: Colors.white),
+    // mainButton: TextButton(
+    //   child: const Text("Dismiss", style: TextStyle(color: Colors.white)),
+    //   onPressed: () {},
+    // ),
+    shouldIconPulse: false,
+    forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+    message: message,
+    flushbarPosition: bottom ? FlushbarPosition.BOTTOM : FlushbarPosition.TOP, 
+  ).show(context);
 }

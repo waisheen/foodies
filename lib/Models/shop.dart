@@ -109,7 +109,7 @@ class Shop {
           }
           return Text(
             "📍 ${newFoodPlace.data!.name}",
-            style: TextStyle(fontSize: size),
+            style: TextStyle(fontSize: size, color: Colors.grey.shade600),
           );
         });
   }

@@ -22,23 +22,45 @@ class _AnonymousPageState extends State<AnonymousPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        child: Column (
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            const SizedBox(
-              height: 250.0,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Text("Don't have an account yet?",
+                // textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: themeColour,
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
-            emptyBox(30),
+
+            emptyBox(20),
+
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30),
+              child: Text("Sign up now to access more features such as leaving reviews, and more that is to come! :D",
+                // textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 13,
+                ),
+              ),
+            ),
+
+            emptyBox(60),
+
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 90.0),
-              child: bigButton('Sign in', () {
+              child: bigButton('Sign up', () {
                 // _auth.signOut();
                 _auth.deleteAnonymousUser();
               }),
             ),
-            emptyBox(20.0),
           ],
         ),
       ),

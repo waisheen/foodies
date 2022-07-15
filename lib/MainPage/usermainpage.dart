@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foodies/Services/all.dart';
 import 'package:foodies/reusablewidgets.dart';
@@ -19,6 +20,24 @@ class _UserMainPageState extends State<UserMainPage> {
   PageController pageController = PageController();
   int currentIndex = 0;
   final Color colour = themeColour;
+
+  @override
+  initState() {
+    super.initState();
+    getSellerShop().then((result) {
+      setState(
+        () async {
+          var user = await FirebaseFirestore.instance
+            .collection('UserInfo')
+            .doc(_auth.currentUser!.uid)
+            .get();
+          String name = user.get("name");
+          
+          setState(() => successFlushBar(context, "Welcome $name!", false));
+        },
+      );
+    });
+  }
 
   void onTapped(int index) {
     setState(() => currentIndex = index);
@@ -43,10 +62,17 @@ class _UserMainPageState extends State<UserMainPage> {
               'Logout',
               style: TextStyle(color: Colors.white),
             ),
-            onPressed: () async {
-              _auth.currentUser!.isAnonymous ? 
-              await _auth.deleteAnonymousUser() : _auth.signOut();
-            },
+            onPressed: () => confirmationPopUp(
+              context, 
+              "Are you sure you want to log out?",
+              () async {
+                _auth.currentUser!.isAnonymous ? 
+                await _auth.deleteAnonymousUser() : _auth.signOut();
+                setState(() {
+                  successFlushBar(context, "Logged out successfully", true);
+                });
+              },
+            ),
           ),
         ],
       ),

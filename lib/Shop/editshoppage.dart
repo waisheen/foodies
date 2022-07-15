@@ -276,6 +276,7 @@ class _EditShopPageState extends State<EditShopPage> {
                         if (result == null) {
                           if (!mounted) return;
                           Navigator.pop(context, newShop);
+                          successFlushBar(context, "Changes saved", true);
                         }
                       }
                     }),
@@ -317,7 +318,7 @@ class _EditShopPageState extends State<EditShopPage> {
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            color: daysSelected[index] ? Colors.green : Colors.white,
+            color: daysSelected[index] ? themeColour : Colors.white,
             border: Border.all(
                 color: daysSelected[index] ? Colors.black : Colors.grey)),
         height: 35,
@@ -334,7 +335,7 @@ class _EditShopPageState extends State<EditShopPage> {
             text,
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: daysSelected[index] ? Colors.black : Colors.grey,
+                color: daysSelected[index] ? Colors.white : Colors.grey,
                 fontSize: 10),
           ),
         ),
@@ -348,7 +349,7 @@ class _EditShopPageState extends State<EditShopPage> {
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            color: selected ? Colors.green : Colors.white,
+            color: selected ? themeColour : Colors.white,
             border: Border.all(color: selected ? Colors.black : Colors.grey)),
         height: 35,
         child: TextButton(
@@ -357,7 +358,7 @@ class _EditShopPageState extends State<EditShopPage> {
             text,
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: selected ? Colors.black : Colors.grey, fontSize: 12),
+                color: selected ? Colors.white : Colors.grey, fontSize: 12),
           ),
         ),
       ),

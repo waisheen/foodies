@@ -42,6 +42,8 @@ class _SellerProfilePageState extends State<SellerProfilePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics()),
         child: Form(
           key: _formKey,
           child: Column(
@@ -179,13 +181,29 @@ class _SellerProfilePageState extends State<SellerProfilePage> {
                       if (_formKey.currentState!.validate()) {
                         setState(() => editing = false);
                         _auth.updateDetails(name, contact);
+                        successFlushBar(context, "Changes saved", true);
                       }
                     })
                   : bigButton("Edit Profile", () {
                       setState(() => editing = true);
                     }),
 
-                    
+              emptyBox(15),
+
+              //delete account button
+              editing
+                  ? bigButton('Delete Account', 
+                  () => confirmationPopUp(
+                    context, 
+                    "Are you sure you want to delete your account?",
+                    () async {
+                      _auth.deleteUser().then(
+                        (value) => redFlushBar(context, "Account deleted successfully", true));
+                    },
+                  ))
+                  : emptyBox(1),
+              
+              emptyBox(10)                   
             ],
           ),
         ),

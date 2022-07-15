@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodies/SellerMenu/addmenuitem.dart';
-import 'package:foodies/theme.dart';
 
 import '../Models/menu.dart';
 import '../Models/shop.dart';
@@ -44,7 +43,7 @@ class _SellerMenuPageState extends State<SellerMenuPage> {
               slivers: [
                 SliverAppBar(
                   leading: widget.showBackButton ? TextButton.icon(
-                    icon: const Icon(Icons.arrow_back_rounded, color: Colors.black),
+                    icon: const Icon(Icons.chevron_left, color: Colors.black),
                     onPressed: () => Navigator.pop(context),
                     label: Container(),
                   ) : null,
@@ -140,7 +139,7 @@ Widget menuWidget(Menu item, BuildContext context, bool canEdit) {
                         builder: (context) => AddMenuItemPage(shop: shop, item: item))));
                   },
                   child: Icon(CupertinoIcons.pencil_circle_fill, 
-                    color: Colors.grey[700]!.withOpacity(0.8),
+                    color: Colors.blueGrey.withOpacity(0.7),
                     size: 30,
                   ),
                 ),

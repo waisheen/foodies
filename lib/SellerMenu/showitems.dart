@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:foodies/SellerMenu/sellermenupage.dart';
 
 import '../Models/menu.dart';
 import '../Models/shop.dart';
-import '../Services/auth.dart';
 import '../loading.dart';
 import '../reusablewidgets.dart';
 
@@ -45,7 +43,7 @@ class _ShowItemsPageState extends State<ShowItemsPage> {
               width: MediaQuery.of(context).size.width,
               child: const Text(
                 'No Menu Items Yet!',
-                style: TextStyle(fontSize: 18),
+                style: TextStyle(fontSize: 15),
                 textAlign: TextAlign.center,
               ),
             );
