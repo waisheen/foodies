@@ -16,12 +16,11 @@ class Loading extends StatelessWidget {
           children: [
             SpinKitRotatingCircle(
               color: themeColour,
-              size: 50.0,
+              size: 25.0,
             ),
-
             emptyBox(15),
-
-            const Text("Loading...", style: TextStyle(fontSize: 13, color: Colors.black))
+            const Text("Loading...",
+                style: TextStyle(fontSize: 13, color: Colors.black))
           ],
         ),
       ),

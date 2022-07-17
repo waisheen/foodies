@@ -70,7 +70,13 @@ Widget shopCard(BuildContext context, Shop shop, int distance) {
                   padding: const EdgeInsets.only(bottom: 5),
                   child: Text(shop.name),
                 ),
-                subtitle: Text('$distance m')),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    shop.foodPlaceText(context, 16),
+                    Text('📏  $distance m'),
+                  ],
+                )),
             emptyBox(10),
           ],
         ),

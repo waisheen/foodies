@@ -5,9 +5,13 @@ class StarRating extends StatelessWidget {
   final double rating;
   final void Function(double rating) onRatingChanged;
   final Color color = Colors.orange;
+  final bool? tappable;
 
   const StarRating(
-      {Key? key, required this.rating, required this.onRatingChanged})
+      {Key? key,
+      required this.rating,
+      required this.onRatingChanged,
+      this.tappable})
       : super(key: key);
 
   Widget buildStar(BuildContext context, int index) {
@@ -28,10 +32,12 @@ class StarRating extends StatelessWidget {
         color: color,
       );
     }
-    return InkResponse(
-      onTap: () => onRatingChanged(index + 1.0),
-      child: icon,
-    );
+    return tappable == null
+        ? InkResponse(
+            onTap: () => onRatingChanged(index + 1.0),
+            child: icon,
+          )
+        : icon;
   }
 
   @override

@@ -15,7 +15,8 @@ class ShowItemsPage extends StatefulWidget {
 }
 
 class _ShowItemsPageState extends State<ShowItemsPage> {
-  final CollectionReference menus = FirebaseFirestore.instance.collection('Menu');
+  final CollectionReference menus =
+      FirebaseFirestore.instance.collection('Menu');
   late Shop? shop = widget.shop;
 
   Stream<QuerySnapshot> getMenuSnapshot() async* {
@@ -30,7 +31,7 @@ class _ShowItemsPageState extends State<ShowItemsPage> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 150,
-      width: MediaQuery.of(context).size.width ,
+      width: MediaQuery.of(context).size.width,
       child: StreamBuilder(
         stream: getMenuSnapshot(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -51,12 +52,11 @@ class _ShowItemsPageState extends State<ShowItemsPage> {
           return CustomScrollView(
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(
-              parent: AlwaysScrollableScrollPhysics()),
+                parent: AlwaysScrollableScrollPhysics()),
             slivers: [
               SliverList(
-                delegate: SliverChildListDelegate(
-                  menuList(snapshot.data!.docs, context, false, widget.shop!.uid)
-                ),
+                delegate: SliverChildListDelegate(menuList(
+                    snapshot.data!.docs, context, false, widget.shop!.uid)),
               ),
             ],
           );
@@ -65,15 +65,16 @@ class _ShowItemsPageState extends State<ShowItemsPage> {
     );
   }
 
-  List<Widget> menuList(List<QueryDocumentSnapshot<Object?>> docsList, BuildContext context, bool canEdit,
-  String shopID) {
-  List filtered = docsList
-      .map((document) => Menu.fromSnapshot(document))
-      .where((menu) => menu.shop_id == shopID)
-      .toList();
+  List<Widget> menuList(List<QueryDocumentSnapshot<Object?>> docsList,
+      BuildContext context, bool canEdit, String shopID) {
+    List filtered = docsList
+        .map((document) => Menu.fromSnapshot(document))
+        .where((menu) => menu.shop_id == shopID)
+        .toList();
 
-  List<Widget> widgetList = filtered.map((menu) => menuWidget(menu, context, canEdit)).toList();
-  return widgetList;
+    List<Widget> widgetList =
+        filtered.map((menu) => menuWidget(menu, context, canEdit)).toList();
+    return widgetList;
   }
 
   Widget menuWidget(Menu item, BuildContext context, bool canEdit) {
@@ -102,23 +103,22 @@ class _ShowItemsPageState extends State<ShowItemsPage> {
                 );
               },
             ),
-
             emptyBox(8),
-            
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Flexible(
-                    child: Text(item.name, style: const TextStyle(fontSize: 10)),
+                    child:
+                        Text(item.name, style: const TextStyle(fontSize: 10)),
                   ),
                   const SizedBox(width: 5),
-                  Text("\$${item.price.toStringAsFixed(2)}", style: const TextStyle(fontSize: 10)),
+                  Text("\$${item.price.toStringAsFixed(2)}",
+                      style: const TextStyle(fontSize: 10)),
                 ],
               ),
             )
-            
           ],
         ),
       ),
