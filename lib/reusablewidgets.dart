@@ -191,6 +191,7 @@ Future<Shop?> getSellerShop() async {
   String currSellerID = AuthService().currentUser!.uid;
   QuerySnapshot snapshot = await shops.get();
   List<Shop> shopList = snapshot.docs
+      .where((snapshot) => snapshot.data().toString().contains('sellerID'))
       .where((snapshot) => snapshot["sellerID"] == currSellerID)
       .map((snapshot) => Shop.fromSnapshot(snapshot))
       .toList();

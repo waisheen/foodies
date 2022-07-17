@@ -30,8 +30,9 @@ class _SearchPageState extends State<SearchPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   emptyBox(10),
+
+                  //Search bar
                   Padding(
-                    //search bar
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: AppBar(
                         backgroundColor: Colors.white,

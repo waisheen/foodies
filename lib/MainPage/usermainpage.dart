@@ -21,22 +21,30 @@ class _UserMainPageState extends State<UserMainPage> {
   int currentIndex = 0;
   final Color colour = themeColour;
 
+  //setState shouldn't be marked with async if possible
   @override
   initState() {
     super.initState();
-    getSellerShop().then((result) {
-      setState(
-        () async {
-          var user = await FirebaseFirestore.instance
+    getSellerShop().then(
+      (result) {
+        FirebaseFirestore.instance
             .collection('UserInfo')
             .doc(_auth.currentUser!.uid)
-            .get();
-          String name = user.get("name");
-          
-          setState(() => successFlushBar(context, "Welcome $name!", false));
-        },
-      );
-    });
+            .get()
+            .then((user) {
+          String name = '';
+          try {
+            name = user.get('name');
+          } catch (e) {
+            name = '';
+          }
+          name != ''
+              ? setState(
+                  () => successFlushBar(context, "Welcome $name!", false))
+              : null;
+        });
+      },
+    );
   }
 
   void onTapped(int index) {
@@ -63,11 +71,12 @@ class _UserMainPageState extends State<UserMainPage> {
               style: TextStyle(color: Colors.white),
             ),
             onPressed: () => confirmationPopUp(
-              context, 
+              context,
               "Are you sure you want to log out?",
               () async {
-                _auth.currentUser!.isAnonymous ? 
-                await _auth.deleteAnonymousUser() : _auth.signOut();
+                _auth.currentUser!.isAnonymous
+                    ? await _auth.deleteAnonymousUser()
+                    : _auth.signOut();
                 setState(() {
                   successFlushBar(context, "Logged out successfully", true);
                 });

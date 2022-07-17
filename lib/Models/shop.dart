@@ -23,7 +23,7 @@ class Shop {
     'Saturday',
     'Sunday'
   ];
-  String sellerID;
+  String? sellerID;
   double totalRating;
   double totalReview;
   static List<String> allOptions = [
@@ -72,7 +72,9 @@ class Shop {
         openDays = List<String>.from(snapshot['openDays']),
         imageURL = snapshot['imageURL'],
         foodPlace = snapshot['foodPlace'],
-        sellerID = snapshot['sellerID'],
+        sellerID = snapshot.data().toString().contains('sellerID')
+            ? snapshot['sellerID']
+            : null,
         options = List<String>.from(snapshot['options']),
         totalReview = snapshot['totalReview'] + 0.0,
         totalRating = snapshot['totalRating'] + 0.0;

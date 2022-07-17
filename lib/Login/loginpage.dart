@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../Models/foodplace.dart';
+import '../Models/shop.dart';
 import '../loading.dart';
 import '../reusablewidgets.dart';
 import 'all.dart';
@@ -124,14 +126,15 @@ class _LoginPageState extends State<LoginPage> {
                               redFlushBar(context, error, true);
                             });
                           } else {
-                            //not working
+                            /*not working
                             var user = await FirebaseFirestore.instance
-                              .collection('UserInfo')
-                              .doc(result.uid)
-                              .get();
+                                .collection('UserInfo')
+                                .doc(result.uid)
+                                .get();
                             String name = user.get("name");
-                            
+
                             setState(() => successFlushBar(context, "Welcome $name!", false));
+                          */
                           }
                         }
                       }),
@@ -151,11 +154,40 @@ class _LoginPageState extends State<LoginPage> {
 
                       //create account button
                       GestureDetector(
-                        onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const CreateAccountPage())),
+                        onTap: () async {
+                          //List of shops available for sellers
+                          QuerySnapshot snapshots = await FirebaseFirestore
+                              .instance
+                              .collection('Shop')
+                              .get();
+                          List<Shop> shops = snapshots.docs
+                              .map((doc) => Shop.fromSnapshot(doc))
+                              .where((shop) => shop.sellerID == null)
+                              .toList();
+                          snapshots = await FirebaseFirestore.instance
+                              .collection('FoodPlace')
+                              .get();
+                          List<FoodPlace> foodPlaces = snapshots.docs
+                              .map((doc) => FoodPlace.fromSnapshot(doc))
+                              .toList();
+
+                          //Form to list of strings of options
+                          List<String> options = shops.map((shop) {
+                            for (int i = 0; i < foodPlaces.length; i++) {
+                              if (shop.foodPlace == foodPlaces[i].uid) {
+                                return '${shop.name.toString()} (${foodPlaces[i].name}) ';
+                              }
+                            }
+                            return shop.name.toString();
+                          }).toList();
+                          if (!mounted) return;
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CreateAccountPage(
+                                        noSellerShops: options,
+                                      )));
+                        },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const <Widget>[
