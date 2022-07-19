@@ -38,10 +38,12 @@ class _UserMainPageState extends State<UserMainPage> {
           } catch (e) {
             name = '';
           }
-          name != ''
-              ? setState(
-                  () => successFlushBar(context, "Welcome $name!", false))
-              : null;
+          if (mounted) {
+            name != ''
+                ? setState(
+                    () => successFlushBar(context, "Welcome $name!", false))
+                : null;
+          }
         });
       },
     );

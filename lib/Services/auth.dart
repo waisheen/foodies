@@ -45,7 +45,7 @@ class AuthService {
     }
   }
 
-  //Register with email & password
+  //Register user with email & password
   Future register(String name, String contact, String email, String role,
       String password) async {
     try {
@@ -54,6 +54,23 @@ class AuthService {
       User? user = result.user;
       await DatabaseService(uid: user!.uid)
           .addUser(name, int.parse(contact), email, role);
+      return _userFromFirebase(user);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  //Register seller with email & password
+  Future registerSeller(String name, String contact, String email, String role,
+      String password, List<String> shops) async {
+    try {
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      User? user = result.user;
+      await DatabaseService(uid: user!.uid)
+          .addUser(name, int.parse(contact), email, role);
+      await DatabaseService(uid: user.uid)
+          .addRequest(name, contact, email, user.uid, shops);
       return _userFromFirebase(user);
     } catch (e) {
       return null;

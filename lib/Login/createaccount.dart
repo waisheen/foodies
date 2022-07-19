@@ -181,16 +181,13 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                       title: '',
                                       placeholder: 'Choose Shops',
                                       selectedValue: _selectedOptions,
-                                      modalValidation: (value) {
-                                        return value.isEmpty
-                                            ? 'Select at least one'
-                                            : '';
-                                      },
                                       modalHeaderStyle: S2ModalHeaderStyle(
                                           backgroundColor: themeColour),
                                       onChange: (selected) {
                                         setState(() => _selectedOptions =
-                                            selected!.value!);
+                                            selected!.value == null
+                                                ? List.empty(growable: true)
+                                                : selected.value!);
                                       },
                                       choiceItems: widget.noSellerShops
                                           .map((string) => S2Choice<String>(
@@ -209,25 +206,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                           trailing: const Icon(
                                               Icons.add_circle_outline),
                                           leading: const Icon(
-                                            Icons.house_outlined,
-                                            color: Colors.black,
-                                          ),
-                                          body: S2TileChips(
-                                            chipColor:
-                                                Theme.of(context).primaryColor,
-                                            chipLength: state.choices!.length,
-                                            chipLabelBuilder: (context, i) {
-                                              return Text(state
-                                                  .selected!.choice![i].title!);
-                                            },
-                                            chipOnDelete: (i) {
-                                              setState(() {
-                                                _selectedOptions.remove(state
-                                                    .selected!
-                                                    .choice![i]
-                                                    .value);
-                                              });
-                                            },
+                                            Icons.house,
+                                            color: Colors.grey,
                                           ),
                                         );
                                       }),
@@ -240,8 +220,11 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                         bigButton("Create Account", () async {
                           if (_formKey.currentState!.validate()) {
                             setState(() => loading = true);
-                            dynamic result = await _auth.register(
-                                name, phone, email, type, password);
+                            dynamic result = isSeller
+                                ? await _auth.registerSeller(name, phone, email,
+                                    type, password, _selectedOptions)
+                                : await _auth.register(
+                                    name, phone, email, type, password);
 
                             if (result == null) {
                               setState(() {
@@ -253,8 +236,13 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                 error = 'Success!';
                                 Navigator.pop(context);
                                 _auth.signOut();
-                                successFlushBar(context,
-                                    "Account created successfully", true);
+                                !isSeller
+                                    ? successFlushBar(context,
+                                        "Account created successfully", true)
+                                    : successFlushBar(
+                                        context,
+                                        "Account created successfully, await approval for shops",
+                                        true);
                               });
                             }
                             setState(() => loading = false);

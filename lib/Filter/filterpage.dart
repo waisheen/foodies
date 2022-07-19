@@ -312,6 +312,10 @@ class _FilterPageState extends State<FilterPage> {
                       }
                     }
 
+                    //For testing only
+                    /*List<int> distances =
+                        shops.map((e) => 1).toList(growable: true);*/
+
                     //Set state to not loading
 
                     if (!mounted) return;
