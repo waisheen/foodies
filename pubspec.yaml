@@ -54,7 +54,7 @@ dependencies:
 
   #google maps and location
   google_maps_flutter: ^2.1.8
-  location: ^4.2.0
+  location: ^4.4.0
   smart_select: ^4.3.2
 
 

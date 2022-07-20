@@ -1,11 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foodies/Models/foodplace.dart';
-import 'package:foodies/Models/review.dart';
 import 'package:foodies/reusablewidgets.dart';
 import 'package:foodies/star.dart';
-
-import '../loading.dart';
 
 class Shop {
   String uid;
@@ -26,7 +23,7 @@ class Shop {
     'Saturday',
     'Sunday'
   ];
-  String sellerID;
+  String? sellerID;
   double totalRating;
   double totalReview;
   static List<String> allOptions = [
@@ -75,7 +72,9 @@ class Shop {
         openDays = List<String>.from(snapshot['openDays']),
         imageURL = snapshot['imageURL'],
         foodPlace = snapshot['foodPlace'],
-        sellerID = snapshot['sellerID'],
+        sellerID = snapshot.data().toString().contains('sellerID')
+            ? snapshot['sellerID']
+            : null,
         options = List<String>.from(snapshot['options']),
         totalReview = snapshot['totalReview'] + 0.0,
         totalRating = snapshot['totalRating'] + 0.0;
@@ -105,21 +104,13 @@ class Shop {
         future: currentFoodPlace,
         builder: (context, AsyncSnapshot<FoodPlace> newFoodPlace) {
           if (!newFoodPlace.hasData) {
-            return const Loading();
+            return const Text('Loading...');
           }
           return Text(
             "📍 ${newFoodPlace.data!.name}",
             style: TextStyle(fontSize: size, color: Colors.grey.shade600),
           );
         });
-  }
-
-  //Get reviews stream
-  Stream<QuerySnapshot> get shopReviews async* {
-    yield* FirebaseFirestore.instance
-        .collection('Review')
-        .where('shop', isEqualTo: uid)
-        .snapshots();
   }
 
   //Show average stars
@@ -129,27 +120,14 @@ class Shop {
 
   //Show number of stars
   Widget showRatings(BuildContext context) {
-    return StreamBuilder(
-        stream: shopReviews,
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
-            return const Text('Loading...');
-          }
-          if (snapshot.data!.docs.isEmpty) {
-            return const Text('No reviews yet!');
-          }
-          List<Review> reviews = snapshot.data!.docs
-              .map((doc) => Review.fromSnapshot(doc))
-              .toList();
-          double ratings = 0;
-          double count = 0;
-          for (var element in reviews) {
-            ratings += element.rating;
-            count += 1;
-          }
-          return StarRating(
-              rating: ratings / count, onRatingChanged: (ratings) {});
-        });
+    if (totalReview == 0) {
+      return const Text('No reviews yet!');
+    }
+    return StarRating(
+      rating: totalRating / totalReview,
+      onRatingChanged: (ratings) {},
+      tappable: false,
+    );
   }
 
   //get operating hours

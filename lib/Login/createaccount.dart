@@ -1,3 +1,4 @@
+import 'package:awesome_select/awesome_select.dart';
 import 'package:flutter/material.dart';
 import 'package:foodies/Services/all.dart';
 import 'package:foodies/reusablewidgets.dart';
@@ -5,7 +6,9 @@ import '../loading.dart';
 import 'package:bordered_text/bordered_text.dart';
 
 class CreateAccountPage extends StatefulWidget {
-  const CreateAccountPage({Key? key}) : super(key: key);
+  const CreateAccountPage({Key? key, required this.noSellerShops})
+      : super(key: key);
+  final List<String> noSellerShops;
 
   @override
   State<CreateAccountPage> createState() => _CreateAccountPageState();
@@ -23,6 +26,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   String type = '';
   String error = '';
   bool loading = false;
+  bool isSeller = false;
+  List<String> _selectedOptions = [];
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +48,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   )),
                 ),*/
                 SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                  physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -147,10 +153,66 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                               return null;
                             },
                             onChanged: (val) {
-                              setState(() => type = val.toString());
+                              setState(() {
+                                type = val.toString();
+                                if (val.toString() == 'Seller') {
+                                  isSeller = true;
+                                } else {
+                                  isSeller = false;
+                                }
+                              });
                             },
                           ),
                         ),
+
+                        emptyBox(10.0),
+
+                        //For sellers to pick their shops
+                        !isSeller
+                            ? emptyBox(1.0)
+                            : Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 5, left: 30, right: 30),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      border: Border.all(color: Colors.grey)),
+                                  child: SmartSelect<String>.multiple(
+                                      title: '',
+                                      placeholder: 'Choose Shops',
+                                      selectedValue: _selectedOptions,
+                                      modalHeaderStyle: S2ModalHeaderStyle(
+                                          backgroundColor: themeColour),
+                                      onChange: (selected) {
+                                        setState(() => _selectedOptions =
+                                            selected!.value == null
+                                                ? List.empty(growable: true)
+                                                : selected.value!);
+                                      },
+                                      choiceItems: widget.noSellerShops
+                                          .map((string) => S2Choice<String>(
+                                              title: string, value: string))
+                                          .toList(),
+                                      choiceType: S2ChoiceType.switches,
+                                      choiceActiveStyle: S2ChoiceStyle(
+                                        color: themeColour,
+                                      ),
+                                      modalFilter: true,
+                                      modalConfirm: true,
+                                      modalType: S2ModalType.fullPage,
+                                      tileBuilder: (context, state) {
+                                        return S2Tile.fromState(
+                                          state,
+                                          trailing: const Icon(
+                                              Icons.add_circle_outline),
+                                          leading: const Icon(
+                                            Icons.house,
+                                            color: Colors.grey,
+                                          ),
+                                        );
+                                      }),
+                                ),
+                              ),
 
                         emptyBox(25.0),
 
@@ -158,8 +220,11 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                         bigButton("Create Account", () async {
                           if (_formKey.currentState!.validate()) {
                             setState(() => loading = true);
-                            dynamic result = await _auth.register(
-                                name, phone, email, type, password);
+                            dynamic result = isSeller
+                                ? await _auth.registerSeller(name, phone, email,
+                                    type, password, _selectedOptions)
+                                : await _auth.register(
+                                    name, phone, email, type, password);
 
                             if (result == null) {
                               setState(() {
@@ -171,7 +236,13 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                 error = 'Success!';
                                 Navigator.pop(context);
                                 _auth.signOut();
-                                successFlushBar(context, "Account created successfully", true);
+                                !isSeller
+                                    ? successFlushBar(context,
+                                        "Account created successfully", true)
+                                    : successFlushBar(
+                                        context,
+                                        "Account created successfully, await approval for shops",
+                                        true);
                               });
                             }
                             setState(() => loading = false);

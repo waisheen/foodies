@@ -68,19 +68,18 @@ Widget inputObscuredText(String label, String hint, Widget icon,
 //back button
 PreferredSizeWidget backButton(BuildContext context, [String title = ""]) {
   return AppBar(
-    backgroundColor: Colors.transparent,
-    elevation: 0,
-    leading: TextButton.icon(
-      icon: const Icon(Icons.chevron_left, color: Colors.black),
-      /*label: const Text(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      leading: TextButton.icon(
+        icon: const Icon(Icons.chevron_left, color: Colors.black),
+        /*label: const Text(
     'Back',
     style: TextStyle(color: Colors.black),
   ),*/
-      onPressed: () => Navigator.pop(context),
-      label: Container(),
-    ),
-    title: Text(title, style: const TextStyle(color: Colors.black))
-  );
+        onPressed: () => Navigator.pop(context),
+        label: Container(),
+      ),
+      title: Text(title, style: const TextStyle(color: Colors.black)));
 }
 
 //big buttons
@@ -192,6 +191,7 @@ Future<Shop?> getSellerShop() async {
   String currSellerID = AuthService().currentUser!.uid;
   QuerySnapshot snapshot = await shops.get();
   List<Shop> shopList = snapshot.docs
+      .where((snapshot) => snapshot.data().toString().contains('sellerID'))
       .where((snapshot) => snapshot["sellerID"] == currSellerID)
       .map((snapshot) => Shop.fromSnapshot(snapshot))
       .toList();
@@ -212,7 +212,8 @@ int distance(lat1, lon1, lat2, lon2) {
   double b = 0.5 -
       cos((lat2 - lat1) * a) / 2 +
       cos(lat1 * a) * cos(lat2 * a) * (1 - cos((lon2 - lon1) * a)) / 2;
-  return (12742 * asin(sqrt(b))).round();
+  double c = (12742 * asin(sqrt(b))) * 1000;
+  return c.round();
 }
 
 //colours boxes for displaying whether halal/veg
@@ -276,10 +277,11 @@ Widget noShopText(BuildContext context) {
       height: MediaQuery.of(context).size.height,
       child: const Align(
         alignment: Alignment.center,
-        child: Text("No shop is associated with your account, contact admin", 
+        child: Text(
+          "No shop is associated with your account, contact admin",
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 15),
-          ),
+        ),
       ),
     ),
   );
@@ -311,16 +313,13 @@ Widget sliverAppBar(BuildContext context, String title) {
     stretch: true,
     backgroundColor: themeColour,
     centerTitle: true,
-    title: Text(
-      title, 
-      style: const TextStyle(color: Colors.white)
-    ),
+    title: Text(title, style: const TextStyle(color: Colors.white)),
     leading: TextButton.icon(
       icon: const Icon(Icons.chevron_left, color: Colors.white),
       onPressed: () => Navigator.pop(context),
       label: Container(),
     ),
-    // onStretchTrigger: 
+    // onStretchTrigger:
   );
 }
 
@@ -331,17 +330,14 @@ Widget heading(BuildContext context, String field) {
       field,
       textAlign: TextAlign.left,
       style: TextStyle(
-        color: themeColour,
-        fontSize: 17, 
-        fontWeight: FontWeight.bold
-      ),
+          color: themeColour, fontSize: 17, fontWeight: FontWeight.bold),
     ),
   );
 }
 
 void confirmationPopUp(BuildContext context, String text, Function func) {
   showDialog(
-    context: context, 
+    context: context,
     builder: (BuildContext context) {
       return AlertDialog(
         title: const Text('Confirm Action'),
@@ -353,7 +349,8 @@ void confirmationPopUp(BuildContext context, String text, Function func) {
               // Close the dialog
               Navigator.of(context).pop();
             },
-            child: const Text('Cancel', 
+            child: const Text(
+              'Cancel',
               // style: TextStyle(color: Colors.red)
             ),
           ),
@@ -380,7 +377,10 @@ void successFlushBar(BuildContext context, String message, bool bottom) {
   Flushbar(
     margin: const EdgeInsets.all(10),
     borderRadius: BorderRadius.circular(8),
-    backgroundGradient: LinearGradient(colors: [Colors.deepPurple.shade300, Colors.purple.shade700,]),
+    backgroundGradient: LinearGradient(colors: [
+      Colors.deepPurple.shade300,
+      Colors.purple.shade700,
+    ]),
     duration: const Duration(seconds: 4),
     icon: const Icon(Icons.check_circle_outline_outlined, color: Colors.white),
     // mainButton: TextButton(
@@ -390,7 +390,7 @@ void successFlushBar(BuildContext context, String message, bool bottom) {
     shouldIconPulse: false,
     forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
     message: message,
-    flushbarPosition: bottom ? FlushbarPosition.BOTTOM : FlushbarPosition.TOP, 
+    flushbarPosition: bottom ? FlushbarPosition.BOTTOM : FlushbarPosition.TOP,
   ).show(context);
 }
 
@@ -398,7 +398,10 @@ void redFlushBar(BuildContext context, String message, bool bottom) {
   Flushbar(
     margin: const EdgeInsets.all(10),
     borderRadius: BorderRadius.circular(8),
-    backgroundGradient: LinearGradient(colors: [Colors.red.shade600, Colors.red.shade300,]),
+    backgroundGradient: LinearGradient(colors: [
+      Colors.red.shade600,
+      Colors.red.shade300,
+    ]),
     duration: const Duration(seconds: 4),
     icon: const Icon(Icons.info_outline, color: Colors.white),
     // mainButton: TextButton(
@@ -408,6 +411,6 @@ void redFlushBar(BuildContext context, String message, bool bottom) {
     shouldIconPulse: false,
     forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
     message: message,
-    flushbarPosition: bottom ? FlushbarPosition.BOTTOM : FlushbarPosition.TOP, 
+    flushbarPosition: bottom ? FlushbarPosition.BOTTOM : FlushbarPosition.TOP,
   ).show(context);
 }

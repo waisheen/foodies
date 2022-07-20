@@ -32,6 +32,6 @@ class FoodPlace {
   //Calculate Distance
   int distanceFrom(currLat, currLong) {
     return distance(
-        currLat, coordinates.latitude, currLong, coordinates.longitude);
+        currLat, currLong, coordinates.latitude, coordinates.longitude);
   }
 }
