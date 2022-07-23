@@ -377,11 +377,13 @@ Widget buildCard(BuildContext context, Shop shop, void Function() onTapped) {
   );
 }
 
-//This sorts shops by ratings
+//This sorts shops by ratings, with minimum number of reviews
 List<Widget> ratingList(
     List<QueryDocumentSnapshot> docsList, BuildContext context) {
-  List<Shop> filtered =
-      docsList.map((document) => Shop.fromSnapshot(document)).toList();
+  List<Shop> filtered = docsList
+      .map((document) => Shop.fromSnapshot(document))
+      .where((shop) => shop.totalReview >= 3)
+      .toList();
 
   //sort shops acc to ratings
   filtered.sort((shop1, shop2) {

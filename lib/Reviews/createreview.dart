@@ -5,7 +5,6 @@ import 'package:foodies/reusablewidgets.dart';
 import '../Models/review.dart';
 import '../Models/shop.dart';
 import '../loading.dart';
-import 'package:bordered_text/bordered_text.dart';
 
 import '../star.dart';
 
@@ -83,16 +82,12 @@ class _CreateReviewPageState extends State<CreateReviewPage> {
 
                     //sign up text
                     Center(
-                      child: BorderedText(
-                        strokeColor: Colors.green,
-                        strokeWidth: 2.0,
-                        child: const Text(
-                          'Review',
-                          style: TextStyle(
-                            color: Colors.transparent,
-                            fontSize: 55.0,
-                          ),
-                        ),
+                      child: Text(
+                        'Review',
+                        style: TextStyle(
+                            color: themeColour,
+                            fontSize: 50.0,
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
 
@@ -125,16 +120,16 @@ class _CreateReviewPageState extends State<CreateReviewPage> {
                               if (val == null || val.isEmpty) {
                                 return 'Cannot be empty';
                               }
-                              if (val.length > 500) {
-                                return 'Max Length: 500 characters';
+                              if (val.length > 200) {
+                                return 'Max Length: 200 characters';
                               }
                               return null;
                             },
                             onChanged: (val) =>
                                 setState(() => description = val))),
 
-                    emptyBox(15.0),
-                    
+                    emptyBox(25.0),
+
                     //create review button
                     bigButton(!hasReview ? "Create Review" : 'Save Changes',
                         () async {
@@ -151,9 +146,9 @@ class _CreateReviewPageState extends State<CreateReviewPage> {
                           if (!mounted) return;
                           Navigator.pop(context);
                           successFlushBar(
-                            context, 
-                            hasReview ? "Changes saved" : "Review created", 
-                            true);
+                              context,
+                              hasReview ? "Changes saved" : "Review created",
+                              true);
                         }
                       }
                     }),

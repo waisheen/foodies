@@ -44,32 +44,47 @@ Widget buildAllReviewStream(
   return Column(
     mainAxisAlignment: MainAxisAlignment.start,
     children: [
+      Text(
+        'Reviews',
+        style: TextStyle(
+            color: themeColour, fontSize: 40.0, fontWeight: FontWeight.bold),
+        textAlign: TextAlign.left,
+      ),
       Flexible(
         fit: FlexFit.loose,
         child: StreamBuilder(
-          stream: stream,
-          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (!snapshot.hasData) {
-              return const Loading();
-            }
-            if (snapshot.data!.docs.isEmpty) {
-              return const Text('No Reviews Yet!');
-            }
-            return ListView.builder(
-              padding: EdgeInsets.zero,
-              shrinkWrap: true,
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (BuildContext context, int index) {
-                Review review =
-                    Review.fromSnapshot(snapshot.data!.docs[index]);
-                return reviewContainer(
-                  context,
-                  review,
+            stream: stream,
+            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (!snapshot.hasData) {
+                return const Loading();
+              }
+              if (snapshot.data!.docs.isEmpty) {
+                return const SizedBox(
+                  height: 150,
+                  child: Center(
+                    child: Text(
+                      'No Reviews Yet!',
+                      style: TextStyle(fontSize: 25),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 );
               }
-            );
-          }
-        ),
+              return ListView.builder(
+                  padding: EdgeInsets.zero,
+                  physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
+                  shrinkWrap: true,
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    Review review =
+                        Review.fromSnapshot(snapshot.data!.docs[index]);
+                    return reviewContainer(
+                      context,
+                      review,
+                    );
+                  });
+            }),
       ),
     ],
   );

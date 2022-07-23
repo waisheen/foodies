@@ -7,8 +7,8 @@ class ShopRecommendationPage extends StatefulWidget {
   const ShopRecommendationPage({Key? key, required this.function})
       : super(key: key);
 
-  final List<Widget> Function(
-      List<QueryDocumentSnapshot> docsList, BuildContext context) function;
+  final List<Widget> Function(List<QueryDocumentSnapshot>, BuildContext context)
+      function;
 
   @override
   State<ShopRecommendationPage> createState() => _ShopRecommendationPageState();
@@ -17,7 +17,7 @@ class ShopRecommendationPage extends StatefulWidget {
 class _ShopRecommendationPageState extends State<ShopRecommendationPage> {
   //This collect all shops available, can be further filtered
   Stream<QuerySnapshot> getShopSnapshots() async* {
-    yield* FirebaseFirestore.instance.collection('Shop').snapshots();
+    yield* FirebaseFirestore.instance.collection('Shop').limit(8).snapshots();
   }
 
   late final _shopSnapshots = getShopSnapshots();
