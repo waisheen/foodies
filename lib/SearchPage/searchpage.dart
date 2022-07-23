@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foodies/SearchPage/shoprecommendation.dart';
+import 'package:location/location.dart';
 
+import '../Models/foodplace.dart';
 import '../Models/shop.dart';
 import '../Shop/shopdetails.dart';
 import '../loading.dart';
@@ -134,8 +136,8 @@ class _SearchPageState extends State<SearchPage> {
                     title: Row(
                       children: const [
                         Icon(
-                          Icons.star_outline,
-                          color: Colors.orange,
+                          Icons.local_fire_department,
+                          color: Colors.red,
                         ),
                         SizedBox(width: 5),
                         Text(
@@ -150,6 +152,57 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                     subtitle:
                         const ShopRecommendationPage(function: numberList),
+                  ),
+
+                  emptyBox(20),
+
+                  //recommendations by cheaper options
+                  ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 15),
+                    title: Row(
+                      children: const [
+                        Icon(
+                          Icons.attach_money,
+                          color: Colors.green,
+                        ),
+                        SizedBox(width: 5),
+                        Text(
+                          'Cheaper Options',
+                          style: TextStyle(
+                            fontSize: 21,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                      ],
+                    ),
+                    subtitle: const ShopRecommendationPage(function: cheapList),
+                  ),
+
+                  emptyBox(20),
+
+                  //recommendations by drinks/desserts
+                  ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 15),
+                    title: Row(
+                      children: const [
+                        Icon(
+                          Icons.local_drink,
+                          color: Colors.brown,
+                        ),
+                        SizedBox(width: 5),
+                        Text(
+                          'Drinks and Desserts',
+                          style: TextStyle(
+                            fontSize: 21,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                      ],
+                    ),
+                    subtitle:
+                        const ShopRecommendationPage(function: drinksList),
                   ),
                 ],
               ),
@@ -363,6 +416,164 @@ List<Widget> numberList(
   filtered.sort((shop1, shop2) {
     double rating1 = shop1.totalReview;
     double rating2 = shop2.totalReview;
+    if (rating1 - rating2 > 0) {
+      return -1;
+    }
+    return 1;
+  });
+  List<Widget> widgetList = filtered
+      .map((shop) => buildCard(
+            context,
+            shop,
+            () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ShopDetailsPage(shop: shop, showBackButton: true))),
+          ))
+      .toList();
+  return widgetList;
+}
+
+//This returns a recommendation page, but it's a future
+Widget futureRecommendation(
+    Future<
+            List<Widget> Function(
+                List<QueryDocumentSnapshot> docsList, BuildContext context)>
+        function) {
+  return FutureBuilder(
+    future: function,
+    builder: (BuildContext context,
+        AsyncSnapshot<
+                List<Widget> Function(
+                    List<QueryDocumentSnapshot> docsList, BuildContext context)>
+            snapshot) {
+      if (!snapshot.hasData) {
+        return const Loading();
+      }
+      return ShopRecommendationPage(function: snapshot.data!);
+    },
+  );
+}
+
+//This sorts shops by distance, then ratings
+Future<List<Widget>> distanceListFuture(
+    List<QueryDocumentSnapshot> docsList, BuildContext context) async {
+  List<Shop> filtered =
+      docsList.map((document) => Shop.fromSnapshot(document)).toList();
+
+  //Get all foodplaces
+  QuerySnapshot snapshot =
+      await FirebaseFirestore.instance.collection('FoodPlace').get();
+  List<FoodPlace> foodplaces =
+      snapshot.docs.map((snap) => FoodPlace.fromSnapshot(snap)).toList();
+
+  //sort by location
+  LocationData location = await Location().getLocation();
+  List<GeoPoint> geoPoints =
+      filtered.map((shop) => getGeoPoints(foodplaces, shop)!).toList();
+  List<int> distances = geoPoints
+      .map((geoPoint) => distance(geoPoint.latitude, geoPoint.longitude,
+          location.latitude, location.longitude))
+      .toList();
+
+  //Some random bubble sorting
+  for (int i = 0; i < filtered.length - 1; i++) {
+    for (int j = i; j < filtered.length; j++) {
+      if (distances[i] > distances[j]) {
+        int temp = distances[j];
+        distances[j] = distances[i];
+        distances[i] = temp;
+        Shop tempShop = filtered[j];
+        filtered[j] = filtered[i];
+        filtered[i] = tempShop;
+      }
+    }
+  }
+
+  //sort shops acc to number of reviews
+  filtered.sort((shop1, shop2) {
+    double rating1 = shop1.totalReview;
+    double rating2 = shop2.totalReview;
+    if (rating1 - rating2 > 0) {
+      return -1;
+    }
+    return 1;
+  });
+  List<Widget> widgetList = filtered
+      .map((shop) => buildCard(
+            context,
+            shop,
+            () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ShopDetailsPage(shop: shop, showBackButton: true))),
+          ))
+      .toList();
+  return widgetList;
+}
+
+//Functions
+GeoPoint? getGeoPoints(List<FoodPlace> foodplaces, Shop shop) {
+  for (var foodplace in foodplaces) {
+    if (foodplace.uid == shop.foodPlace) {
+      return foodplace.coordinates;
+    }
+  }
+  return null;
+}
+
+//This sorts shops by desserts/beverages then ratings
+List<Widget> drinksList(
+    List<QueryDocumentSnapshot> docsList, BuildContext context) {
+  List<Shop> filtered =
+      docsList.map((document) => Shop.fromSnapshot(document)).toList();
+
+  //take out those that has drinks/desserts
+  filtered = filtered
+      .where((shop) =>
+          shop.options.contains('Drinks') || shop.options.contains('Dessert'))
+      .toList();
+
+  //sort shops acc to ratings
+  filtered.sort((shop1, shop2) {
+    double rating1 = shop1.averageRating;
+    double rating2 = shop2.averageRating;
+    if (rating1 - rating2 > 0) {
+      return -1;
+    }
+    return 1;
+  });
+  List<Widget> widgetList = filtered
+      .map((shop) => buildCard(
+            context,
+            shop,
+            () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ShopDetailsPage(shop: shop, showBackButton: true))),
+          ))
+      .toList();
+  return widgetList;
+}
+
+//This sorts shops by shops that offer food below $5 then ratings
+List<Widget> cheapList(
+    List<QueryDocumentSnapshot> docsList, BuildContext context) {
+  List<Shop> filtered =
+      docsList.map((document) => Shop.fromSnapshot(document)).toList();
+
+  //take out those that has drinks/desserts
+  filtered = filtered
+      .where((shop) => shop.minPrice <= 5 && shop.minPrice >= 2)
+      .toList();
+
+  //sort shops acc to ratings
+  filtered.sort((shop1, shop2) {
+    double rating1 = shop1.averageRating;
+    double rating2 = shop2.averageRating;
     if (rating1 - rating2 > 0) {
       return -1;
     }

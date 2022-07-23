@@ -7,8 +7,8 @@ class ShopRecommendationPage extends StatefulWidget {
   const ShopRecommendationPage({Key? key, required this.function})
       : super(key: key);
 
-  final List<Widget> Function(List<QueryDocumentSnapshot>, BuildContext context)
-      function;
+  final List<Widget> Function(
+      List<QueryDocumentSnapshot> docsList, BuildContext context) function;
 
   @override
   State<ShopRecommendationPage> createState() => _ShopRecommendationPageState();
