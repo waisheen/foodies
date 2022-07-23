@@ -163,13 +163,15 @@ Widget reviewContainer(BuildContext context, Review review) {
               review.userText(context),
             ],
           ),
-          emptyBox(10),
           Padding(
             padding: const EdgeInsets.only(left: 10.0),
-            child:
-                StarRating(rating: review.rating, onRatingChanged: (rating) {}),
+            child: StarRating(
+              rating: review.rating,
+              onRatingChanged: (rating) {},
+              tappable: false,
+            ),
           ),
-          emptyBox(20),
+          emptyBox(10),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: SizedBox(
