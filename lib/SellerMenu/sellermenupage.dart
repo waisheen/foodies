@@ -49,7 +49,7 @@ class _SellerMenuPageState extends State<SellerMenuPage> {
                   ) : null,
                   floating: true,
                   backgroundColor: Colors.white,
-                  title: Text("Menu", style: TextStyle(color: themeColour, fontSize: 30))
+                  title: Text("Menu", style: TextStyle(color: themeColour, fontSize: 30, fontWeight: FontWeight.bold))
                   ),
                 SliverGrid(
                   delegate: SliverChildListDelegate(

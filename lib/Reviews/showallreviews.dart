@@ -1,6 +1,7 @@
 //This widget displays all reviews
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:foodies/theme.dart';
 
 import '../Models/review.dart';
 import '../Models/shop.dart';
@@ -28,7 +29,7 @@ class _ShowAllReviewsPageState extends State<ShowAllReviewsPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       extendBodyBehindAppBar: false,
-      appBar: backButton(context),
+      appBar: backButton(context, "All Reviews", themeColour),
       body: Padding(
         padding: const EdgeInsets.only(left: 15, right: 15),
         child: buildAllReviewStream(
@@ -44,12 +45,12 @@ Widget buildAllReviewStream(
   return Column(
     mainAxisAlignment: MainAxisAlignment.start,
     children: [
-      Text(
-        'Reviews',
-        style: TextStyle(
-            color: themeColour, fontSize: 40.0, fontWeight: FontWeight.bold),
-        textAlign: TextAlign.left,
-      ),
+      // Text(
+      //   'Reviews',
+      //   style: TextStyle(
+      //       color: themeColour, fontSize: 35.0, fontWeight: FontWeight.bold),
+      //   textAlign: TextAlign.left,
+      // ),
       Flexible(
         fit: FlexFit.loose,
         child: StreamBuilder(

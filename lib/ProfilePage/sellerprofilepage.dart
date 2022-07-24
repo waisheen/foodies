@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:foodies/Models/shop.dart';
 import 'package:foodies/Services/all.dart';
 
 import '../reusablewidgets.dart';
@@ -16,6 +17,8 @@ class _SellerProfilePageState extends State<SellerProfilePage> {
   final _formKey = GlobalKey<FormState>();
   final CollectionReference userInformation =
       FirebaseFirestore.instance.collection('UserInfo');
+  final CollectionReference shops =
+      FirebaseFirestore.instance.collection('Shop');
 
   bool editing = false;
   String name = 'Loading...';
@@ -195,11 +198,14 @@ class _SellerProfilePageState extends State<SellerProfilePage> {
                   ? bigButton('Delete Account', 
                   () => confirmationPopUp(
                     context, 
-                    "Are you sure you want to delete your account?",
+                    "Are you sure you want to delete your account? If your account is linked to a shop, your shop will not be deleted",
                     () async {
-                      _auth.deleteUser().then(
+                      removeSellerFromShop();
+                      _auth.deleteUser()
+                      .then((value) => _auth.signOut())
+                      .then(
                         (value) => redFlushBar(context, "Account deleted successfully", true));
-                    },
+                    }
                   ))
                   : emptyBox(1),
               
@@ -209,5 +215,17 @@ class _SellerProfilePageState extends State<SellerProfilePage> {
         ),
       ),
     );
+  }
+
+  Future removeSellerFromShop() async {
+    Shop? currShop = await getSellerShop();
+    if (currShop == null) {
+      return null;
+    }
+    return shops
+      .doc(currShop.uid)
+      .update({
+        'sellerID': FieldValue.delete(),
+      });
   }
 }

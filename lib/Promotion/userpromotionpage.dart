@@ -34,7 +34,7 @@ class _UserPromotionPageState extends State<UserPromotionPage> {
                 return const Loading();
               }
               return Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: CustomScrollView(
                   physics: const BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics()),
@@ -154,7 +154,7 @@ class _UserPromotionPageState extends State<UserPromotionPage> {
               ListTile(
                   title: Padding(
                     padding: const EdgeInsets.only(bottom: 5),
-                    child: Text(promo.details),
+                    child: Text(promo.details, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                   ),
                   subtitle: //Text("${dateFromDateTime(promo.startDate)} ~ ${dateFromDateTime(promo.endDate)} \n\n 📍  location"),
                       dateAndShopText(context, promo)),
@@ -178,7 +178,9 @@ class _UserPromotionPageState extends State<UserPromotionPage> {
             return const Loading();
           }
           return Text(
-              "${dateFromDateTime(promo.startDate)} ~ ${dateFromDateTime(promo.endDate)} \n\n 📍  ${shop.data!.name}");
+              "${dateFromDateTime(promo.startDate)} ~ ${dateFromDateTime(promo.endDate)} \n\n 📍  ${shop.data!.name}",
+              style: const TextStyle(fontSize: 13),
+              );
         });
   }
 

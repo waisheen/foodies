@@ -42,7 +42,7 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
                   return const Loading();
                 }
                 return Padding(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: CustomScrollView(
                     physics: const BouncingScrollPhysics(
                         parent: AlwaysScrollableScrollPhysics()),
@@ -194,7 +194,7 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
               ListTile(
                   title: Padding(
                     padding: const EdgeInsets.only(bottom: 5),
-                    child: Text(promo.details),
+                    child: Text(promo.details, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                   ),
                   subtitle: dateAndShopText(context, promo)),
               emptyBox(10),
@@ -237,7 +237,9 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
             return const Loading();
           }
           return Text(
-              "${dateFromDateTime(promo.startDate)} - ${dateFromDateTime(promo.endDate)} \n\n 📍  ${shop.data!.name}");
+              "${dateFromDateTime(promo.startDate)} - ${dateFromDateTime(promo.endDate)} \n\n 📍  ${shop.data!.name}",
+              style: const TextStyle(fontSize: 13),
+            );
         });
   }
 
