@@ -291,24 +291,31 @@ class CustomSearchDelegate extends SearchDelegate {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
-      child: Column(
-        children: <Widget>[
-          Image(
-            image: NetworkImage(shop.imageURL),
-            height: 180,
-            width: double.infinity,
-            fit: BoxFit.cover,
-          ),
-          emptyBox(5),
-          ListTile(
-            title: Padding(
-              padding: const EdgeInsets.only(bottom: 5),
-              child: Text(shop.name),
+      child: InkWell(
+        onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    ShopDetailsPage(shop: shop, showBackButton: true))),
+        child: Column(
+          children: <Widget>[
+            Image(
+              image: NetworkImage(shop.imageURL),
+              height: 180,
+              width: double.infinity,
+              fit: BoxFit.cover,
             ),
-            subtitle: shop.foodPlaceText(context, 14),
-          ),
-          emptyBox(10),
-        ],
+            emptyBox(5),
+            ListTile(
+              title: Padding(
+                padding: const EdgeInsets.only(bottom: 5),
+                child: Text(shop.name),
+              ),
+              subtitle: shop.foodPlaceText(context, 14),
+            ),
+            emptyBox(10),
+          ],
+        ),
       ),
     );
   }

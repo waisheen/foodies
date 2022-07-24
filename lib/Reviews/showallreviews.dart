@@ -1,7 +1,6 @@
 //This widget displays all reviews
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:foodies/theme.dart';
 
 import '../Models/review.dart';
 import '../Models/shop.dart';
