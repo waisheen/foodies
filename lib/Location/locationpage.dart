@@ -16,7 +16,7 @@ class LocationPage extends StatefulWidget {
 
 class _LocationPageState extends State<LocationPage>
     with AutomaticKeepAliveClientMixin<LocationPage> {
-  final LatLng _initialcameraposition = const LatLng(20.5937, 78.9629);
+  final LatLng _initialcameraposition = const LatLng(1.2966, 103.7764);
   late GoogleMapController _controller;
   final Location _location = Location();
 
@@ -45,17 +45,13 @@ class _LocationPageState extends State<LocationPage>
   }
 
   //Calls the function after map is created
-  void _onMapCreated(GoogleMapController controller) {
+  void _onMapCreated(GoogleMapController controller) async {
     _controller = controller;
-    _location.onLocationChanged.listen((location) {
-      _controller.animateCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(
-              target: LatLng(location.latitude!, location.longitude!),
-              zoom: 15),
-        ),
-      );
-    });
+    LocationData location = await _location.getLocation();
+    _controller.animateCamera(CameraUpdate.newCameraPosition(
+      CameraPosition(
+          target: LatLng(location.latitude!, location.longitude!), zoom: 15),
+    ));
   }
 
   @override

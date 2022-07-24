@@ -27,7 +27,7 @@ class _ShowReviewPageState extends State<ShowReviewPage> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width ,
+      width: MediaQuery.of(context).size.width,
       child: StreamBuilder(
         stream: getReviewSnapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -38,10 +38,15 @@ class _ShowReviewPageState extends State<ShowReviewPage> {
             return Container(
               alignment: Alignment.center,
               width: MediaQuery.of(context).size.width,
-              child: const Text(
-                'No Reviews Yet!',
-                style: TextStyle(fontSize: 15),
-                textAlign: TextAlign.center,
+              child: const SizedBox(
+                height: 150,
+                child: Center(
+                  child: Text(
+                    'No Reviews Yet!',
+                    style: TextStyle(fontSize: 15),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ),
             );
           }
@@ -63,4 +68,3 @@ class _ShowReviewPageState extends State<ShowReviewPage> {
     );
   }
 }
-

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../loading.dart';
 import 'shop.dart';
 
 class Review {
@@ -37,7 +36,7 @@ class Review {
             FirebaseFirestore.instance.collection('UserInfo').doc(user).get(),
         builder: (context, AsyncSnapshot newUser) {
           if (!newUser.hasData) {
-            return const Loading();
+            return const Text('Loading...');
           }
           return Text(
             newUser.data!.get('name'),
