@@ -17,7 +17,7 @@ class ShopRecommendationPage extends StatefulWidget {
 class _ShopRecommendationPageState extends State<ShopRecommendationPage> {
   //This collect all shops available, can be further filtered
   Stream<QuerySnapshot> getShopSnapshots() async* {
-    yield* FirebaseFirestore.instance.collection('Shop').limit(8).snapshots();
+    yield* FirebaseFirestore.instance.collection('Shop').snapshots();
   }
 
   late final _shopSnapshots = getShopSnapshots();
