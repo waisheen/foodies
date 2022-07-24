@@ -23,7 +23,7 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
       FirebaseFirestore.instance.collection("Promotion");
   final CollectionReference shops =
       FirebaseFirestore.instance.collection("Shop");
-  
+
   //variable states
   Color colour = themeColour;
   bool sortByStart = true;
@@ -31,53 +31,57 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.shop == null ? 
-    noShopText(context) :
-    Scaffold(
-      body: StreamBuilder(
-        stream: promotions.snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
-            return const Loading();
-          }
-          return Padding(
-            padding: const EdgeInsets.all(20),
-            child: CustomScrollView(
-              physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics()),
-              slivers: [
-                SliverAppBar(
-                  floating: true,
-                  backgroundColor: Colors.white,
-                  title: Row(
-                    children: [
-                      Text("Sort by:", style: TextStyle(fontSize: 15, color: colour),),
-                      const SizedBox(width: 10),
-                      sortButton("Start Date", sortByStart, () {
-                        setState(() {
-                          sortByStart = true;
-                          sortByEnd = false;
-                        });
-                      }),
-                      const SizedBox(width: 10),
-                      sortButton("End Date", sortByEnd, () {
-                        setState(() {
-                          sortByStart = false;
-                          sortByEnd = true;
-                        });
-                      }),
+    return widget.shop == null
+        ? noShopText(context)
+        : Scaffold(
+            body: StreamBuilder(
+              stream: promotions.snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return const Loading();
+                }
+                return Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: CustomScrollView(
+                    physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
+                    slivers: [
+                      SliverAppBar(
+                        floating: true,
+                        backgroundColor: Colors.white,
+                        title: Row(
+                          children: [
+                            Text(
+                              "Sort by:",
+                              style: TextStyle(fontSize: 15, color: colour),
+                            ),
+                            const SizedBox(width: 10),
+                            sortButton("Start Date", sortByStart, () {
+                              setState(() {
+                                sortByStart = true;
+                                sortByEnd = false;
+                              });
+                            }),
+                            const SizedBox(width: 10),
+                            sortButton("End Date", sortByEnd, () {
+                              setState(() {
+                                sortByStart = false;
+                                sortByEnd = true;
+                              });
+                            }),
+                          ],
+                        ),
+                      ),
+                      SliverList(
+                          delegate: SliverChildListDelegate(
+                              promoList(snapshot.data!.docs))),
                     ],
                   ),
-                ),
-                SliverList(
-                  delegate: SliverChildListDelegate(promoList(snapshot.data!.docs))
-                ),
-              ],
+                );
+              },
             ),
           );
-        },
-      ),
-    );
   }
 
   //creates a list of promo widgets
@@ -86,11 +90,12 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
         //map each document to Promotion
         .map((document) => Menu.fromSnapshot(document))
         //uncomment to view current promos only
-        .where((promo) => promo.endDate.isAfter(DateTime.now())).toList()
+        .where((promo) => promo.endDate.isAfter(DateTime.now()))
+        .toList()
         //only show seller's promos
         .where((promo) => promo.shop_id == widget.shop!.uid)
         .toList();
-    
+
     //sort promos acc to startDate or endDate
     if (sortByStart) {
       filtered.sort((a, b) {
@@ -98,7 +103,7 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
           return a.endDate.compareTo(b.endDate);
         }
         return a.startDate.compareTo(b.startDate);
-        });
+      });
     } else if (sortByEnd) {
       filtered.sort((a, b) {
         if (a.endDate == b.endDate) {
@@ -110,7 +115,7 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
 
     List<Widget> widgetList =
         filtered.map((promo) => promoWidget(promo)).toList();
-    
+
     //if store has no ongoing promotions
     if (widgetList.isEmpty) {
       widgetList.add(
@@ -118,10 +123,11 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
           height: MediaQuery.of(context).size.height / 1.8,
           child: const Align(
             alignment: Alignment.center,
-            child: Text("There are no ongoing promotions", 
+            child: Text(
+              "There are no ongoing promotions",
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 15),
-              ),
+            ),
           ),
         ),
       );
@@ -162,7 +168,8 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
           await promo.currentShop.then((shop) => Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ShopDetailsPage(shop: shop, showBackButton: true))));
+                  builder: (context) =>
+                      ShopDetailsPage(shop: shop, showBackButton: true))));
         },
         splashColor: themeColour.withOpacity(0.5),
         child: Ink(
@@ -183,18 +190,14 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
                   );
                 },
               ),
-              
               emptyBox(5),
-              
               ListTile(
                   title: Padding(
                     padding: const EdgeInsets.only(bottom: 5),
                     child: Text(promo.details),
                   ),
                   subtitle: dateAndShopText(context, promo)),
-              
               emptyBox(10),
-              
               Container(
                 height: 35.0,
                 width: 300.0,
@@ -209,8 +212,8 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
                     await getSellerShop().then((shop) => Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                CreatePromotionPage(shop: shop, promo: promo))));
+                            builder: (context) => CreatePromotionPage(
+                                shop: shop, promo: promo))));
                   },
                   child: const Text(
                     "Edit Promotion",
@@ -218,7 +221,6 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
                   ),
                 ),
               ),
-              
               emptyBox(10),
             ],
           ),
@@ -244,13 +246,15 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
     String currSellerID = _auth.currentUser!.uid;
     QuerySnapshot snapshot = await shops.get();
     List<Shop> shopList = snapshot.docs
-        .where((snapshot) => snapshot["sellerID"] == currSellerID)
+        .where((snapshot) => snapshot.data().toString().contains('sellerID')
+            ? snapshot['sellerID'] == currSellerID
+            : false)
         .map((snapshot) => Shop.fromSnapshot(snapshot))
         .toList();
     return shopList[0];
   }
 
-  //create sort button 
+  //create sort button
   Widget sortButton(String text, bool selected, Function()? onPressed) {
     return Container(
       height: 35.0,
@@ -259,15 +263,14 @@ class _SellerPromotionPageState extends State<SellerPromotionPage> {
         borderRadius: BorderRadius.circular(30),
         border: Border.all(color: colour),
       ),
-      child: 
-      TextButton(
+      child: TextButton(
         onPressed: onPressed,
         child: Text(
           text,
-          style: TextStyle(color: selected ? Colors.white : colour, fontSize: 13),
+          style:
+              TextStyle(color: selected ? Colors.white : colour, fontSize: 13),
         ),
       ),
     );
   }
-
 }
